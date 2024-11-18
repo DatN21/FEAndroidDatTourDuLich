@@ -1,0 +1,161 @@
+.container {
+    color: white;
+    height: 85vh;
+    padding: 80px;
+    margin: 0 auto;
+}
+
+.login-form {
+    background-color: rgb(12, 12, 55);
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 500px;
+    border: 1px solid rgb(32, 34, 60);
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.login-header {
+    text-align: center;
+    color: rgb(105, 244, 181);
+    margin-bottom: 20px;
+}
+
+.form-control {
+    margin-top: 5px;
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+
+.form-control:focus {
+    color: white;
+    background-color: transparent;
+    outline: none;
+    border-color: transparent;
+}
+
+.divider-nospace {
+    border-top: 1px solid white;
+}
+
+.password-field {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: rgb(105, 244, 181);
+    cursor: pointer;
+}
+
+.checkbox-text {
+    color: rgb(243, 165, 42);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.checkbox-text input[type="checkbox"] {
+    appearance: none;
+    /* Loại bỏ kiểu mặc định của checkbox */
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    margin-right: 5px;
+}
+
+/*Màu checkbox khi được chọn */
+.checkbox-text input[type="checkbox"]:checked {
+    border-color: white;
+    background-color: rgb(233, 66, 178);
+}
+
+.checkbox-text input[type="checkbox"]:checked::before {
+    content: '✔';
+    /* Dấu check */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+}
+
+.form-check-input {
+    margin-right: 5px;
+}
+
+
+
+.access-right {
+    margin-top: 20px;
+    width: 200px;
+    color: white;
+    border: 1px solid rgb(225, 64, 180);
+}
+
+.access-right:focus {
+    border: 1px solid rgb(225, 64, 180);
+}
+
+.form-control::placeholder {
+    color: rgba(243, 165, 42, 0.4);
+    opacity: 1;
+    /* Màu trắng với độ mờ 50% */
+}
+
+/* Để hỗ trợ các trình duyệt khác nhau: */
+
+/* Firefox */
+.form-control::-moz-placeholder {
+    color: rgba(243, 165, 42, 0.4);
+}
+
+/* Internet Explorer 10+ */
+.form-control:-ms-input-placeholder {
+    color: rgba(243, 165, 42, 0.4);
+}
+
+/* Chrome, Safari, Opera */
+.form-control::-webkit-input-placeholder {
+    color: rgba(243, 165, 42, 0.4);
+}
+
+.login-button {
+    background: linear-gradient(to right, rgb(225, 64, 180), rgb(126, 43, 237));
+    color: white;
+    border-radius: 30px;
+    width: 100%;
+    padding: 10px 0;
+    margin-top: 20px;
+    border: none;
+}
+
+.divider {
+    height: 1px;
+    background-color: rgb(243, 165, 42);
+    margin: 20px;
+}
+
+/* Đảm bảo "đăng ký" hiển thị như một liên kết với hiệu ứng con trỏ chuột */
+a[routerLink="dang-ky"] {
+    color: rgb(105, 244, 181); /* Màu cho liên kết */
+    text-decoration: none; /* Loại bỏ gạch chân */
+    cursor: pointer; /* Hiển thị con trỏ chuột */
+    font-weight: bold; /* Tạo điểm nhấn với độ đậm chữ */
+    transition: color 0.3s ease; /* Hiệu ứng chuyển màu mượt mà */
+}
+
+/* Đổi màu khi hover */
+a[routerLink="dang-ky"]:hover {
+    color: rgb(233, 66, 178); /* Màu sắc khi hover */
+    text-decoration: underline; /* Thêm gạch chân để rõ ràng hơn khi hover */
+}

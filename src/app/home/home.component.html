@@ -1,0 +1,110 @@
+<!-- Background Image and Search Section -->
+<div class="anhHome">
+    <div id="noiDungvaTimKiem">
+        <h2>BẠN DỰ ĐỊNH ĐI ĐÂU TẠI PHÚ YÊN?</h2>
+        <h3>Đặt ngay các tour để có một chuyến đi thoải mái và tiết kiệm nhất</h3>
+
+        <form class="d-flex" role="search" (ngSubmit)="searchTours()">
+            <input 
+                class="form-control me-2" 
+                type="search" 
+                placeholder="Tìm kiếm..." 
+                aria-label="Search" 
+                [(ngModel)]="keyword" 
+                name="keyword"
+            >
+            <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+
+
+
+<!-- Introduction Section -->
+<h5>Phú Yên Tour - Đơn vị tổ chức tour du lịch - cung cấp Land tour Phú Yên hàng đầu</h5>
+<h3 class="viSaoBanChon">VÌ SAO BẠN NÊN CHỌN PHÚ YÊN TOUR ?</h3>
+<div class="viSao">
+    <div class="viSaoTheCon">
+        <img src="assets/image/banner1-phuyentourist.png" alt="TourImage">
+        <p>TOP 50 THƯƠNG HIỆU  DẪN ĐẦU</p>
+        <p class="pCon">TOP 50 Tour du lịch dẫn đầu, mang đến trải nghiệm tuyệt vời và dịch vụ chất lượng cao.</p>
+    </div>
+    <div class="viSaoTheCon">
+        <img src="/assets/image/banner2-phuyentourist.png" alt="TourImage">
+        <p>ĐẶT CHỔ ONLINE</p>
+        <p class="pCon">Bạn chỉ cần chọn tour mong muốn và tiến hành giữ chỗ, Phú Yên Tour sẽ gọi lại bạn ngay tư vấn trong vòng 30 phút</p>
+    </div>
+    <div class="viSaoTheCon">
+        <img src="/assets/image/banner3-phuyentourist.png" alt="">
+        <p>TƯ VẤN 24/7</p>
+        <p class="pCon">Không còn lo lắng bởi Phú Yên Tour sẽ luôn bên bạn trong suốt hành trình, giúp chuyến đi của bạn được trọn vẹn, vui vẻ. Hotline: 0905 91 58 59</p>
+    </div>
+</div>
+
+<div class="danhSachTour">
+<h2>TOUR NỔI BẬT</h2>
+<p class="tongHop">TỔNG HỢP DANH SÁCH CÁC TOUR</p>
+<p class="headerTourMotNgay">TOUR PHÚ YÊN 1 NGÀY</p>
+<!-- Tours List -->
+<div >
+    <div class="row">
+      <div class="col-lg-4 col-md-6" *ngFor="let tour of tours">
+        <div class="tour-item" (click)="goToTourDetail(tour.id.toString())">
+
+          <!-- Hiển thị ảnh đại diện nếu có imageHeader -->
+          <img *ngIf="tour.imageHeader" [src]="tour.imageHeader" alt="Tour Image" class="tour-image">
+  
+          <p class="tour-name">{{ tour.tour_name }}</p>
+
+          <div class="td_tour_type">
+
+            <i class="fa-regular fa-clock"></i>
+            <p class="bold-text">{{ tour.tour_type === '1 day' ? '1 ngày' : 'Nhiều ngày' }}</p>
+        </div>
+
+          <div class="td_tour_type">
+          <i class="fa-regular fa-calendar-days"></i>
+          <p class="tour-depart">Khởi hành: {{ tour.departure_location }}</p>
+          </div>
+
+        <div class="td_tour_type">
+            <p class="giaP">GIÁ:</p>
+          <p class="tour-price">{{ tour.price }}đ/Khách</p>
+        </div>
+          </div>
+          <div class="tour-actions">
+            <span class="space-x"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+<!-- Pagination Section -->
+<div class="d-flex justify-content-center mt-4">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item" *ngIf="currentPage > 1">
+                <a class="page-link" href="#" (click)="onPageChange(1)">First</a>
+            </li>
+            <li class="page-item" *ngIf="currentPage > 1">
+                <a class="page-link" href="#" (click)="onPageChange(currentPage - 1)">Previous</a>
+            </li>
+            <ng-container *ngFor="let page of visiblePages">
+                <li class="page-item" [ngClass]="{'active': page === currentPage}">
+                    <a class="page-link" href="#" (click)="onPageChange(page)">{{ page }}</a>
+                </li>
+            </ng-container>
+            <li class="page-item" *ngIf="currentPage < totalPages">
+                <a class="page-link" href="#" (click)="onPageChange(currentPage + 1)">Next</a>
+            </li>
+            <li class="page-item" *ngIf="currentPage < totalPages">
+                <a class="page-link" href="#" (click)="onPageChange(totalPages)">Last</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+

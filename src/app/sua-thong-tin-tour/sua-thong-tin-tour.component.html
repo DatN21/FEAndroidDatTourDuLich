@@ -1,0 +1,219 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Sửa Thông Tin Tour</h2>
+  
+    <!-- Hiển thị thông báo thành công -->
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+  
+    <!-- Hiển thị thông báo lỗi -->
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  
+    <!-- Form sửa thông tin tour -->
+    <form #editTourForm="ngForm" (ngSubmit)="onUpdateTour()">
+      <div class="form-group">
+        <label for="tourName">Tên Tour:</label>
+        <input
+          type="text"
+          id="tourName"
+          class="form-control"
+          name="tourName"
+          [(ngModel)]="tour.tourName"
+          required
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="days">Số ngày:</label>
+        <input
+          type="number"
+          id="days"
+          class="form-control"
+          name="days"
+          [(ngModel)]="tour.days"
+          required
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="start_date">Ngày khởi hành:</label>
+        <input
+          type="date"
+          id="start_date"
+          class="form-control"
+          name="start_date"
+          [(ngModel)]="tour.start_date"
+          required
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="destination">Điểm Đến:</label>
+        <input
+          type="text"
+          id="destination"
+          class="form-control"
+          name="destination"
+          [(ngModel)]="tour.destination"
+          required
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="price">Giá Tour:</label>
+        <input
+          type="number"
+          id="price"
+          class="form-control"
+          name="price"
+          [(ngModel)]="tour.price"
+          required
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="status">Trạng Thái:</label>
+        <select
+          id="status"
+          class="form-control"
+          name="status"
+          [(ngModel)]="tour.status"
+          required
+        >
+          <option value="Đang hoạt động">Đang hoạt động</option>
+          <option value="Tạm dừng">Tạm dừng</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="tourType">Loại Tour:</label>
+        <select
+          id="tourType"
+          class="form-control"
+          name="tourType"
+          [(ngModel)]="tour.tourType"
+          required
+        >
+          <option value="1 ngày">1 ngày</option>
+          <option value="Nhiều ngày">Nhiều ngày</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="description">Điểm xuất phát:</label>
+        <input
+          type="text"
+          id="description"
+          class="form-control"
+          name="description"
+          [(ngModel)]="tour.description"
+          required
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="content">Nội dung tour:</label>
+        <quill-editor
+          #quillEditor
+          [(ngModel)]="tour.content"
+          name="content"
+          [style]="{ height: '200px' }"
+          [modules]="{
+            toolbar: [
+              [{ 'font': [] }],
+              [{ 'size': ['small', 'normal', 'large', 'huge'] }],
+              [{ 'header': '1' }, { 'header': '2' }, { 'header': '3' }],
+              ['bold', 'italic', 'underline', 'strike'],
+              [{ 'color': [] }],
+              [{ 'background': [] }],
+              [{ 'script': 'sub'}, { 'script': 'super' }],
+              ['blockquote', 'code-block'],
+              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+              [{ 'align': [] }],
+              ['link', 'image', 'video'],
+              ['clean']
+            ]
+          }">
+        </quill-editor>
+
+
+      </div>
+  
+      <!-- Hiển thị ảnh đại diện cũ -->
+      <div *ngIf="tour.imageHeader" class="form-group anhHienTai">
+        <label>Ảnh đại diện hiện tại:</label> <br>
+        <img 
+          [src]="tour.imageHeader" 
+          alt="Ảnh đại diện cũ" 
+          class="img-fluid mb-2" 
+          style="max-width: 200px;" />
+      </div>
+  
+      <!-- Thêm phần chọn hình ảnh -->
+      <div class="form-group">
+        <label for="fileInput">Chọn ảnh mới cho tour:</label>
+        <input 
+          id="fileInput" 
+          type="file" 
+          (change)="onFileSelected($event)" 
+          accept="image/*" 
+          class="form-control" />
+      </div>
+  
+      <!-- Hiển thị ảnh đã chọn -->
+      <div *ngIf="selectedImage" class="form-group">
+        <p><strong>Ảnh đã chọn:</strong> {{ selectedImage.name }}</p>
+        <img [src]="imagePreview" alt="Ảnh đã chọn" class="img-fluid mb-2" style="max-width: 200px;" />
+      </div>
+  
+
+  
+      <!-- Nút Thêm ảnh -->
+      <div *ngIf="selectedImage" class="form-group">
+        <button (click)="updateImage()" class="btn btn-primary btn-sm">Cập nhật ảnh đại diện</button>
+      </div>
+  
+
+      <div class="container mt-5">
+        <h3 class="text-center mb-4">Danh Sách Ảnh Hiện Tại</h3>
+        
+        <!-- Hiển thị danh sách ảnh -->
+        <div *ngIf="tourImages && tourImages.length > 0" class="row">
+          <div class="col-md-3 mb-3" *ngFor="let image of tourImages">
+            <div class="card">
+              <img [src]="image.imgUrl" class="card-img-top img-fluid" alt="Ảnh tour" />
+              <div class="card-body text-center">
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="deleteImage(image.id)"
+                >
+                  Xoá Ảnh
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Hiển thị nếu không có ảnh -->
+        <div *ngIf="!tourImages || tourImages.length === 0" class="alert alert-warning">
+          Chưa có ảnh nào cho tour này.
+        </div>
+      
+        <!-- Xoá tất cả ảnh -->
+        <div *ngIf="tourImages && tourImages.length > 0" class="mt-3">
+          <button
+            class="btn btn-danger"
+            (click)="deleteAllImages()"
+          >
+            Xoá Tất Cả Ảnh
+          </button>
+        </div>
+      </div>
+      
+
+      <button type="submit" class="btn btn-success mt-3">Cập Nhật</button>
+    </form>
+  </div>
+  

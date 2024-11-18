@@ -1,0 +1,31 @@
+<!-- Hiển thị thông báo thành công -->
+<div *ngIf="successMessage" class="alert alert-success custom-alert">
+  <i class="fa fa-check-circle"></i> {{ successMessage }}
+</div>
+
+<!-- Hiển thị thông báo lỗi -->
+<div *ngIf="errorMessage" class="alert alert-danger custom-alert">
+  <i class="fa fa-times-circle"></i> {{ errorMessage }}
+</div>
+
+<!-- Thêm phần chọn hình ảnh -->
+<label class="headerThemAnh" for="fileInput">Thêm ảnh cho tours (tối đa 5 ảnh): </label> <br>
+<input id="fileInput" type="file" (change)="onFileSelected($event)" multiple accept="image/*" class="custom-file-input" />
+
+<!-- Hiển thị tên ảnh đã chọn -->
+<div *ngIf="selectedFiles.length > 0" class="selected-files">
+  <p>Đã chọn {{ selectedFiles.length }} ảnh:</p>
+  <ul>
+    <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
+  </ul>
+</div>
+
+<!-- Nút thêm ảnh -->
+<button (click)="uploadImages()" type="submit" class="btn btn-success">
+  <i class="fa fa-upload"></i> Thêm ảnh
+</button>
+
+<!-- Nút đóng -->
+<button (click)="close()" type="button" class="btn btn-secondary">
+  <i class="fa fa-times"></i> Đóng
+</button>

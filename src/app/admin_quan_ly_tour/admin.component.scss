@@ -1,0 +1,38 @@
+/* Menu thanh bên */
+.sidenav {
+  height: 100%; /* Chiều cao toàn màn hình */
+  width: 300px; /* Chiều rộng của thanh bên */
+  position: fixed; /* Cố định vị trí thanh bên */
+  z-index: 1; /* Đặt trên các phần tử khác */
+  top: 0; /* Cố định trên cùng */
+  left: 0; /* Cố định bên trái */
+  background-color: #111; /* Màu nền đen */
+  overflow-x: hidden; /* Vô hiệu hóa cuộn ngang */
+  padding-top: 20px;
+}
+
+/* Các liên kết trong thanh bên */
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+/* Đổi màu liên kết khi di chuột qua */
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+/* Phần nội dung trang */
+.main {
+  margin-left: 330px; /* Đặt khoảng cách bằng chiều rộng thanh bên */
+  padding: 10px;
+}
+
+/* Khi ở màn hình nhỏ, chiều cao dưới 450px, giảm padding và kích thước font */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}

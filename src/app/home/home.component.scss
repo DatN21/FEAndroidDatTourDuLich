@@ -1,0 +1,269 @@
+
+.anhHome {
+    display: flex; /* Biến header thành flex container */
+    flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
+    height: 100vh; /* Chiều cao của header bằng chiều cao toàn bộ viewport (có thể điều chỉnh) */
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("/assets/image/phu-yen.jpg");
+    background-size: cover;
+    width: 100vw; /* Chiều rộng toàn bộ viewport */
+    height: 100vh; /* Chiều cao toàn bộ viewport */
+}
+#noiDungvaTimKiem {
+    display: flex; /* Biến thành flex container */
+    flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
+    align-items: center; /* Căn giữa các phần tử con theo chiều ngang */
+    text-align: center;
+    padding: 20px;
+    flex-grow: 1; /* Cho phép nó chiếm không gian còn lại */
+    justify-content: center;
+}
+
+#noiDungvaTimKiem h2,
+#noiDungvaTimKiem h3 {
+    color: #fff; /* Màu chữ cho tiêu đề */
+    margin: 10px 0; /* Khoảng cách giữa các tiêu đề */
+}
+
+#noiDungvaTimKiem .d-flex {
+    padding: 30px;
+}
+
+input[type="search"] {
+    width: 500px !important; /* Đặt độ rộng của thanh input với !important để ưu tiên */
+    margin-right: 10px;
+}
+
+.btn-outline-success {
+    color: #fff;
+}
+
+// .container{
+//     color: #000;
+// }
+
+.intro-section {
+    text-align: center;
+    color: 000;
+    padding: 20px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tour-category {
+    width: 200px;
+}
+
+.search-input {
+    width: 300px;
+    background-color: rgb(19, 23, 42);
+    margin-right: 10px;
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #000;
+}
+
+.form-control {
+    background-color: transparent;
+    color: white;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    /* Màu trắng với độ mờ 50% */
+}
+
+/* Để hỗ trợ các trình duyệt khác nhau: */
+
+/* Firefox */
+.search-input::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Internet Explorer 10+ */
+.search-input:-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Chrome, Safari, Opera */
+.search-input::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.tour-item {
+    background-color: #eeeee4;
+    border: 1px solid ;
+    border-radius: 10px;
+    padding: 2px;
+    margin-bottom: 20px;
+}
+
+.tour-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.tour-name {
+    color: #000;
+    padding-left: 10px;
+}
+
+.tour-description {
+    color: 000;
+    // font-weight: bold;
+    padding-left: 10px;
+}
+
+.tour-depart {
+    color: green;
+    // font-weight: bold;
+    padding-left: 10px;
+}
+
+.tour-price {
+    color: green;
+    // font-weight: bold;
+    padding-left: 10px;
+}
+
+
+
+.tour-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.space-x {
+    margin: 0 10px;
+}
+h5{
+    background-color: #F2F2F2;
+    padding: 20px;
+    text-align: center;
+}
+.tour-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+.tour-name{
+    // text-align: center;
+    padding: 10px;
+    color: green;
+    font-size: 20px;
+}
+.viSao {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // height: 100vh;
+}
+
+.viSaoTheCon {
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 33%;
+    text-align: center;
+}
+
+.viSaoTheCon img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    width: 40%; /* Chiếm toàn bộ chiều rộng */
+    padding: 20px; 
+}
+.viSaoTheCon p {
+    font-size: 20px; /* Tăng cỡ chữ cho văn bản */
+    font-weight: bold;
+}
+.viSaoTheCon .pCon{
+    font-size: 17px;
+    font-weight: normal;
+}
+h2{
+    text-align: center;
+    padding: 15px;
+    font-weight: bold;
+    color: green;
+}
+.tongHop{
+    text-align: center;
+    // padding: 20px;
+    font-size: 20px;
+    
+}
+.danhSachTour{
+    background-color: #F2F2F2;
+}
+.headerTourMotNgay{
+    color: green;
+    font-size: 30px;
+    font-weight: 100px;
+    padding-bottom: 5px;
+}
+h3{
+    padding-top: 20px;
+    text-align: center;
+}
+.bold-text {
+    // font-weight: bold;
+    padding-left: 10px;
+    color: green;
+  }
+  
+
+.td_tour_type{
+    display: flex;
+    margin-top: -10px;
+    padding: 2px;
+}
+.fa-regular{
+    margin-top: 3px;
+}
+.giaP{
+    margin-left: -1px;
+    color: green;
+    // font-weight: bold;
+}
+
+/* Hiệu ứng khi hover vào .row */
+// .col-lg-4:hover {
+//     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Tạo bóng */
+//     transition: all 0.3s ease-in-out; /* Hiệu ứng mượt mà */
+//   }
+  
+//   /* Thay đổi màu tiêu đề khi hover */
+//   .col-lg-4:hover .tour-name {
+//     color: gold; /* Màu vàng */
+//     font-weight: bold; /* Tô đậm chữ nếu cần */
+//   }
+
+  .tour-item {
+    width: 360px; /* Chiều rộng cố định */
+    height: auto; /* Chiều cao tự dãn theo nội dung */
+    padding: 10px; /* Khoảng cách bên trong */
+    background-color: #fff; /* Nền trắng */
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.12); /* Bóng */
+    border-radius: 8px; /* Bo góc */
+    overflow: hidden; /* Ẩn nội dung thừa */
+    transition: box-shadow 0.2s ease-in-out;
+    cursor: pointer; /* Hiển thị con trỏ khi di chuột vào */
+        transition: transform 0.2s ease, box-shadow 0.2s ease; /* Hiệu ứng hover */
+  }
+  
+  /* Hiệu ứng hover */
+  .tour-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bóng lớn hơn khi hover */
+    transform: scale(1.03); /* Phóng to nhẹ khi hover */
+  }
+  

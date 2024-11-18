@@ -1,0 +1,78 @@
+<h2>Thêm mới Tour</h2>
+
+<form #themTour="ngForm" (ngSubmit)="createTour()">
+  <label for="tour_name">Tên tour:</label>
+  <input id="tour_name" type="text" [(ngModel)]="newTour.tourName" name="tour_name" required />
+
+  <label for="days">Số ngày:</label>
+  <input id="days" type="number" [(ngModel)]="newTour.days" name="days" required />
+
+  <label for="start_date">Ngày khởi hành:</label>
+  <input id="start_date" type="date" [(ngModel)]="newTour.startDate" name="start_date" required />
+
+  <label for="destination">Điểm đến:</label>
+  <input id="destination" type="text" [(ngModel)]="newTour.destination" name="destination" required />
+  <div class="option">
+  <label for="tourType">Loại tour:</label>
+  <select id="tourType" [(ngModel)]="newTour.tourType" name="tourType" required>
+      <option value="1 ngày">1 ngày</option>
+      <option value="Nhiều ngày">Nhiều ngày</option>
+  </select>
+</div>
+
+  <label for="departure_location">Điểm xuất phát:</label>
+  <input id="departure_location" type="text" [(ngModel)]="newTour.departureLocation" name="departure_location" required />
+
+
+  <div class="option">
+  <label for="status">Trạng thái:</label>
+  <select id="status" [(ngModel)]="newTour.status" name="status" required>
+      <option value="Tạm dừng">Tạm dừng</option>
+      <option value="Đang hoạt động">Đang hoạt động</option>
+  </select>
+
+</div>
+
+  <label for="price">Giá tour:</label>
+  <input id="price" type="number" [(ngModel)]="newTour.price" name="price" required />
+
+  <label for="description">Tiêu đề Tour:</label>
+  <input id="description" type="text" [(ngModel)]="newTour.description" name="description" />
+
+  <label for="content">Nội dung tour:</label>
+  <!-- Quill editor -->
+  <quill-editor #quillEditor [(ngModel)]="newTour.content"
+  name="content"
+  [style]="{ height: '300px' }"
+  [modules]="{
+    toolbar: [
+      [{ 'font': [] }],
+      [{ 'size': ['small', 'normal', 'large', 'huge'] }],
+      [{ 'header': '1' }, { 'header': '2' }, { 'header': '3' }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }],
+      [{ 'background': [] }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      ['blockquote', 'code-block'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'align': [] }],
+      ['link', 'image', 'video'],
+      ['clean']
+    ]
+  }">
+</quill-editor>
+
+
+
+
+
+<!-- Thêm phần chọn hình ảnh -->
+<label for="fileInput">Thêm ảnh đại diện cho tour:</label>
+<input id="fileInput" type="file" (change)="onFileSelected($event)" accept="image/*" />
+<img *ngIf="newTour.imageHeader" [src]="newTour.imageHeader" alt="Ảnh đại diện" style="max-width: 200px; margin-top: 10px;" />
+
+
+
+  <button type="submit">Lưu tour</button>
+  
+</form>

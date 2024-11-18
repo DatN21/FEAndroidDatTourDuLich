@@ -1,0 +1,64 @@
+/* them-tour.component.scss */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  form {
+    // max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  input, button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px;
+    border-radius: 4px;
+  }
+  
+  button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  quill-editor {
+    width: 100%;
+  }
+  
+  .option{
+    padding-top: 5px;
+    padding-bottom: 20px;
+  }
+  #tourType{
+    margin-left: 10px;
+  }
+  #status{
+    margin-left: 7px;
+  }
+  /* styles.scss */
+.ql-editor {
+  font-size: 16px; /* Đảm bảo rằng cỡ chữ không bị ghi đè */
+}
+
+.ql-size-large {
+  font-size: 24px !important; /* Cỡ chữ lớn hơn */
+}
+
+.ql-color-red {
+  color: red !important; /* Đảm bảo màu sắc đỏ */
+}

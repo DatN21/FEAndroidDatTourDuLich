@@ -1,0 +1,52 @@
+/* Tạo không gian cho form */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Tạo các khoảng cách đẹp hơn */
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Cải thiện kích thước các nút */
+  .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  
+  /* Cải thiện cho ảnh */
+  img {
+    max-width: 100%;
+    border-radius: 5px;
+  }
+  
+  /* Tăng khoảng cách giữa các thẻ input */
+  input, select, quill-editor {
+    font-size: 16px;
+  }
+  
+  /* Style cho các thông báo */
+  .alert {
+    margin-top: 20px;
+  }
+  
+  /* Tạo hiệu ứng hover cho nút */
+  .btn:hover {
+    opacity: 0.85;
+  }
+  /* Tùy chỉnh cỡ chữ cho editor */
+.ql-editor {
+  font-size: 16px;
+}
+
+/* Cỡ chữ lớn */
+.ql-size-large {
+  font-size: 24px !important;
+}
+
+/* Màu sắc chữ đỏ */
+.ql-color-red {
+  color: red !important;
+}
