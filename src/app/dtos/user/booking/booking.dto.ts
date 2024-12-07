@@ -1,5 +1,7 @@
 export interface BookingDTO {
     user_id: number; // ID người dùng, lấy từ session hoặc token
+    full_name:string ;
+    phone_number:string;
     tour_id: number; // ID tour, lấy từ URL hoặc chọn
     tour_name: string; // Tên tour
     amount: number; // Số lượng khách

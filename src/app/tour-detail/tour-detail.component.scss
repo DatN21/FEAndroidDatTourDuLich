@@ -1,6 +1,10 @@
 .container{
-    padding-top: 80px;
+     padding-top: 10px;
     height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
 }
 
   
@@ -21,6 +25,7 @@
     color: #333;
     margin-bottom: 10px;
     text-align: center;
+    padding: 10px;
   }
   
   p {
@@ -44,25 +49,25 @@
   display: flex;
 }
 .contentCon{
-  width: 75%;
   text-align: justify;
+  width: 75%;
 }
  
 
 .datTour {
-  max-width: 600px;
+  width: 30%;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #f9f9f9;  
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-right: -80px;
-  height: 780px;
+  height: 680px;
 
   /* Sticky position */
-  position: sticky;
-  top: 20px; /* Cách mép trên 20px */
-  z-index: 1000; /* Đảm bảo luôn ở trên các phần tử khác */
+  // position: sticky;
+  // top: 20px; /* Cách mép trên 20px */
+  // z-index: 1000; /* Đảm bảo luôn ở trên các phần tử khác */
 }
 
 h2 {
@@ -89,7 +94,7 @@ label {
 
 input[type="number"], input[type="date"], select, textarea {
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1em;
@@ -107,7 +112,7 @@ textarea {
 }
 
 .submit-button {
-  padding: 12px 20px;
+  padding: 9px 20px;
   background-color: #4CAF50;
   color: white;
   border: none;
@@ -118,10 +123,76 @@ textarea {
 }
 
 .submit-button:disabled {
-  background-color: #cccccc;
+  background-color: #4CAF50;
   cursor: not-allowed;
 }
 
 .submit-button:hover {
   background-color: #45a049;
+}
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .slideshow-container {
+    width: 100%;
+  }
+
+  .booking-form .form-group input,
+  .booking-form .form-group textarea {
+    font-size: 14px;
+  }
+}
+
+.mySlides {
+  display: none; /* Hide all images initially */
+  width: 100%;
+}
+
+.mySlides.active {
+  display: block; /* Show only the active slide */
+}
+
+/* Slideshow container */
+.slideshow-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 20px;
+}
+.modal-content {
+  width: 100%;
+  height: auto;
+}
+/* Next and Previous buttons */
+.prev,
+.next {
+  position: absolute;
+  top: 50%;
+  padding: 16px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+  transform: translateY(-50%);
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.anhVahead{
+  background-color: #333;
+  width: 100%;
+  margin-top: 77px;
 }

@@ -1,0 +1,51 @@
+<div class="account-info">
+  <h1>Thông Tin Tài Khoản</h1>
+  <div *ngIf="successMessage" class="alert alert-success text-center">
+    {{ successMessage }}
+  </div>
+
+  <!-- Hiển thị thông báo lỗi -->
+  <div *ngIf="errorMessage" class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="user; else notLoggedIn">
+    <div class="account-details">
+      <div class="account-item">
+        <label for="username">Số điện thoại:</label>
+        <input type="text" id="username" [(ngModel)]="user.phone" [disabled]="isAdmin" />
+      </div>
+      <div class="account-item">
+        <label for="name">Họ và Tên:</label>
+        <input type="text" id="name" [(ngModel)]="user.name" [disabled]="isAdmin" />
+      </div>
+      <div class="account-item">
+        <label for="address">Giới tính:</label>
+        <input type="text" id="address" [(ngModel)]="user.gender" [disabled]="isAdmin" />
+      </div>
+      <div class="account-item">
+        <label for="email">Email:</label>
+        <input type="email" id="email" [(ngModel)]="user.email" [disabled]="isAdmin" />
+      </div>
+      <div class="account-item">
+        <label for="address">Địa chỉ:</label>
+        <input type="text" id="address" [(ngModel)]="user.address" [disabled]="isAdmin" />
+      </div>
+    </div>
+
+    <div class="account-actions">
+      <button (click)="viewBookedTours()" class="btn btn-success">Quản lý tour đã đặt</button>
+      
+      <!-- Ẩn nút cập nhật nếu là admin -->
+      <button *ngIf="!isAdmin" (click)="updateAccount()" class="btn btn-primary">Cập nhật thông tin tài khoản</button>
+
+      <!-- Hiển thị nút chuyển đến trang admin nếu user là admin -->
+      <button *ngIf="user.roleId === 'ADMIN'" (click)="goToAdminPage()" class="btn btn-info">Chuyển đến Admin</button>
+
+      <button (click)="logout()" class="btn btn-danger">Đăng xuất</button>
+    </div>
+  </div>
+
+  <ng-template #notLoggedIn>
+    <p>Bạn chưa đăng nhập. Vui lòng đăng nhập để xem thông tin tài khoản.</p>
+  </ng-template>
+</div>

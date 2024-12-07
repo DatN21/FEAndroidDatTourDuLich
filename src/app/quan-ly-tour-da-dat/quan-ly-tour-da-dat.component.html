@@ -1,0 +1,82 @@
+<!-- Nút Thêm mới tour -->
+<h2>THÔNG TIN CÁC TOUR ĐÃ ĐẶT</h2>
+
+
+<!-- Bảng dữ liệu tour  -->
+<table class="table table-bordered mt-3">
+  <thead>
+    <tr>
+      <th>Tên tour</th>
+      <th>Ngày Ngày đặt </th>
+      <th>Tổng tiền </th>
+      <th>Trạng thái</th>
+      <!-- <th>Nội dung</th> -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let booking of bookings">
+        <td>{{ booking.tour_name }}</td>
+      <td>{{ booking.start_date  }}</td>
+      <td>{{ booking.total_price  }}</td>
+      <td>{{ booking.status }}</td>
+      <!-- <td [innerHTML]="tour.content"></td> -->
+      <td>
+      <!-- Nút Thêm Ảnh -->
+
+
+<!-- 
+<div>
+  <div class="modal-content">
+    <h3>Thêm ảnh cho tour</h3>
+    <label for="fileInput">Chọn ảnh</label>
+    <input id="fileInput" type="file" (change)="onFileSelected($event)" multiple accept="image/*">
+    <button (click)="uploadImages()" class="btn btn-success" [disabled]="!selectedFiles.length || selectedTourId === null">
+      Thêm
+    </button>
+    <button (click)="cancelAddImage()" class="btn btn-danger">
+      Hủy
+    </button>
+  </div>
+</div>
+
+
+
+Hiển thị danh sách ảnh đã chọn (nếu có) -->
+<!-- <div *ngIf="selectedFiles.length > 0">
+  <p><strong>Ảnh đã chọn:</strong></p>
+  <ul>
+    <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
+  </ul>
+  </div> -->
+
+
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Pagination Section -->
+<div class="d-flex justify-content-center mt-4">
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li class="page-item" *ngIf="currentPage > 1">
+        <a class="page-link" (click)="onPageChange(1)">First</a>
+      </li>
+      <li class="page-item" *ngIf="currentPage > 1">
+        <a class="page-link" (click)="onPageChange(currentPage - 1)">Previous</a>
+      </li>
+      <ng-container *ngFor="let page of visiblePages">
+        <li class="page-item" [ngClass]="{'active': page === currentPage}">
+          <a class="page-link" (click)="onPageChange(page)">{{ page }}</a>
+        </li>
+      </ng-container>
+      <li class="page-item" *ngIf="currentPage < totalPages">
+        <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
+      </li>
+      <li class="page-item" *ngIf="currentPage < totalPages">
+        <a class="page-link" (click)="onPageChange(totalPages)">Last</a>
+      </li>
+    </ul>
+  </nav>
+</div>

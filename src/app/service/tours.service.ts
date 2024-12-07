@@ -6,13 +6,14 @@ import {  Tour } from '../model/tour';
 import { TourCreateDTO } from '../dtos/user/tourDTO/tour-create.dto';
 import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs'; 
+import {AuthService} from '../service/auth.service'
 @Injectable({
   providedIn: 'root'
 })
 export class TourService {
   private apiUrl = `${enviroment.apiBaseUrl}/tours`;
-
-  constructor(private http: HttpClient) { }
+  private apiUrlGetTourIMG =  `${enviroment.apiBaseUrl}/tours/uploads`;
+  constructor(private http: HttpClient,private authService:AuthService) { }
 
   getTours(keyword:string, 
               page: number, limit: number
@@ -34,7 +35,7 @@ export class TourService {
   }
 
   addTour(tour: TourCreateDTO): Observable<TourCreateDTO> {
-    return this.http.post<TourCreateDTO>(this.apiUrl, tour);
+    return this.authService.postWithAuthHeader(this.apiUrl,tour);
   }
 
 
@@ -47,11 +48,13 @@ uploadImages(tourId: number, files: File[]): Observable<any> {
   files.forEach(file => {
     formData.append('files', file, file.name);
   });
-
+  
+  const url = `${this.apiUrl}/uploads/${tourId}`;
+  
   // Send the files to the backend
-  return this.http.post<any>(`${this.apiUrl}/uploads/${tourId}`, formData).pipe(
+  return this.authService.postWithAuthHeader(url, formData).pipe(
     map(response => response),  // Return the backend response directly if needed
-    catchError(this.handleError)
+    catchError(this.handleError)  // Handle any errors
   );
 }
 
@@ -62,21 +65,34 @@ uploadImages(tourId: number, files: File[]): Observable<any> {
   }
 
   updateTour(id: number, tour: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, tour);
+    const url = `${this.apiUrl}/${id}`;
+    return this.authService.putWithAuthHeader(url, tour);
   }
-   // Lấy danh sách ảnh của tour
-   getTourImages(tourId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${tourId}/images`);
-  }
+
    // Xoá một ảnh
-   deleteTourImage(imageId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/images/${imageId}`);
-    
+   deleteTour(id: number): Observable<void> {
+    const urlDelete =`${this.apiUrl}/${id}`
+    return this.authService.deleteWithAuthHeader(urlDelete);
   }
   // Xoá tất cả ảnh
   deleteAllTourImages(tourId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${tourId}/images`);
+    const urlDelete = `${this.apiUrl}/${tourId}/images` ;
+    return this.authService.deleteWithAuthHeader(urlDelete);
   }
+
+  getImagesByTourId(tourId: number, page: number, size: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${tourId}?page=${page}&size=${size}`);
+  }
+
+      getToursFull(keyword:string, 
+        page: number, limit: number
+    ): Observable<Tour[]> {
+    const params = new HttpParams()
+    .set('keyword', keyword)
+    .set('page', page.toString())
+    .set('limit', limit.toString());            
+    return this.authService.getWithAuthHeaderFull(`${this.apiUrl}/full`,{ params });
+    }
 }
 
 

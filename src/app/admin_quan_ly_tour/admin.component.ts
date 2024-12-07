@@ -11,10 +11,11 @@ import {QuanLyBookingComponent} from '../quan-ly-booking/quan-ly-booking.compone
 import {ThemMoiTourComponent} from '../them-moi-tour/them-moi-tour.component'
 import {SuaThongTinTourComponent} from '../sua-thong-tin-tour/sua-thong-tin-tour.component'
 import {TourDetailComponent} from '../tour-detail/tour-detail.component'
+import {QuanLyNguoiDungComponent} from '../quan-ly-nguoi-dung/quan-ly-nguoi-dung.component'
 @Component({
   selector: 'app-admin-quan-ly-tour',
   standalone: true,
-  imports: [CommonModule, RouterModule, QuanLyTourComponent,QuanLyBookingComponent,ThemMoiTourComponent,SuaThongTinTourComponent,TourDetailComponent],
+  imports: [CommonModule, RouterModule,QuanLyNguoiDungComponent, QuanLyTourComponent,QuanLyBookingComponent,ThemMoiTourComponent,SuaThongTinTourComponent,TourDetailComponent],
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss'] // Sửa thành styleUrls
 })

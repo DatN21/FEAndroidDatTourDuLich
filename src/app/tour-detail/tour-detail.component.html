@@ -1,85 +1,82 @@
+<div class="anhVahead">
+
+</div>
+
 <div class="container">
-    <div class="header-hinh">
-      <!-- <img *ngIf="tour.imageHeader" [src]="tour.imageHeader" alt="Tour Image" class="tour-image" /> -->
+
+  <div class="body">
+    <!-- Tên tour -->
+    <h1>{{ tour.tourName }}</h1>
+
+    <div class="contentCha">
+    <div class="slideshow-container">
+      <!-- Các ảnh trong slideshow -->
+      <div *ngFor="let img of images; let i = index" class="mySlides" [ngClass]="{'active': i === currentIndex}">
+        <img [src]="img" alt="Slideshow Image" class="modal-content" />
+      </div>
+  
+      <!-- Nút Previous và Next -->
+      <a class="prev" (click)="changeImage(-1)">&#10094;</a>
+      <a class="next" (click)="changeImage(1)">&#10095;</a>
     </div>
-    <div class="body">
-      <h1>{{ tour.tourName }}</h1>
-<!--   
-      <p><strong>Loại tour:</strong> {{ tour.tour_type === '1 day' ? '1 ngày' : 'Nhiều ngày' }}</p>
-      <p><strong>Địa điểm khởi hành:</strong> {{ tour.departure_location }}</p>
-      <p><strong>Điểm đến:</strong> {{ tour.destination }}</p>
-      <p><strong>Ngày khởi hành:</strong> {{ tour.start_date }}</p>
-      <p><strong>Thời lượng:</strong> {{ tour.duration }} ngày</p>
-      <p><strong>Giá:</strong> {{ tour.price | number }}đ/Khách</p> -->
-      <div class="contentCha">
-        <div class="contentCon" [innerHTML]="tour.content"></div>
 
-        <div class="datTour">
-          <h2>Đặt Tour</h2>
-          <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
-            <div class="form-group">
-              <label for="amount">Số khách:</label>
-              <input type="number" id="amount" formControlName="amount" class="form-control" />
-              <div *ngIf="bookingForm.get('amount')?.invalid && bookingForm.get('amount')?.touched" class="error-message">
-                Số lượng khách phải lớn hơn hoặc bằng 1.
-              </div>
-            </div>
+    <div class="datTour">
+      <h2>Đặt Tour</h2>
+      <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
         
-            <div class="form-group">
-              <label for="start_date">Ngày khởi hành:</label>
-              <input type="date" id="start_date" formControlName="start_date" class="form-control" />
-              <div *ngIf="bookingForm.get('start_date')?.invalid && bookingForm.get('start_date')?.touched" class="error-message">
-                Ngày khởi hành không được để trống.
-              </div>
-            </div>
-        
-            <div class="form-group">
-              <label for="name">Họ và tên:</label>
-              <input type="text" id="name" formControlName="name" class="form-control" />
-              <div *ngIf="bookingForm.get('name')?.invalid && bookingForm.get('name')?.touched" class="error-message">
-                <span *ngIf="bookingForm.get('name')?.errors?.['required']">Họ và tên không được để trống.</span>
-                <span *ngIf="bookingForm.get('name')?.errors?.['pattern']">Họ và tên chỉ được chứa chữ cái và khoảng trắng.</span>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label for="phone">Số điện thoại:</label>
-              <input type="text" id="phone" formControlName="phone" class="form-control" />
-              <div *ngIf="bookingForm.get('phone')?.invalid && bookingForm.get('phone')?.touched" class="error-message">
-                <span *ngIf="bookingForm.get('phone')?.errors?.['required']">Số điện thoại không được để trống.</span>
-                <span *ngIf="bookingForm.get('phone')?.errors?.['pattern']">Số điện thoại không hợp lệ.</span>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label for="email">Email:</label>
-              <input type="text" id="email" formControlName="email" class="form-control" />
-              <div *ngIf="bookingForm.get('email')?.invalid && bookingForm.get('email')?.touched" class="error-message">
-                <span *ngIf="bookingForm.get('email')?.errors?.['required']">Email không được để trống.</span>
-                <span *ngIf="bookingForm.get('email')?.errors?.['email']">Email không hợp lệ.</span>
-              </div>
-            </div>
-            
+        <!-- Số khách -->
+        <div class="form-group">
+          <label for="amount">Số khách:</label>
+          <input type="number" id="amount" formControlName="amount" class="form-control" />
+          <div *ngIf="bookingForm.get('amount')?.invalid && bookingForm.get('amount')?.touched" class="error-message">
+            Số lượng khách phải lớn hơn hoặc bằng 1.
+          </div>
+        </div>
 
-            <div class="form-group">
-              <label for="notes">Ghi chú:</label>
-              <textarea id="notes" formControlName="notes" class="form-control"></textarea>
-            </div>
-        
-            <button type="submit" [disabled]="bookingForm.invalid" class="submit-button">Đặt Tour</button>
-          </form>
+        <!-- Ngày khởi hành -->
+        <div class="form-group">
+          <label for="start_date">Ngày khởi hành:</label>
+          <input type="date" id="start_date" formControlName="start_date" class="form-control" />
+          <div *ngIf="bookingForm.get('start_date')?.invalid && bookingForm.get('start_date')?.touched" class="error-message">
+            Ngày khởi hành không được để trống.
+          </div>
+        </div>
 
+        <!-- Họ và tên -->
+        <div class="form-group">
+          <label for="fullName">Họ và tên:</label>
+          <input type="text" id="fullName" formControlName="fullName" class="form-control" />
+          <div *ngIf="bookingForm.get('fullName')?.invalid && bookingForm.get('fullName')?.touched" class="error-message">
+            <span *ngIf="bookingForm.get('fullName')?.errors?.['required']">Họ và tên không được để trống.</span>
+          </div>
         </div>
         
+        <!-- Số điện thoại -->
+        <div class="form-group">
+          <label for="phoneNumber">Số điện thoại:</label>
+          <input type="text" id="phoneNumber" formControlName="phoneNumber" class="form-control" />
+          <div *ngIf="bookingForm.get('phoneNumber')?.invalid && bookingForm.get('phoneNumber')?.touched" class="error-message">
+            <span *ngIf="bookingForm.get('phoneNumber')?.errors?.['required']">Số điện thoại không được để trống.</span>
+            <span *ngIf="bookingForm.get('phoneNumber')?.errors?.['pattern']">Số điện thoại không hợp lệ.</span>
+          </div>
+        </div>
 
-      </div>
+        <!-- Ghi chú -->
+        <div class="form-group">
+          <label for="notes">Ghi chú:</label>
+          <textarea id="notes" formControlName="notes" class="form-control"></textarea>
+        </div>
 
+        <!-- Nút gửi form -->
+        <button type="submit" [disabled]="bookingForm.invalid" class="submit-button">Đặt Tour</button>
+      </form>
+    </div>
 
+  </div>
+      <div class="contentCon" [innerHTML]="tour.content"></div>
 
-      <!-- Hiển thị thông báo lỗi nếu có -->
-      <div *ngIf="errorMessage" class="alert alert-danger">
-        {{ errorMessage }}
-      </div>
+      <!-- Form đặt tour -->
+
     </div>
   </div>
-  
+

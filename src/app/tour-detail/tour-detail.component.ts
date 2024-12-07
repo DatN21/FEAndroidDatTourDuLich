@@ -1,80 +1,121 @@
-import { Component, OnInit } from '@angular/core';
-import { HeaderComponent } from "../header/header.component";
-import { FooterComponent } from "../footer/footer.component";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { HeaderComponent } from '../header/header.component';
+import { FooterComponent } from '../footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FormBuilder, FormGroup, Validators ,ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService } from '../service/booking.service';
 import { TourService } from '../service/tours.service';
 import { BookingDTO } from '../dtos/user/booking/booking.dto';
+import { AuthService } from '../service/auth.service';
+import { ImageService } from '../service/image.service';
 
 @Component({
   selector: 'app-tour-detail',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent, FormsModule, CommonModule, RouterModule,ReactiveFormsModule],
+  imports: [HeaderComponent, FooterComponent, FormsModule, CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './tour-detail.component.html',
-  styleUrls: ['./tour-detail.component.scss']
+  styleUrls: ['./tour-detail.component.scss'],
 })
-export class TourDetailComponent implements OnInit {
+export class TourDetailComponent implements OnInit, OnDestroy {
   bookingForm!: FormGroup;
-  tour: any = {}; // Chứa thông tin tour
-  tourId!: number; // ID tour từ URL
-  userId!: number; // ID người dùng từ localStorage
-  tourName: string = 'test'; // Tên tour
-  pricePerPerson: number = 1000; // Giá mỗi người
-  totalPrice: number = 0; // Tổng tiền
-  errorMessage: string = ''; // Lỗi khi tải dữ liệu
-  successMessage: string = ''; // Thông báo thành công
+  tour: any = {}; 
+  tourId!: number; 
+  tourName: string = ''; 
+  loading: boolean = false;
+  images: string[] = [];
+  pricePerPerson: number = 0;
+  totalPrice: number = 0; 
+  errorMessage: string = ''; 
+  successMessage: string = ''; 
+  user: any;
+  selectedImage: string | null = null;
+  currentIndex: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private bookingService: BookingService,
     private tourService: TourService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
+    private imageService: ImageService
   ) {}
 
   ngOnInit(): void {
-    // Lấy tourId từ URL
+    this.user = this.authService.getLoggedInUser();
+    this.initializeForm();
+    this.loadTourData();
+  }
+
+  private initializeForm(): void {
+    this.bookingForm = this.fb.group({
+      amount: [1, [Validators.required, Validators.min(1)]],
+      start_date: ['', Validators.required],
+      phoneNumber: [
+        '',
+        [Validators.required, Validators.pattern(/^(0[3|5|7|8|9])+([0-9]{8})$/)],
+      ],
+      notes: [''],
+      fullName: ['', [Validators.required, Validators.minLength(3)]],
+    });
+
+    this.bookingForm.get('amount')?.valueChanges.subscribe((amount) => {
+      this.totalPrice = this.calculateTotalPrice(amount);
+    });
+  }
+
+  private loadTourData(): void {
     const tourId = Number(this.route.snapshot.params['id']);
     if (tourId) {
       this.tourId = tourId;
       this.fetchTourDetails(tourId);
+      this.loadImages();
     } else {
       this.errorMessage = 'Không tìm thấy thông tin tour.';
     }
-
-    // Lấy thông tin người dùng từ localStorage
-    const userData = JSON.parse(localStorage.getItem('user') || '{}');
-    this.userId = userData.id || 9; // Mặc định là 1 nếu không có user
-
-    // Khởi tạo form với các trường dữ liệu
-    this.bookingForm = this.fb.group({
-      amount: [1, [Validators.required, Validators.min(1)]], // Số khách >= 1
-      start_date: ['', Validators.required], // Không được để trống
-      name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]+$/)]], // Chỉ chứa chữ cái và khoảng trắng
-      phone: ['', [Validators.required, Validators.pattern(/^(0[3|5|7|8|9])+([0-9]{8})$/)]], // Định dạng số điện thoại VN
-      email: ['', [Validators.required, Validators.email]], // Định dạng email
-      notes: [''] // Không bắt buộc
-    });
-
-    // Lắng nghe sự thay đổi của số lượng khách để tính lại tổng tiền
-    this.bookingForm.get('amount')?.valueChanges.subscribe((amount) => {
-      this.totalPrice = this.calculateTotalPrice(amount);
-    });
-
-    // Thiết lập tổng tiền mặc định khi chưa thay đổi số khách
-    this.totalPrice = this.calculateTotalPrice(1);
   }
 
-  // Hàm tính tổng tiền dựa trên số lượng khách
-  calculateTotalPrice(amount: number): number {
-    return amount * this.pricePerPerson;
+  private fetchTourDetails(tourId: number): void {
+    this.tourService.getDetailTour(tourId).subscribe({
+      next: (data) => {
+        this.tour = data;
+        this.pricePerPerson = (data as any).price;
+        this.totalPrice = this.calculateTotalPrice(this.bookingForm.value.amount);
+      },
+      error: () => {
+        this.errorMessage = 'Không thể tải thông tin tour.';
+      },
+    });
   }
 
-  // Gửi yêu cầu đặt tour
+  private loadImages(): void {
+    this.loading = true;
+    this.imageService.getImagesByTourIdArray(this.tourId).subscribe({
+      next: (data) => {
+        const imageRequests = data.map((img) =>
+          this.imageService.getImageWithToken(img.imgUrl).toPromise()
+        );
+
+        Promise.all(imageRequests)
+        .then((imageBlobs) => {
+          this.images = imageBlobs
+            .filter((blob): blob is Blob => !!blob && blob.size > 0) // Sử dụng '!!blob' để loại bỏ 'undefined'
+            .map((blob) => URL.createObjectURL(blob));
+        })
+        .catch((err) => {
+          console.error('Lỗi khi tải ảnh:', err);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+      },
+      error: () => (this.loading = false),
+    });  
+  }
+
   onSubmit(): void {
     if (this.bookingForm.invalid) {
       alert('Vui lòng kiểm tra thông tin đặt tour.');
@@ -82,40 +123,45 @@ export class TourDetailComponent implements OnInit {
     }
 
     const bookingData: BookingDTO = {
-      user_id: this.userId,
+      user_id: this.user.id,
+      full_name: this.bookingForm.value.fullName,
+      phone_number: this.bookingForm.value.phoneNumber,
       tour_id: this.tourId,
-      tour_name: this.tourName,
+      tour_name: this.tour.tourName,
       amount: this.bookingForm.value.amount,
       start_date: this.bookingForm.value.start_date,
-      total_price: this.totalPrice,
+      total_price: this.calculateTotalPrice(this.bookingForm.value.amount),
       status: 'Đang chờ xử lý',
-      payment_method: this.bookingForm.value.payment_method,
-      notes: this.bookingForm.value.notes || ''
+      notes: this.bookingForm.value.notes || '',
     };
 
-    // Gửi dữ liệu đặt tour đến API
     this.bookingService.createBooking(bookingData).subscribe({
       next: () => {
         alert('Đặt tour thành công!');
-        this.router.navigate(['/']); // Chuyển hướng về trang chủ sau khi đặt tour thành công
+        this.bookingForm.reset();
+        this.totalPrice = 0;
       },
-      error: (err) => {
-        console.error(err);
-        alert('Đặt tour thất bại. Vui lòng thử lại.');
-      }
+      error: () => alert('Đặt tour thất bại. Vui lòng thử lại.'),
     });
   }
 
-  // Lấy thông tin chi tiết tour
-  fetchTourDetails(tourId: number): void {
-    this.tourService.getDetailTour(tourId).subscribe({
-      next: (data) => {
-        this.tour = data;
-        // this.tourName = data.name; // Lưu tên tour từ dữ liệu nhận được
-      },
-      error: (err) => {
-        this.errorMessage = 'Không thể tải thông tin tour.';
-      }
-    });
+  calculateTotalPrice(amount: number): number {
+    return amount > 0 && this.tour.price ? amount * this.tour.price : 0;
+  }
+
+  openImage(image: string): void {
+    this.selectedImage = image;
+  }
+
+  closeModal(): void {
+    this.selectedImage = null;
+  }
+
+  changeImage(direction: number): void {
+    this.currentIndex = (this.currentIndex + direction + this.images.length) % this.images.length;
+  }
+
+  ngOnDestroy(): void {
+    this.images.forEach((url) => URL.revokeObjectURL(url));
   }
 }

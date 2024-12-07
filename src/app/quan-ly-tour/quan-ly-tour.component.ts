@@ -23,7 +23,8 @@ export class QuanLyTourComponent implements OnInit {
   visiblePages: number[] = [];
   keyword: string = "";
   showForm = false;
-
+  successMessage: string = '';
+  errorMessage: string = '';
   showAddImageForm: boolean = false; // Điều khiển hiển thị form thêm ảnh
   selectedFiles: File[] = [];        // Mảng lưu ảnh đã chọn
   selectedTourId: number | null = null;
@@ -52,7 +53,7 @@ export class QuanLyTourComponent implements OnInit {
   }
 
   getTours(keyword: string, page: number, limit: number) {
-    this.tourService.getTours(keyword, page, limit).subscribe({
+    this.tourService.getToursFull(keyword, page, limit).subscribe({
       next: (response: any) => {
         if (response && response.tourResponses) {
           this.tours = response.tourResponses.map((tour: Tour) => ({
@@ -101,27 +102,8 @@ export class QuanLyTourComponent implements OnInit {
   //     }
   //   });
   // }
-  onFileSelected(event: any): void {
-    // Lấy danh sách các tệp đã chọn
-    this.selectedFiles = Array.from(event.target.files);
-  }
-  uploadImages() {
-    if (this.selectedTourId !== null && this.selectedFiles.length > 0) {
-      this.tourService.uploadImages(this.selectedTourId, this.selectedFiles).subscribe({
-        next: (response) => {
-          console.log('Uploaded images:', response);
-          this.uploadedImageUrls = response.map((image: any) => image.imageUrl);
-          this.showAddImageForm = false;
-          this.selectedFiles = [];
-        },
-        error: (error) => {
-          console.error('Error uploading images:', error);
-        }
-      });
-    } else {
-      console.error('Tour ID or files are missing!');
-    }
-  }
+
+
   
 
   // Hàm để chọn tourId khi người dùng chọn một tour cụ thể
@@ -140,5 +122,30 @@ export class QuanLyTourComponent implements OnInit {
     this.showAddImageForm = !this.showAddImageForm;
   }
 
-
+  deleteTour(tourId: number): void {
+    // Hiển thị thông báo xác nhận trước khi xóa
+    const confirmDelete = window.confirm('Bạn có chắc chắn muốn xóa tour này không?');
+  
+    if (confirmDelete) {
+      // Kiểm tra xem tourId có hợp lệ hay không
+      if (tourId) {
+        // Gọi service để xóa tour
+        this.tourService.deleteTour(tourId).subscribe({
+          next: () => {
+            // Hiển thị thông báo thành công
+            this.successMessage = 'Tour đã được xóa thành công!';
+            this.errorMessage = '';
+            // Tải lại danh sách các tour
+            this.getTours(this.keyword, this.currentPage, this.itemsPerPage);
+          },
+          error: (err) => {
+            // Hiển thị thông báo lỗi khi xóa không thành công
+            this.errorMessage = 'Đã xảy ra lỗi khi xóa tour.';
+            console.error('Error deleting tour:', err);
+          }
+        });
+      }
+    }
+  }
+  
 }

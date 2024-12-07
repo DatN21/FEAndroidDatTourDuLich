@@ -1,8 +1,6 @@
 <header>
     <nav class="navbar navbar-expand-lg">
-
         <div class="container">
-
             <a class="navbar-brand" href="#">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="50" height="50">
                     <circle cx="50" cy="50" r="45" fill="rgb(240, 101, 197)" />
@@ -17,18 +15,14 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-
                     <li class="nav-item">
-                        <a class="nav-link active" href="">TRANG CHỦ</a>
+                        <a class="nav-link active" routerLink="">TRANG CHỦ</a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" routerLink="/gioi-thieu">GIỚI THIỆU</a>
                     </li>
-
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="#">
-                      
                             TOUR PHÚ YÊN
                         </a>
                         <ul class="dropdown-menu">
@@ -36,29 +30,29 @@
                             <li><a class="dropdown-item" href="#">TOUR PHÚ YÊN NHIỀU NGÀY</a></li>
                         </ul>
                     </li>
-
-                    
-
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                        
-                           CẨM NANG DU LỊCH
+                            CẨM NANG DU LỊCH
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            KHÁCH HÀNG
                         </a>
                     </li>
 
+                    <!-- Phần kiểm tra trạng thái đăng nhập -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-              
-                           KHÁCH HÀNG
-                        </a>
-                    </li>
+                        <ng-container *ngIf="isLoggedIn; else loginButton">
+                            <button class="btn btn-link nav-link" routerLink="/thong-tin-tai-khoan">TÀI KHOẢN</button>
+                        </ng-container>
 
-                    <li class="nav-item">
-                        <a class="nav-link" routerLink="dang-nhap">ĐĂNG NHẬP</a>
+                        <ng-template #loginButton>
+                            <a class="nav-link" routerLink="/dang-nhap">ĐĂNG NHẬP</a>
+                        </ng-template>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-
 </header>

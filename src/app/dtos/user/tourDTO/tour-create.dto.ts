@@ -1,7 +1,7 @@
 export class TourCreateDTO {
   tourName: string;
-  days: number;
-  startDate: Date;
+  days: string;
+  startDate?: string;
   destination: string;
   departureLocation: string;
   price: number;
@@ -16,8 +16,8 @@ export class TourCreateDTO {
   // Constructor
   constructor(
     tourName: string,
-    days: number,
-    startDate: Date,
+    days: string,
+    startDate: string,
     destination: string,
     departureLocation: string,
     price: number,

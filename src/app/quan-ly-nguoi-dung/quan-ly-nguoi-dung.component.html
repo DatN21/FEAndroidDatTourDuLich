@@ -1,0 +1,95 @@
+<section class="booking-data">
+    <h2 class="text-center my-4">Bảng Dữ Liệu Người Dùng</h2>
+  
+    <!-- Hiển thị thông báo thành công -->
+    <div *ngIf="successMessage" class="alert alert-success text-center">
+      {{ successMessage }}
+    </div>
+  
+    <!-- Hiển thị thông báo lỗi -->
+    <div *ngIf="errorMessage" class="alert alert-danger text-center">
+      {{ errorMessage }}
+    </div>
+  
+    <!-- Bảng dữ liệu người dùng -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover mt-3">
+        <thead class="thead-dark">
+          <tr>
+            <th>ID</th>
+            <th>Họ và Tên</th>
+            <th>Số Điện Thoại</th>
+            <th>Giới Tính</th>
+            <th>Email</th>
+            <th>Địa Chỉ</th>
+            <th>Phân Quyền</th>
+            <th>Hành Động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.id }}</td>
+            <td>
+              <input *ngIf="editableRowId === user.id" [(ngModel)]="user.name" class="form-control" />
+              <span *ngIf="editableRowId !== user.id">{{ user.name }}</span>
+            </td>
+            <td>
+              <input *ngIf="editableRowId === user.id" [(ngModel)]="user.phone" class="form-control" />
+              <span *ngIf="editableRowId !== user.id">{{ user.phone }}</span>
+            </td>
+            <td>
+              <select *ngIf="editableRowId === user.id" [(ngModel)]="user.gender" class="form-control">
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+              </select>
+              <span *ngIf="editableRowId !== user.id">{{ user.gender }}</span>
+            </td>
+            <td>
+              <input *ngIf="editableRowId === user.id" [(ngModel)]="user.email" class="form-control" />
+              <span *ngIf="editableRowId !== user.id">{{ user.email }}</span>
+            </td>
+            <td>
+              <input *ngIf="editableRowId === user.id" [(ngModel)]="user.address" class="form-control" />
+              <span *ngIf="editableRowId !== user.id">{{ user.address }}</span>
+            </td>
+            <td>
+              <select *ngIf="editableRowId === user.id" [(ngModel)]="user.roleId" class="form-control">
+                <option value=2>Admin</option>
+                <option value=1>User</option>
+              </select>
+              <span *ngIf="editableRowId !== user.id">{{ user.roleId }}</span>
+            </td>
+            <td>
+              <button *ngIf="editableRowId !== user.id" class="btn btn-primary btn-sm mx-1" title="Sửa thông tin" (click)="editRow(user.id)">
+                <i class="fa fa-edit"></i> Sửa
+              </button>
+              <button *ngIf="editableRowId === user.id" class="btn btn-success btn-sm mx-1" title="Cập nhật thông tin" (click)="updateRow(user)">
+                <i class="fa fa-save"></i> Cập nhật
+              </button>
+              <button *ngIf="editableRowId !== user.id" class="btn btn-danger btn-sm mx-1" title="Xóa người dùng" (click)="onDelete(user.id)">
+                <i class="fa fa-trash"></i> Xóa
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Phân trang -->
+    <div class="pagination-container text-center">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="currentPage === 0">
+          <a class="page-link" href="javascript:void(0)" (click)="onPageChange(currentPage - 1)">Trước</a>
+        </li>
+  
+        <li class="page-item" *ngFor="let page of visiblePages" [class.active]="page === currentPage">
+          <a class="page-link" href="javascript:void(0)" (click)="onPageChange(page)">{{ page + 1 }}</a>
+        </li>
+  
+        <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+          <a class="page-link" href="javascript:void(0)" (click)="onPageChange(currentPage + 1)">Sau</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+  

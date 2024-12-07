@@ -24,7 +24,8 @@ export class HomeComponent implements OnInit {
   totalPages: number = 0;             // Tổng số trang
   visiblePages: number[] = [];        // Các trang hiển thị
   keyword: string = "";               // Từ khóa tìm kiếm
-
+  oneDayTours: any[] = []; // Tour 1 ngày
+  multiDayTours: any[] = []; // Tour nhiều ngày
   constructor(
     private tourService: TourService, // Dịch vụ lấy dữ liệu tour
     private router: Router             // Dịch vụ điều hướng
@@ -40,11 +41,16 @@ getTours(keyword: string, page: number, limit: number) {
   this.tourService.getTours(keyword, page, limit).subscribe({
     next: (response: any) => {
       if (response && response.tourResponses) { // Kiểm tra response.tourResponses thay vì response.tours
-        this.tours = response.tourResponses.map((tour: Tour) => ({
-          ...tour,
-          // thumbnailUrl: `${enviroment.apiBaseUrl}/images/${tour.thumbnail}` // Đảm bảo đúng chính tả
-        }));
-        this.totalPages = response.totalPages ;
+        // Lọc tour thành 2 loại: 1 ngày và nhiều ngày
+        this.oneDayTours = response.tourResponses.filter((tour: Tour) => tour.tour_type === 'ONE_DAY');
+        this.multiDayTours = response.tourResponses.filter((tour: Tour) => tour.tour_type === 'MULTI_DAY');
+        
+        // Log thông tin tour (tuỳ chọn)
+        console.log('Tours 1 ngày:', this.oneDayTours);
+        console.log('Tours nhiều ngày:', this.multiDayTours);
+
+        // Cập nhật dữ liệu
+        this.totalPages = response.totalPages;
         this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
       } else {
         console.error("Cấu trúc phản hồi từ backend không đúng:", response);
@@ -55,6 +61,7 @@ getTours(keyword: string, page: number, limit: number) {
     }
   });
 }
+
 
 
   // Hàm tìm kiếm tour mới

@@ -47,39 +47,60 @@
 <h2>TOUR NỔI BẬT</h2>
 <p class="tongHop">TỔNG HỢP DANH SÁCH CÁC TOUR</p>
 <p class="headerTourMotNgay">TOUR PHÚ YÊN 1 NGÀY</p>
-<!-- Tours List -->
-<div >
-    <div class="row">
-      <div class="col-lg-4 col-md-6" *ngFor="let tour of tours">
-        <div class="tour-item" (click)="goToTourDetail(tour.id.toString())">
 
-          <!-- Hiển thị ảnh đại diện nếu có imageHeader -->
-          <img *ngIf="tour.imageHeader" [src]="tour.imageHeader" alt="Tour Image" class="tour-image">
-  
-          <p class="tour-name">{{ tour.tour_name }}</p>
-
-          <div class="td_tour_type">
-
-            <i class="fa-regular fa-clock"></i>
-            <p class="bold-text">{{ tour.tour_type === '1 day' ? '1 ngày' : 'Nhiều ngày' }}</p>
-        </div>
-
-          <div class="td_tour_type">
-          <i class="fa-regular fa-calendar-days"></i>
-          <p class="tour-depart">Khởi hành: {{ tour.departure_location }}</p>
-          </div>
-
+<!-- Tours 1 Day -->
+<div *ngIf="oneDayTours && oneDayTours.length">
+  <div class="row">
+    <div class="col-lg-4 col-md-6" *ngFor="let tour of oneDayTours">
+      <!-- Hiển thị thông tin tour 1 ngày -->
+      <div class="tour-item" (click)="goToTourDetail(tour.id.toString())">
+        <img *ngIf="tour.imageHeader" [src]="tour.imageHeader" alt="Tour Image" class="tour-image">
+        <p class="tour-name">{{ tour.tour_name }}</p>
         <div class="td_tour_type">
-            <p class="giaP">GIÁ:</p>
-          <p class="tour-price">{{ tour.price }}đ/Khách</p>
+          <i class="fa-regular fa-clock"></i>
+          <p class="bold-text">{{tour.days}}</p>
         </div>
-          </div>
-          <div class="tour-actions">
-            <span class="space-x"></span>
-          </div>
+        <div class="td_tour_type">
+          <i class="fa-regular fa-calendar-days"></i>
+          <p class="tour-depart">Khởi hành: {{ tour.start_date }}</p>
+        </div>
+        <div class="td_tour_type">
+          <p class="giaP">GIÁ:</p>
+          <p class="tour-price">{{ tour.price }}đ/Khách</p>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<p class="headerTourMotNgay">TOUR PHÚ YÊN NHIỀU NGÀY</p>
+
+<!-- Tours Multiple Days -->
+<div *ngIf="multiDayTours && multiDayTours.length">
+  <div class="row">
+    <div class="col-lg-4 col-md-6" *ngFor="let tour of multiDayTours">
+      <!-- Hiển thị thông tin tour nhiều ngày -->
+      <div class="tour-item" (click)="goToTourDetail(tour.id.toString())">
+        <img *ngIf="tour.imageHeader" [src]="tour.imageHeader" alt="Tour Image" class="tour-image">
+        <p class="tour-name">{{ tour.tour_name }}</p>
+        <div class="td_tour_type">
+          <i class="fa-regular fa-clock"></i>
+          <p class="bold-text">{{tour.days}}</p>
+        </div>
+        <div class="td_tour_type">
+          <i class="fa-regular fa-calendar-days"></i>
+          <p class="tour-depart">Khởi hành: {{ tour.start_date }}</p>
+        </div>
+        <div class="td_tour_type">
+          <p class="giaP">GIÁ:</p>
+          <p class="tour-price">{{ tour.price }}đ/Khách</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   </div>
   
 </div>

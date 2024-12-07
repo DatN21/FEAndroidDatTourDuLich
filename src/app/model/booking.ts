@@ -1,8 +1,9 @@
 import {Tour} from './tour'
 export interface Booking {
     id: number ;
-    user_id: number ;
-    tour_id: Tour ;
+    full_name: string ;
+    phone_number: string ;
+    userId: number ;
     tour_name: string ;
     amount : number ;
     start_date: Date ;

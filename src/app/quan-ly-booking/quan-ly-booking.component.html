@@ -1,4 +1,80 @@
-<!-- app.component.html -->
+<h2>Bảng dữ liệu Booking</h2>
 
-<h2>Quilljs Editor in Angular 15 | Geeksforgeek</h2>
-<div #editorContainer class="editor-container"></div>
+<!-- Hiển thị thông báo thành công -->
+<div *ngIf="successMessage" class="alert alert-success">
+  {{ successMessage }}
+</div>
+
+<!-- Hiển thị thông báo lỗi -->
+<div *ngIf="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+</div>
+
+<!-- Bảng dữ liệu booking -->
+<table class="table table-bordered mt-3">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>ID User đặt booking</th>
+      <th>Tên khách đặt trong form</th>
+      <th>Số điện thoại</th>
+      <th>Tên tour</th>
+      <th>Số lượng người</th>
+      <th>Tổng tiền</th>
+      <th>Trạng thái</th>
+      <th>Ghi chú</th>
+      <th>Thời điểm booking</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let booking of bookings">
+      <td>{{ booking.id }}</td>
+      <td>{{ booking.userId }}</td>
+      <td>{{ booking.full_name }}</td>
+      <td>{{ booking.phone_number }}</td>
+      <td>{{ booking.tour_name }}</td>
+      <td>{{ booking.amount }}</td>
+      <td>{{ booking.total_price }}</td>
+      <td>{{ booking.status }}</td>
+      <td>{{ booking.notes }}</td>
+      <td>{{ booking.booking_time }}</td>
+      <td>
+        <!-- Nút Cập nhật trạng thái -->
+        <button class="btn btn-primary btn-sm" title="Cập nhật trạng thái Booking" (click)="openUpdateForm(booking)">
+          <i class="fa fa-edit"></i> Cập nhật trạng thái
+        </button>
+
+        <!-- Nút Xóa -->
+        <button class="btn btn-danger btn-sm" title="Xóa" (click)="onDelete(booking.id)">
+          <i class="fa fa-trash"></i> Xóa tour
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="isUpdateFormVisible && selectedBooking" class="modal show" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cập nhật trạng thái booking</h5>
+      </div>
+      <div class="modal-body">
+        <form>
+          <!-- Trạng thái -->
+          <div class="form-group">
+            <label for="status">Trạng thái</label>
+            <input id="status" class="form-control" [(ngModel)]="selectedBooking.status" name="status">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        
+        <button type="button" class="btn btn-secondary" (click)="closeUpdateForm()">Hủy</button>
+        <button type="button" class="btn btn-primary" (click)="updateBookingStatus()">Cập nhật</button>
+      </div>
+    </div>
+  </div>
+</div>
+

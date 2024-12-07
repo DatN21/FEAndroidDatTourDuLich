@@ -20,22 +20,24 @@ export class ThemMoiTourComponent implements OnInit {
   @ViewChild('quillEditor') quillEditor: QuillEditorComponent | undefined;
   newTour: TourCreateDTO = {
     tourName: '',
-    days: 0,
-    startDate: new Date(),
+    days: '',
+    startDate: '',
     destination: '',
     tourType: '',
     departureLocation: '',
     status: '',
-    // thumbnail: '',
     price: 0,
     description: '',
     content: '',
-    imageHeader:'',
+    imageHeader: '',
   };
 
   selectedFiles: File[] = [];
   uploadedImageUrls: string[] = [];  // Mảng lưu trữ các URL ảnh đã upload
-  selectedImageBase64: string | undefined = ''; 
+  selectedImageBase64: string | undefined = '';
+  successMessage: string = ''; // Thông báo thành công
+  errorMessage: string = ''; // Thông báo lỗi
+
   constructor(private tourService: TourService, private router: Router) {}
 
   ngOnInit(): void {}
@@ -73,18 +75,21 @@ export class ThemMoiTourComponent implements OnInit {
       // Gửi yêu cầu tạo tour
       this.tourService.addTour(newTour).subscribe({
         next: (tour) => {
+          this.successMessage = 'Thêm mới tour thành công!'; // Hiển thị thông báo thành công
+          this.errorMessage = ''; // Xóa thông báo lỗi (nếu có)
+          this.registerForm.resetForm(); // Reset form
           this.router.navigate(['/quan-ly-tour']);
         },
         error: (err) => {
           console.error('Error creating tour:', err);
+          this.errorMessage = 'Có lỗi xảy ra khi thêm tour. Vui lòng thử lại!'; // Hiển thị thông báo lỗi
+          this.successMessage = ''; // Xóa thông báo thành công (nếu có)
         }
       });
     } else {
       console.error('Editor not initialized!');
     }
   }
-  
-  
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
@@ -99,5 +104,4 @@ export class ThemMoiTourComponent implements OnInit {
       console.error('No file selected or invalid file input');
     }
   }
-  
 }

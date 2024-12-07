@@ -13,19 +13,17 @@ import { RegisterDTO } from '../dtos/user/register.dto';
   standalone: true,
   imports: [HeaderComponent, FooterComponent, FormsModule, CommonModule, RouterModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
+  
   @ViewChild('registerForm') registerForm!: NgForm;
 
   phone: string = '';
   password: string = '';
   retypePassword: string = '';
   name: string = '';
-  address: string = '';
   isAccepted: boolean = false;
-  gender: string = '';
-  email: string = "ngothanhdat09@gmail.com";
   successMessage: string = '';
 
   constructor(private router: Router, private userService: UserService) {}
@@ -37,36 +35,32 @@ export class RegisterComponent {
 
   // Phương thức đăng ký
   register() {
-    const registerDTO:RegisterDTO = {
-        name: this.name,
-        phone: this.phone,
-        gender: this.gender,
-        password: this.password,
-        retypePassword: this.retypePassword,
-        address: this.address,
-        email: this.email,
-        role_id: 1
+    const registerDTO: RegisterDTO = {
+      name: this.name,
+      phone: this.phone,
+      password: this.password,
+      retypePassword: this.retypePassword,
+      role_id: 1,
     };
 
     this.userService.register(registerDTO).subscribe({
       next: (response: any) => {
-        this.successMessage = 'Đăng ký thành công!';
+        // Hiển thị thông báo thành công từ backend
+        alert(response.message || 'Đăng ký thành công!');
 
         // Xóa các giá trị đã nhập trong form
         this.phone = '';
         this.password = '';
         this.retypePassword = '';
         this.name = '';
-        this.address = '';
         this.isAccepted = false;
-        this.gender = '';
-        this.email = "ngothanhdat09@gmail.com";
 
-        this.registerForm.resetForm(); // Reset form
-
+        // Reset form
+        this.registerForm.resetForm();
       },
       error: (error) => {
-        const errorMessage = error.error || `Cannot register, error: ${error.message}`;
+        const errorMessage = error.error?.message || `Cannot register, error: ${error.message}`;
+        console.error('Phản hồi từ backend (error):', errorMessage);
         alert(errorMessage);
       }
     });

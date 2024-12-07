@@ -6,6 +6,7 @@
 }
 
 .register-form {
+    margin-top: 20px;
     background-color: rgb(12, 12, 55);
     border-radius: 10px;
     padding: 20px;
@@ -13,7 +14,7 @@
     border: 1px solid rgb(32, 34, 60);
     align-items: center;
     justify-content: center;
-    height: 86vh;
+    height: 77vh;
 }
 
 .register-header {
@@ -127,3 +128,13 @@
     display: flex;
     gap: 20px;
 }
+.success-snackbar {
+    background-color: #4caf50; /* Màu nền cho thông báo thành công */
+    color: white;
+  }
+  
+  .error-snackbar {
+    background-color: #f44336; /* Màu nền cho thông báo lỗi */
+    color: white;
+  }
+  

@@ -1,6 +1,5 @@
 <!-- Nút Thêm mới tour -->
-<a routerLink="/them-moi-tour" class="btn btn-primary">Thêm mới tour</a>
-
+<a routerLink="/admin/them-moi-tour" class="btn btn-primary">Thêm mới tour</a>
 <h2>Bảng dữ liệu tour</h2>
 
 
@@ -27,7 +26,7 @@
       <td>{{ tour.id }}</td>
       <td>{{ tour.tour_name }}</td>
       <td>{{ tour.days }}</td>
-      <td>{{ tour.start_date | date: 'dd-MM-yyyy' }}</td>
+      <td>{{tour.start_date }}</td>
       <td>{{ tour.destination }}</td>
       <td>{{ tour.tour_type }}</td>
       <td>{{ tour.departure_location }}</td>
@@ -66,21 +65,16 @@ Hiển thị danh sách ảnh đã chọn (nếu có) -->
 
 
 
-  <a class="btn btn-info btn-sm themAnh" [routerLink]="['/them-anh', tour.id]" title="Thêm ảnh">
+  <a class="btn btn-info btn-sm themAnh" [routerLink]="['/admin/them-anh', tour.id]" title="Thêm ảnh">
     <i class="fa fa-image"></i> Thêm ảnh
   </a>
   
 
 
-  <a class="btn btn-primary btn-sm" title="Sửa" [routerLink]="['/sua-thong-tin-tour', tour.id]">
+  <a class="btn btn-primary btn-sm" title="Sửa" [routerLink]="['/admin/edit-tour', tour.id]">
     <i class="fa fa-edit"></i> Sửa thông tin tour
   </a>
   
-
-<!-- Nút Xóa -->
-<button class="btn btn-danger btn-sm" title="Xóa">
-  <i class="fa fa-trash"></i> Xóa tour
-</button>
 
       </td>
     </tr>

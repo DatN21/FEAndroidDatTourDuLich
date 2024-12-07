@@ -10,6 +10,11 @@ import {QuanLyBookingComponent} from './quan-ly-booking/quan-ly-booking.componen
 import {ThemAnhComponent} from './them-anh/them-anh.component'
 import {SuaThongTinTourComponent} from './sua-thong-tin-tour/sua-thong-tin-tour.component'
 import {TourDetailComponent} from './tour-detail/tour-detail.component'
+import {ThongTinTaiKhoanComponent} from './thong-tin-tai-khoan/thong-tin-tai-khoan.component'
+import {QuanLyTourDaDatComponent} from './quan-ly-tour-da-dat/quan-ly-tour-da-dat.component'
+import { AdminComponent } from './admin_quan_ly_tour/admin.component';
+import {QuanLyNguoiDungComponent} from './quan-ly-nguoi-dung/quan-ly-nguoi-dung.component'
+import { AuthGuard } from './guards/auth.guard';
 export const routes: Routes = [
     {
         path: 'gioi-thieu', // URL sẽ được sử dụng để điều hướng
@@ -18,14 +23,48 @@ export const routes: Routes = [
     // { path: '', component: HomeComponent },
     { path: 'dang-nhap', component: LoginComponent },
     { path: 'dang-ky', component: RegisterComponent },
-    { path: 'them-moi-tour', component: ThemMoiTourComponent },
-    { path: 'app-quan-ly-tour', component: QuanLyTourComponent },
-    { path: 'admin', component: QuanLyTourComponent },
-    { path: 'quan-ly-booking', component: QuanLyBookingComponent },
-    { path: 'them-anh/:id', component: ThemAnhComponent },
+        {
+          path: 'admin',
+          component: AdminComponent, 
+          canActivate: [AuthGuard], // Admin layout
+          children: [
+            {
+              path: '',  // Trang dashboard của Admin
+              component: QuanLyTourComponent,  // Component của dashboard admin
+            
+            },
+            {
+              path: 'them-moi-tour',
+              component: ThemMoiTourComponent,  // Component thêm tour
+            },
+            {
+              path: 'quan-ly-booking',
+              component: QuanLyBookingComponent,  // Trang quản lý booking
+            },
+            {
+              path: 'quan-ly-nguoi-dung',
+              component: QuanLyNguoiDungComponent,  // Trang quản lý booking
+            },
+            {
+              path: 'edit-tour/:id',
+              component: SuaThongTinTourComponent,  // Component chỉnh sửa tour
+            },
+            {
+              path: 'app-quan-ly-tour',
+              component: QuanLyTourComponent,  // Trang quản lý tour
+            },
+            { path: 'them-anh/:id', component: ThemAnhComponent },
+        ]
+        },
+        // Các route khác nếu có
+      
+      
+
     { path: '', component: HomeComponent },
-    { path: 'sua-thong-tin-tour/:id', component: SuaThongTinTourComponent },
+
     { path: 'tour-detail/:id', component: TourDetailComponent },
+    {path: 'thong-tin-tai-khoan', component: ThongTinTaiKhoanComponent},
+    {path: 'quan-ly-tour-da-dat', component: QuanLyTourDaDatComponent}
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

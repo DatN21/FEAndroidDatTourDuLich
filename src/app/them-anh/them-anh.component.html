@@ -1,31 +1,80 @@
-<!-- Hiển thị thông báo thành công -->
-<div *ngIf="successMessage" class="alert alert-success custom-alert">
-  <i class="fa fa-check-circle"></i> {{ successMessage }}
+<div class="container mt-4">
+  <!-- Thông báo thành công hoặc lỗi -->
+ 
+
+  <!-- Bảng hiển thị ảnh -->
+  <h3 class="text-center mb-4">Danh sách ảnh của Tour có ID: {{ tourId }}</h3>
+  <table class="table table-striped table-bordered text-center shadow">
+    <thead class="thead-dark">
+      <tr>
+        <th>#</th>
+        <th>Ảnh</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let image of images; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>
+          <img [src]="image.fullUrl" alt="Tour Image" width="200" height="150" class="img-thumbnail shadow-sm">
+        </td>
+        <td>
+          <button (click)="deleteImage(image.id)" class="btn btn-danger">
+            <i class="fa fa-trash"></i> Xóa
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="successMessage" class="alert alert-success custom-alert mx-auto" style="max-width: 600px;">
+    <i class="fa fa-check-circle"></i> {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger custom-alert mx-auto" style="max-width: 600px;">
+    <i class="fa fa-times-circle"></i> {{ errorMessage }}
+  </div>
+  <!-- Phân trang -->
+  <div class="pagination mt-3 text-center" *ngIf="totalPages > 1">
+    <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1" class="btn btn-outline-primary me-1">
+      <i class="fa fa-angle-left"></i>
+    </button>
+    <button *ngFor="let page of pages" 
+            (click)="onPageChange(page)" 
+            [class.active]="currentPage === page" 
+            class="btn btn-outline-primary me-1">
+      {{ page }}
+    </button>
+    <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages" class="btn btn-outline-primary">
+      <i class="fa fa-angle-right"></i>
+    </button>
+  </div>
+
+  <!-- Thêm phần chọn hình ảnh -->
+  <div class="mt-4">
+    <label class="headerThemAnh" for="fileInput"><b>Thêm ảnh cho tour:</b></label>
+    <input id="fileInput" type="file" (change)="onFileSelected($event)" multiple accept="image/*" class="form-control mt-2 shadow-sm" />
+
+    <!-- Hiển thị tên ảnh đã chọn -->
+    <div *ngIf="selectedFiles.length > 0" class="selected-files mt-3">
+      <p><b>Đã chọn {{ selectedFiles.length }} ảnh:</b></p>
+      <ul class="list-group">
+        <li *ngFor="let file of selectedFiles" class="list-group-item list-group-item-light">
+          <i class="fa fa-image"></i> {{ file.name }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Nút upload ảnh -->
+    <div *ngIf="selectedFiles.length > 0" class="mt-4">
+      <button (click)="uploadImages()" class="btn btn-success btn-lg shadow">
+        <i class="fa fa-upload"></i> Tải ảnh lên
+      </button>
+    </div>
+  </div>
+
+  <!-- Nút đóng -->
+  <div class="mt-4">
+    <button (click)="close()" class="btn btn-danger btn-lg shadow">
+      <i class="fa fa-times"></i> Đóng
+    </button>
+  </div>
 </div>
-
-<!-- Hiển thị thông báo lỗi -->
-<div *ngIf="errorMessage" class="alert alert-danger custom-alert">
-  <i class="fa fa-times-circle"></i> {{ errorMessage }}
-</div>
-
-<!-- Thêm phần chọn hình ảnh -->
-<label class="headerThemAnh" for="fileInput">Thêm ảnh cho tours (tối đa 5 ảnh): </label> <br>
-<input id="fileInput" type="file" (change)="onFileSelected($event)" multiple accept="image/*" class="custom-file-input" />
-
-<!-- Hiển thị tên ảnh đã chọn -->
-<div *ngIf="selectedFiles.length > 0" class="selected-files">
-  <p>Đã chọn {{ selectedFiles.length }} ảnh:</p>
-  <ul>
-    <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
-  </ul>
-</div>
-
-<!-- Nút thêm ảnh -->
-<button (click)="uploadImages()" type="submit" class="btn btn-success">
-  <i class="fa fa-upload"></i> Thêm ảnh
-</button>
-
-<!-- Nút đóng -->
-<button (click)="close()" type="button" class="btn btn-secondary">
-  <i class="fa fa-times"></i> Đóng
-</button>
