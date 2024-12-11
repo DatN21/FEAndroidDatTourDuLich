@@ -8,7 +8,7 @@
       <input
         type="text"
         id="tourName"
-        class="form-control"
+        class="form-control input-style"
         name="tourName"
         [(ngModel)]="tour.tourName"
         required
@@ -20,7 +20,7 @@
       <input
         type="text"
         id="days"
-        class="form-control"
+        class="form-control input-style"
         name="days"
         [(ngModel)]="tour.days"
         required
@@ -32,7 +32,7 @@
       <input
         type="text"
         id="start_date"
-        class="form-control"
+        class="form-control input-style"
         name="start_date"
         [(ngModel)]="tour.startDate"
         required
@@ -44,7 +44,7 @@
       <input
         type="text"
         id="destination"
-        class="form-control"
+        class="form-control input-style"
         name="destination"
         [(ngModel)]="tour.destination"
         required
@@ -56,7 +56,7 @@
       <input
         type="number"
         id="price"
-        class="form-control"
+        class="form-control input-style"
         name="price"
         [(ngModel)]="tour.price"
         required
@@ -67,7 +67,7 @@
       <label for="status">Trạng Thái:</label>
       <select
         id="status"
-        class="form-control"
+        class="form-control input-style"
         name="status"
         [(ngModel)]="tour.status"
         required
@@ -81,7 +81,7 @@
       <label for="tourType">Loại Tour:</label>
       <select
         id="tourType"
-        class="form-control"
+        class="form-control input-style"
         name="tourType"
         [(ngModel)]="tour.tourType"
         required
@@ -92,23 +92,23 @@
     </div>
 
     <div class="form-group">
-      <label for="description">Điểm xuất phát:</label>
+      <label for="departureLocation">Điểm xuất phát:</label>
       <input
         type="text"
-        id="description"
-        class="form-control"
-        name="description"
-        [(ngModel)]="tour.description"
+        id="departureLocation"
+        class="form-control input-style"
+        name="departureLocation"
+        [(ngModel)]="tour.departureLocation"
         required
       />
     </div>
 
     <div class="form-group">
-      <label for="content">Nội dung tour:</label>
+      <label for="description">Mô tả về giá tour:</label>
       <quill-editor
         #quillEditor
-        [(ngModel)]="tour.content"
-        name="content"
+        [(ngModel)]="tour.description"
+        name="description"
         [style]="{ height: '200px' }"
         [modules]="{
           toolbar: [
@@ -129,13 +129,39 @@
       ></quill-editor>
     </div>
 
+    <div class="form-group">
+      <label for="content">Nội dung tour:</label>
+      <quill-editor
+        #quillEditor
+        [(ngModel)]="tour.content"
+        name="content"
+        [style]="{ height: '600px' }"
+        [modules]="{
+          toolbar: [
+            [{ 'font': [] }],
+            [{ 'size': ['small', 'normal', 'large', 'huge'] }],
+            [{ 'header': '1' }, { 'header': '2' }, { 'header': '3' }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'color': [] }],
+            [{ 'background': [] }],
+            [{ 'script': 'sub'}, { 'script': 'super' }],
+            ['blockquote', 'code-block'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'align': [] }],
+            ['link', 'image', 'video'],
+            ['clean']
+          ]
+        }"
+      ></quill-editor>
+    </div>
+
     <!-- Hiển thị ảnh đại diện cũ -->
-    <div *ngIf="tour.imageHeader" class="form-group anhHienTai">
+    <div *ngIf="tour.imageHeader" class="form-group image-preview">
       <label>Ảnh đại diện hiện tại:</label> <br />
       <img
         [src]="imagePreview || tour.imageHeader"
         alt="Ảnh đại diện"
-        class="img-fluid mb-2"
+        class="img-fluid"
         style="max-width: 200px"
       />
     </div>
@@ -148,7 +174,7 @@
         type="file"
         (change)="onFileSelected($event)"
         accept="image/*"
-        class="form-control"
+        class="form-control input-style"
       />
     </div>
 
@@ -158,24 +184,22 @@
       <img
         [src]="imagePreview"
         alt="Ảnh đã chọn"
-        class="img-fluid mb-2"
+        class="img-fluid"
         style="max-width: 200px"
       />
     </div>
+
     <div *ngIf="successMessage" class="alert alert-success">
       {{ successMessage }}
     </div>
 
-    <!-- Hiển thị thông báo lỗi -->
     <div *ngIf="errorMessage" class="alert alert-danger">
       {{ errorMessage }}
     </div>
+
     <!-- Nút Cập Nhật -->
     <div class="form-group">
-      <button type="submit" class="btn btn-success mt-3">Cập Nhật</button>
+      <button type="submit" class="btn btn-success mt-3 btn-custom">Cập Nhật</button>
     </div>
-
-    <!-- Hiển thị thông báo thành công -->
-  
   </form>
 </div>

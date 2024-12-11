@@ -1,52 +1,83 @@
 /* Tạo không gian cho form */
 .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  /* Tạo các khoảng cách đẹp hơn */
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Cải thiện kích thước các nút */
-  .btn {
-    padding: 10px 20px;
-    font-size: 16px;
-  }
-  
-  /* Cải thiện cho ảnh */
-  img {
-    max-width: 100%;
-    border-radius: 5px;
-  }
-  
-  /* Tăng khoảng cách giữa các thẻ input */
-  input, select, quill-editor {
-    font-size: 16px;
-  }
-  
-  /* Style cho các thông báo */
-  .alert {
-    margin-top: 20px;
-  }
-  
-  /* Tạo hiệu ứng hover cho nút */
-  .btn:hover {
-    opacity: 0.85;
-  }
-  /* Tùy chỉnh cỡ chữ cho editor */
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Cải thiện khoảng cách giữa các trường input */
+.form-group {
+  margin-bottom: 1.75rem;
+}
+
+/* Thêm padding cho các trường input và select */
+.input-style {
+  font-size: 16px;
+  padding: 12px;
+  border-radius: 5px;
+  background-color: #f4f7fb;
+  border: 1px solid #ccc;
+}
+
+/* Hiệu ứng hover khi di chuột qua các trường input */
+.input-style:hover {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Style cho các thông báo lỗi và thành công */
+.alert {
+  margin-top: 20px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+/* Màu sắc thông báo thành công */
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* Màu sắc thông báo lỗi */
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Tạo hiệu ứng hover cho nút */
+.btn-custom {
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 25px;
+  background-color: #28a745;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-custom:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+/* Tăng cỡ chữ cho Quill editor */
 .ql-editor {
   font-size: 16px;
+  line-height: 1.5;
 }
 
-/* Cỡ chữ lớn */
-.ql-size-large {
-  font-size: 24px !important;
+/* Hiệu ứng cho ảnh */
+img {
+  max-width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Màu sắc chữ đỏ */
-.ql-color-red {
-  color: red !important;
+/* Cải thiện cách hiển thị ảnh đã chọn */
+.image-preview img {
+  max-width: 200px;
+  border-radius: 5px;
 }

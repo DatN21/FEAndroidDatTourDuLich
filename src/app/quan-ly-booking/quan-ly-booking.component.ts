@@ -35,10 +35,18 @@ export class QuanLyBookingComponent implements OnInit {
     this.bookingService.getAllBookings(page, limit).subscribe({
       next: (response: any) => {
         if (response && response.bookingResponses) {
-          this.bookings = response.bookingResponses.map((booking: Booking) => ({
-            ...booking,
-            // Xử lý bổ sung nếu cần, ví dụ: thêm URL hình ảnh
-          }));
+          // Sắp xếp danh sách bookings theo ngày đặt, booking mới nhất lên trước
+          this.bookings = response.bookingResponses
+            .map((booking: Booking) => ({
+              ...booking,
+              // Xử lý bổ sung nếu cần, ví dụ: thêm URL hình ảnh
+            }))
+            .sort((a: Booking, b: Booking) => {
+              const dateA = new Date(a.booking_time);  // Thay 'bookingDate' bằng trường ngày đặt trong model
+              const dateB = new Date(b.booking_time);
+              return dateB.getTime() - dateA.getTime();  // Sắp xếp giảm dần (mới nhất lên trước)
+            });
+  
           this.totalPages = response.totalPages;
           this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
         } else {
@@ -50,6 +58,7 @@ export class QuanLyBookingComponent implements OnInit {
       }
     });
   }
+  
 
   generateVisiblePageArray(currentPage: number, totalPages: number): number[] {
     const maxVisiblePages = 5;
@@ -80,12 +89,13 @@ export class QuanLyBookingComponent implements OnInit {
         },
         error: (error: any) => {
           this.errorMessage = 'Đã xảy ra lỗi khi xóa booking.';
-          console.error('Lỗi khi xóa booking:', error);
-          alert('Xóa booking thất bại.');
+          console.error('Lỗi khi xóa booking:', error.message || error); // Hiển thị thông báo lỗi rõ ràng
+          alert('Xóa booking thất bại. Vui lòng thử lại.');
         }
       });
     }
   }
+  
 
   openUpdateForm(booking: Booking) {
     this.selectedBooking = { ...booking };

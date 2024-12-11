@@ -1,5 +1,73 @@
+.table {
+  font-size: 0.9rem;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+}
+
+
+.alert {
+  font-size: 0.9rem;
+}
+
+.badge {
+  font-size: 0.8rem;
+}
+
+.btn-sm i {
+  margin-right: 5px;
+}
+
+.btn-sm  {
+  margin: 0.5rem 0.75rem;
+  width: 100.76px;
+  height: 51.6px;
+}
+/* Thêm hiệu ứng hover cho các dòng trong bảng */
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1; /* Màu nền khi hover */
+  cursor: pointer; /* Con trỏ chuột thay đổi khi hover */
+}
+
+/* Thêm hiệu ứng hover cho các nút trong bảng */
+.table-hover tbody tr td button:hover {
+  background-color: #0056b3; /* Màu nền của nút khi hover */
+  border-color: #004085; /* Viền của nút khi hover */
+}
+
+
+/* Thêm hiệu ứng hover cho các dòng trong bảng */
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1; /* Màu nền khi hover */
+  cursor: pointer; /* Con trỏ chuột thay đổi khi hover */
+}
+
+/* Thêm hiệu ứng hover cho các nút trong bảng */
+.table-hover tbody tr td button:hover {
+  background-color: #0056b3; /* Màu nền của nút khi hover */
+  border-color: #004085; /* Viền của nút khi hover */
+}
+
+/* Modal đẹp hơn */
+.modal-content {
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Hiệu ứng nền modal */
 .modal.show {
-    display: block;
-    background-color: rgba(0, 0, 0, 0.5); /* Hiệu ứng mờ nền */
-  }
-  
+  display: block;
+  background-color: rgba(0, 0, 0, 0.5); /* Hiệu ứng mờ nền */
+}
+
+/* Cải thiện giao diện nút trong modal */
+.modal-footer button {
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Cải thiện giao diện các nút trong bảng */
+button.btn {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

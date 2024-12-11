@@ -36,16 +36,20 @@ user: any;
 
 
   getBookings(): void {
-    this.bookingService.getBookingsByUser(this.user.id).subscribe(
-      (data) => {
+    this.bookingService.getBookingsByUser(this.user.id).subscribe({
+      next: (data) => {
         this.bookings = data;
         console.log('Bookings:', this.bookings);
       },
-      (error) => {
+      error: (error) => {
         console.error('Error loading bookings:', error);
-      }
-    );
+      },
+      complete: () => {
+        console.log('Finished loading bookings.');
+      },
+    });
   }
+  
 
   generateVisiblePageArray(currentPage: number, totalPages: number): number[] {
     const maxVisiblePages = 5;

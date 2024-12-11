@@ -148,4 +148,38 @@ export class QuanLyTourComponent implements OnInit {
     }
   }
   
+  // Hàm tìm kiếm tour mới
+searchTours(keyword: string, page: number, limit: number) {
+  // Chuyển đổi từ khóa về chữ thường để tìm kiếm không phân biệt hoa thường
+  const lowerKeyword = keyword.trim().toLowerCase();
+
+  // Gọi API tìm kiếm
+  this.tourService.searchTours(keyword, page, limit).subscribe({
+    next: (response: any) => {
+      if (response && response.tourResponses) {
+        // Lọc các tour có chứa chuỗi keyword trong các trường thông tin
+        this.tours = response.tourResponses.filter((tour: Tour) => {
+          return (
+            tour.tour_name.toLowerCase().includes(lowerKeyword) || 
+            tour.destination.toLowerCase().includes(lowerKeyword) || 
+            tour.description.toLowerCase().includes(lowerKeyword)
+          );
+        });
+
+        // Cập nhật số trang và các trang hiển thị
+        this.totalPages = response.totalPages;
+        this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
+      } else {
+        console.error("Cấu trúc phản hồi từ backend không đúng:", response);
+      }
+    },
+    error: (error: any) => {
+      console.error('Lỗi khi tìm kiếm tour:', error);
+    }
+  });
+}
+
+  
+
+
 }

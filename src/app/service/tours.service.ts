@@ -93,6 +93,15 @@ uploadImages(tourId: number, files: File[]): Observable<any> {
     .set('limit', limit.toString());            
     return this.authService.getWithAuthHeaderFull(`${this.apiUrl}/full`,{ params });
     }
+
+    searchTours(keyword: string, page: number, limit: number): Observable<Tour[]> {
+      const params = new HttpParams()
+        .set('keyword', keyword)
+        .set('page', page.toString())
+        .set('limit', limit.toString());
+  
+      return this.http.get<Tour[]>(this.apiUrl, { params });
+    }
 }
 
 

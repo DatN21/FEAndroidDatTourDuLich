@@ -1,4 +1,4 @@
-<h2>Bảng dữ liệu Booking</h2>
+<h2 class="text-center my-4">Bảng dữ liệu Booking</h2>
 
 <!-- Hiển thị thông báo thành công -->
 <div *ngIf="successMessage" class="alert alert-success">
@@ -11,8 +11,8 @@
 </div>
 
 <!-- Bảng dữ liệu booking -->
-<table class="table table-bordered mt-3">
-  <thead>
+<table class="table table-bordered mt-3 table-hover">
+  <thead class="table-dark">
     <tr>
       <th>ID</th>
       <th>ID User đặt booking</th>
@@ -47,7 +47,7 @@
 
         <!-- Nút Xóa -->
         <button class="btn btn-danger btn-sm" title="Xóa" (click)="onDelete(booking.id)">
-          <i class="fa fa-trash"></i> Xóa tour
+          <i class="fa fa-trash"></i> Xóa booking
         </button>
       </td>
     </tr>
@@ -70,11 +70,25 @@
         </form>
       </div>
       <div class="modal-footer">
-        
         <button type="button" class="btn btn-secondary" (click)="closeUpdateForm()">Hủy</button>
         <button type="button" class="btn btn-primary" (click)="updateBookingStatus()">Cập nhật</button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Phân trang -->
+<nav *ngIf="totalPages > 1" aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item" [class.disabled]="currentPage === 0">
+      <a class="page-link" (click)="onPageChange(currentPage - 1)" href="javascript:void(0)">Trước</a>
+    </li>
+    <li *ngFor="let page of visiblePages" class="page-item" [class.active]="page === currentPage">
+      <a class="page-link" (click)="onPageChange(page)" href="javascript:void(0)">{{ page + 1 }}</a>
+    </li>
+    <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+      <a class="page-link" (click)="onPageChange(currentPage + 1)" href="javascript:void(0)">Sau</a>
+    </li>
+  </ul>
+</nav>
 
