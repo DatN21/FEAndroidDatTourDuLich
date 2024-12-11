@@ -102,6 +102,11 @@ uploadImages(tourId: number, files: File[]): Observable<any> {
   
       return this.http.get<Tour[]>(this.apiUrl, { params });
     }
+
+    updateTourStatus(id: number, status: string): Observable<any> {
+      const url = `${this.apiUrl}/status/${id}` ;
+      return this.authService.putWithAuthHeader(url, {status});
+    }
 }
 
 
