@@ -17,41 +17,10 @@
     <tr *ngFor="let booking of bookings">
         <td>{{ booking.tour_name }}</td>
       <td>{{ booking.start_date  }}</td>
-      <td>{{ booking.total_price  }}</td>
+      <td>{{ booking.total_price  }} VNĐ</td>
       <td>{{ booking.status }}</td>
       <!-- <td [innerHTML]="tour.content"></td> -->
-      <td>
-      <!-- Nút Thêm Ảnh -->
 
-
-<!-- 
-<div>
-  <div class="modal-content">
-    <h3>Thêm ảnh cho tour</h3>
-    <label for="fileInput">Chọn ảnh</label>
-    <input id="fileInput" type="file" (change)="onFileSelected($event)" multiple accept="image/*">
-    <button (click)="uploadImages()" class="btn btn-success" [disabled]="!selectedFiles.length || selectedTourId === null">
-      Thêm
-    </button>
-    <button (click)="cancelAddImage()" class="btn btn-danger">
-      Hủy
-    </button>
-  </div>
-</div>
-
-
-
-Hiển thị danh sách ảnh đã chọn (nếu có) -->
-<!-- <div *ngIf="selectedFiles.length > 0">
-  <p><strong>Ảnh đã chọn:</strong></p>
-  <ul>
-    <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
-  </ul>
-  </div> -->
-
-
-
-      </td>
     </tr>
   </tbody>
 </table>

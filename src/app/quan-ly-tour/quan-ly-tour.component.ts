@@ -157,6 +157,7 @@ searchTours(keyword: string, page: number, limit: number) {
   this.tourService.searchTours(keyword, page, limit).subscribe({
     next: (response: any) => {
       if (response && response.tourResponses) {
+        console.log('Kết quả tìm kiếm 3: ', response.tourResponses);
         // Lọc các tour có chứa chuỗi keyword trong các trường thông tin
         this.tours = response.tourResponses.filter((tour: Tour) => {
           return (

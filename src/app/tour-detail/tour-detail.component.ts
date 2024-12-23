@@ -121,7 +121,28 @@ export class TourDetailComponent implements OnInit, OnDestroy {
       alert('Vui lòng kiểm tra thông tin đặt tour.');
       return;
     }
-
+  
+    // Kiểm tra xem người dùng đã đăng nhập chưa
+    if (!this.authService.isLoggedIn()) {
+      // Nếu chưa đăng nhập, hiện thông báo yêu cầu đăng nhập và chuyển hướng đến trang đăng nhập
+      alert('Bạn cần đăng nhập trước khi đặt tour.');
+      this.router.navigate(['/dang-nhap']).then(() => {
+        // Sau khi người dùng đăng nhập thành công, thực hiện đặt tour
+        this.router.events.subscribe(() => {
+          if (this.authService.isLoggedIn()) {
+            this.createBooking();
+          }
+        });
+      });
+      return;
+    }
+  
+    // Nếu đã đăng nhập, tiến hành đặt tour
+    this.createBooking();
+  }
+  
+  // Hàm để tạo booking
+  createBooking(): void {
     const bookingData: BookingDTO = {
       user_id: this.user.id,
       full_name: this.bookingForm.value.fullName,
@@ -134,12 +155,15 @@ export class TourDetailComponent implements OnInit, OnDestroy {
       status: 'Đang chờ xử lý',
       notes: this.bookingForm.value.notes || '',
     };
-
+  
     this.bookingService.createBooking(bookingData).subscribe({
       next: () => {
         alert('Đặt tour thành công!');
         this.bookingForm.reset();
         this.totalPrice = 0;
+        this.router.navigate(['/tour', this.tourId]).then(() => {
+          alert('Bạn đã đặt tour thành công!');
+        });
       },
       error: () => alert('Đặt tour thất bại. Vui lòng thử lại.'),
     });

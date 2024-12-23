@@ -1,8 +1,85 @@
-.footer-description {
-    // color: rgb(173, 178, 203);
-    color: black;
-}
-footer{
+footer {
     background-color: #132D37;
-    height: 1000px;
+    color: #fff;
+    padding: 40px 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.ftHeader {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.col-md-3 {
+    flex: 1 1 calc(25% - 20px); /* Đảm bảo các cột vừa nhau */
+    min-width: 200px;
+}
+
+.logoTour {
+    width: 200px;
+    height: auto;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.pHead {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.ptail {
+    color: #89969b;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.ptail a {
+    color: #FFD700;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.ptail a:hover {
+    color: #ffa500;
+}
+
+.ftFooter {
+    text-align: center;
+    font-size: 14px;
+    color: #89969b;
+    padding-top: 20px;
+    border-top: 1px solid #264D5D;
+}
+
+.ftFooter p {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .ftHeader {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .col-md-3 {
+        flex: 1 1 100%;
+        text-align: center;
+    }
+
+    .logoTour {
+        margin: 0 auto 20px;
+    }
 }

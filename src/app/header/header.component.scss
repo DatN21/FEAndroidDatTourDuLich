@@ -1,81 +1,95 @@
-// header{
-//     background-color: red;
-// }
-// header .navbar .container .navbar-nav .nav-link:hover{
-//     background-color: rgba(127, 68, 255, 0.7); /* Thay đổi màu nền khi hover */
-// }
-.navbar {
-    box-shadow: none;
-    position: fixed; /* Giữ thanh navbar cố định */
-    top: 0; /* Đặt ở trên cùng */
-    width: 100%; /* Đảm bảo chiều rộng 100% */
-    background-color: rgba(0, 0, 0, 0.1); /* Nền trong suốt */
-    z-index: 1000; /* Đặt z-index cao hơn */
+    // header{
+    //     background-color: red;
+    // }
+    // header .navbar .container .navbar-nav .nav-link:hover{
+    //     background-color: rgba(127, 68, 255, 0.7); /* Thay đổi màu nền khi hover */
+    // }
+    body, html {
+        overflow: auto; /* Đảm bảo cuộn được */
+        height: 100%;
+        margin: 0;
+    }
+    
+    .navbar {
+        box-shadow: none;
+        position: fixed; /* Giữ thanh navbar cố định */
+        top: 0; /* Đặt ở trên cùng */
+        width: 100%; /* Đảm bảo chiều rộng 100% */
+        background-color: rgba(0, 0, 0, 0.1); /* Nền trong suốt */
+        z-index: 1000; /* Đặt z-index cao hơn */
+        
+
+    }
+    
+    .navbar.scrolled {
+        background-color: #469c4b;
+    }
     
 
-}
-
-/* Các phần khác vẫn giữ nguyên */
-.navbar .container .navbar-brand {
-    color: rgb(173, 178, 203);
-}
-.navbar .container .navbar-nav .nav-link {
-    color: #fff(173, 178, 203); /* Màu chữ ban đầu */
-    border: 2px solid transparent; /* Viền ban đầu trong suốt */
-    border-radius: 18px; /* Độ bo viền */
-    padding: 8px 40px;
-    transition: border-color 0.3s; /* Hiệu ứng chuyển động khi hover */
-    font-weight: 500;
-    font-size: 17px;
-}
-
-.navbar .container .navbar-nav .nav-link:hover {
-    border-color: rgba(127, 68, 255, 0.7); /* Đổi màu viền khi hover */
-    background-color: transparent; /* Giữ nguyên màu nền */
-}
-.navbar .container .navbar-nav .nav-link.active {
-    background-color: rgb(127, 68, 255) !important; /* Màu nền khi active */
-    color: white !important; /* Màu chữ khi active */
-}
-
-header .small-navbar {
-    height: auto; /* Thay đổi chiều cao khi nhỏ lại */
-    background-color: rgba(255, 0, 0, 0.9) !important; /* Nền đậm hơn khi navbar nhỏ */
-    background-image: none; /* Ẩn hình ảnh nền */
-    transition: height 0.3s ease, background-color 0.3s ease; /* Thêm hiệu ứng chuyển động */
-}
-/* Ẩn menu con */
-.nav-item.dropdown .dropdown-menu {
-    display: none;
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    margin-top: 10px;
-    padding: 0;
-    list-style: none;
-    z-index: 1000;
-}
 
 
+    /* Các phần khác vẫn giữ nguyên */
+    .navbar .container .navbar-brand {
+        color: rgb(173, 178, 203);
+    }
+    .navbar .container .navbar-nav .nav-link {
+        color: #fff(173, 178, 203); /* Màu chữ ban đầu */
+        border: 2px solid transparent; /* Viền ban đầu trong suốt */
+        border-radius: 18px; /* Độ bo viền */
+        padding: 8px 60px;
+        transition: border-color 0.3s; /* Hiệu ứng chuyển động khi hover */
+        font-weight: 500;
+        font-size: 17px;
+    }
 
-/* Hiển thị menu con khi hover vào thẻ <li> */
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    padding: 20px;
-    margin-top: 0px;    
-   
-}
+    .navbar .container .navbar-nav .nav-link:hover {
+        border-color: rgba(127, 68, 255, 0.7); /* Đổi màu viền khi hover */
+        background-color: transparent; /* Giữ nguyên màu nền */
+    }
+    .navbar .container .navbar-nav .nav-link.active {
+        background-color: rgb(127, 68, 255) !important; /* Màu nền khi active */
+        color: white !important; /* Màu chữ khi active */
+    }
 
-/* Căn chỉnh và tạo hiệu ứng cho các mục con */
-.dropdown-menu .dropdown-item {
-    padding: 10px 20px;
-    color: #fff(173, 178, 203);
-    text-decoration: none;
-    display: block;
+    header .small-navbar {
+        height: auto; /* Thay đổi chiều cao khi nhỏ lại */
+        background-color: rgba(255, 0, 0, 0.9) !important; /* Nền đậm hơn khi navbar nhỏ */
+        background-image: none; /* Ẩn hình ảnh nền */
+        transition: height 0.3s ease, background-color 0.3s ease; /* Thêm hiệu ứng chuyển động */
+    }
+    /* Ẩn menu con */
+    .nav-item.dropdown .dropdown-menu {
+        display: none;
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        margin-top: 10px;
+        padding: 0;
+        list-style: none;
+        z-index: 1000;
+    }
+
+
+
+    /* Hiển thị menu con khi hover vào thẻ <li> */
+    .nav-item.dropdown:hover .dropdown-menu {
+        display: block;
+        padding: 20px;
+        margin-top: 0px;    
     
-}
+    }
 
-.dropdown-menu .dropdown-item:hover {
-    background-color: rgba(0, 0, 0, 0.3); /* Nền trong suốt */
-    color: #fff;
-}
+    /* Căn chỉnh và tạo hiệu ứng cho các mục con */
+    .dropdown-menu .dropdown-item {
+        padding: 10px 20px;
+        color: rgb(173, 178, 203);
+        text-decoration: none;
+        display: block;
+        
+    }
+
+    .dropdown-menu .dropdown-item:hover {
+        background-color: rgba(0, 0, 0, 0.3); /* Nền trong suốt */
+        color: #fff;
+    }
+  

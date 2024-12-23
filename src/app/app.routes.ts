@@ -15,6 +15,8 @@ import {QuanLyTourDaDatComponent} from './quan-ly-tour-da-dat/quan-ly-tour-da-da
 import { AdminComponent } from './admin_quan_ly_tour/admin.component';
 import {QuanLyNguoiDungComponent} from './quan-ly-nguoi-dung/quan-ly-nguoi-dung.component'
 import { AuthGuard } from './guards/auth.guard';
+import {TourTimKiemComponent} from './tour-tim-kiem/tour-tim-kiem.component'
+import {LienHeComponent} from './lien-he/lien-he.component'
 export const routes: Routes = [
     {
         path: 'gioi-thieu', // URL sẽ được sử dụng để điều hướng
@@ -23,6 +25,8 @@ export const routes: Routes = [
     // { path: '', component: HomeComponent },
     { path: 'dang-nhap', component: LoginComponent },
     { path: 'dang-ky', component: RegisterComponent },
+    { path: 'tour-tim-kiem', component: TourTimKiemComponent },
+    { path: 'lien-he', component: LienHeComponent },
         {
           path: 'admin',
           component: AdminComponent, 

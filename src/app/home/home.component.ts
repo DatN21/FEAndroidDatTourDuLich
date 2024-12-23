@@ -42,6 +42,7 @@ getTours(keyword: string, page: number, limit: number) {
     next: (response: any) => {
       if (response && response.tourResponses) { // Kiểm tra response.tourResponses thay vì response.tours
         // Lọc tour thành 2 loại: 1 ngày và nhiều ngày
+        
         this.oneDayTours = response.tourResponses.filter((tour: Tour) => tour.tour_type === 'ONE_DAY');
         this.multiDayTours = response.tourResponses.filter((tour: Tour) => tour.tour_type === 'MULTI_DAY');
         
@@ -65,9 +66,11 @@ getTours(keyword: string, page: number, limit: number) {
 
 
   // Hàm tìm kiếm tour mới
-  searchTours() {
-    this.currentPage = 1;
-    this.getTours(this.keyword, this.currentPage, this.itemsPerPage);
+  searchTours(): void {
+    if (this.keyword.trim()) {
+      // Điều hướng đến trang 'tour-tim-kiem' với tham số 'keyword' trong URL
+      this.router.navigate(['/tour-tim-kiem'], { queryParams: { keyword: this.keyword } });
+    }
   }
 
   // Hàm thay đổi trang hiện tại

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID ,HostListener } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
@@ -15,7 +15,7 @@ import {AuthService} from '../service/auth.service'
 export class HeaderComponent implements OnInit{
   isLoggedIn: boolean = false;
   userName: string = '';
-
+  isScrolled = false;
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
@@ -43,5 +43,13 @@ export class HeaderComponent implements OnInit{
       }
     });
 
+}
+@HostListener('window:scroll', [])
+onWindowScroll(): void {
+  const scrollY = window.scrollY || document.documentElement.scrollTop;
+  console.log('Scroll Y:', scrollY);
+
+  // Kiểm tra vị trí cuộn và thay đổi trạng thái `isScrolled`
+  this.isScrolled = scrollY > 50;
 }
 }
