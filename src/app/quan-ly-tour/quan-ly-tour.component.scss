@@ -1,76 +1,91 @@
 .tieuDe {
-    position: relative;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+
+  a.btn-success {
+    font-size: 1rem;
+    padding: 8px 20px;
+    border-radius: 8px;
   }
-  
-  .tieuDe h1 {
+
+  h1 {
+    flex: 1;
     text-align: center;
-    width: 100%;
+    font-weight: bold;
+    font-size: 2rem;
+    color: #2c3e50;
   }
-  
-  .tieuDe a {
-    position: absolute;
-    left: 0;
+}
+
+form[role="search"] {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 10px;
+
+  input.form-control {
+    border-radius: 6px;
   }
-  
-  
-  .table-responsive {
-    margin-top: 20px;
+
+  button {
+    border-radius: 6px;
   }
-  
-  .table-hover tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-  
-  .pagination .page-item.active .page-link {
-    background-color: #007bff;
-    border-color: #007bff;
-  }
-  
-  .pagination .page-link {
-    color: #007bff;
-  }
-  
-  .pagination .page-link:hover {
-    color: #0056b3;
-  }
-  
-  .btn-sm {
-    font-size: 0.875rem;
-    margin: 0.5rem 0.75rem;
-  }
-  .btn-edit {
-    width: 90.76px;
-    height: 51.6px;
-    display: flex; /* Đảm bảo căn chỉnh biểu tượng và text */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    justify-content: center; /* Căn giữa theo chiều ngang */
-    text-align: center;
-  }
-  
-  .table-responsive {
-    overflow-x: auto;
 }
 
 .table {
-    width: 100%;
-    border-collapse: collapse; /* Ensures borders between cells are visible */
-}
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-.table th, .table td {
-    padding: 10px;
+  th, td {
+    vertical-align: middle;
     text-align: center;
-    border: 1px solid #ddd; /* Adds border to each cell */
-}
+  }
 
-.table th {
+  td {
+    font-size: 0.95rem;
+    color: #333;
+  }
+
+  thead th {
     background-color: #343a40;
     color: #fff;
+    font-size: 0.95rem;
+  }
+
+  tbody tr:hover {
+    background-color: #f5f5f5;
+  }
 }
 
-.table td {
-    background-color: #f9f9f9;
+.btn-sm {
+  margin: 2px 3px;
+  border-radius: 6px;
 }
 
-.table-hover tbody tr:hover {
-    background-color: #f1f1f1;
+.btn-edit {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+
+  &:hover {
+    background-color: #357ab8;
+  }
 }
+
+.pagination {
+  .page-item {
+    .page-link {
+      border-radius: 6px;
+      margin: 0 4px;
+      color: #333;
+    }
+
+    &.active .page-link {
+      background-color: #198754;
+      border-color: #198754;
+      color: white;
+    }
+  }
+}
+
+

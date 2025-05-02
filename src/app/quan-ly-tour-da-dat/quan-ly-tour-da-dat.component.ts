@@ -5,17 +5,20 @@ import { Router } from '@angular/router';
 import { response } from 'express';
 import { CommonModule } from '@angular/common';
 import {AuthService} from '../service/auth.service'
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-quan-ly-tour-da-dat',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './quan-ly-tour-da-dat.component.html',
   styleUrl: './quan-ly-tour-da-dat.component.scss'
 })
 export class QuanLyTourDaDatComponent implements OnInit{
-bookings: Booking[] = [];
+bookings: Booking[] = []; //danh sách gốc (từ API)
+bookingsFiltered: Booking[] = []; //danh sách đã lọc (theo từ khoá)
+selectedStatus: string = 'all'; // Trạng thái đã chọn
 user: any;
-  currentPage: number = 0;
+  currentPage: number = 1;
   itemsPerPage: number = 12;
   totalPages: number = 0;
   keyword: string = "";
@@ -39,18 +42,28 @@ user: any;
     this.bookingService.getBookingsByUser(this.user.id).subscribe({
       next: (data) => {
         this.bookings = data;
-        console.log('Bookings:', this.bookings);
+        this.bookingsFiltered = [...this.bookings]; // Khởi tạo danh sách hiển thị
+        this.totalPages = Math.ceil(this.bookingsFiltered.length / this.itemsPerPage);
+        this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
       },
       error: (error) => {
         console.error('Error loading bookings:', error);
-      },
-      complete: () => {
-        console.log('Finished loading bookings.');
-      },
+      }
     });
   }
   
-
+  
+  filterByStatus() {
+    if (this.selectedStatus === 'all') {
+      this.bookingsFiltered = [...this.bookings];
+    } else {
+      this.bookingsFiltered = this.bookings.filter(b => b.status === this.selectedStatus);
+    }
+    this.totalPages = Math.ceil(this.bookingsFiltered.length / this.itemsPerPage);
+    this.currentPage = 1;
+    this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
+  }
+  
   generateVisiblePageArray(currentPage: number, totalPages: number): number[] {
     const maxVisiblePages = 5;
     const halfVisiblePages = Math.floor(maxVisiblePages / 2);
@@ -69,4 +82,21 @@ user: any;
     this.currentPage = page;
     this.getBookings();
   }
+  viewDetail(bookingId: number) {
+    this.router.navigate(['/booking-detail', bookingId]);
+  }
+  
+  editBooking(bookingId: number) {
+    this.router.navigate(['/booking-edit', bookingId]);
+  }
+  
+  // cancelBooking(bookingId: number) {
+  //   if (confirm('Bạn có chắc muốn huỷ tour này?')) {
+  //     // Gọi service để huỷ (nếu có), sau đó cập nhật danh sách
+  //     this.bookingService.cancelBooking(bookingId).subscribe(() => {
+  //       this.getBookings(); // Giả sử bạn có hàm load lại danh sách
+  //     });
+  //   }
+  // }
+  
 }

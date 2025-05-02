@@ -67,10 +67,10 @@ input[type="search"] {
     color: #000;
 }
 
-.form-control {
-    background-color: transparent;
-    color: white;
-}
+// .form-control {
+//     background-color: transparent;
+//     color: white;
+// }
 
 .search-input::placeholder {
     color: rgba(255, 255, 255, 0.5);
@@ -206,15 +206,17 @@ h2{
     
 }
 .danhSachTour{
-    background-color: #F2F2F2;
-    padding-left: 50px;
-    padding-right: 20px;
+    gap: 20px;
+    display: flex;
+    justify-content: center ;
+    // background-color: #F2F2F2;
 }
 .headerTourMotNgay{
-    color: green;
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 100px;
     padding-bottom: 5px;
+    font-style: bold;
+    margin-left: 10px;
 }
 h3{
     padding-top: 20px;
@@ -254,8 +256,8 @@ h3{
 //   }
 
   .tour-item {
-    width: 360px; /* Chiều rộng cố định */
-    height: auto; /* Chiều cao tự dãn theo nội dung */
+    width: 320px; /* Chiều rộng cố định */
+    height: 470px;/* Chiều cao tự dãn theo nội dung */
     padding: 10px; /* Khoảng cách bên trong */
     background-color: #fff; /* Nền trắng */
     box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.12); /* Bóng */
@@ -265,10 +267,151 @@ h3{
     cursor: pointer; /* Hiển thị con trỏ khi di chuột vào */
         transition: transform 0.2s ease, box-shadow 0.2s ease; /* Hiệu ứng hover */
   }
-  
+  .tour-item > * {
+    flex-grow: 1; /* Cho phép các phần tử con (như ảnh, tên tour, v.v.) chiếm không gian còn lại */
+  }
+  .tour-item img {
+    width: 100%; /* Đảm bảo ảnh chiếm 100% chiều rộng của phần tử */
+    height: 200px; /* Chiều cao cố định cho ảnh */
+    object-fit: cover; /* Đảm bảo ảnh lấp đầy phần tử mà không bị kéo dãn hoặc méo */
+    border-radius: 8px; /* Bo góc ảnh */
+  }
   /* Hiệu ứng hover */
   .tour-item:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bóng lớn hơn khi hover */
     transform: scale(1.03); /* Phóng to nhẹ khi hover */
   }
+  .timKiem{
+    width: 22%;
+    background-color: #f8f8f8;
+    min-width: 200px;
+    height: 305px;
+  }
+  .tourList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    justify-content: end; 
+  }
+  .form-select {
+    background-color: #ffffff; /* Nền trắng */
+    color: #333; /* Màu chữ đậm */
+    border: 1px solid #ced4da; /* Viền nhẹ */
+    border-radius: 8px; /* Bo góc */
+    padding: 6px 12px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .form-select:focus {
+    border-color: #28a745; /* Viền xanh khi focus */
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); /* Viền phát sáng */
+    outline: none;
+  }
+  
+  .form-select option {
+    color: #000; /* Màu chữ trong các tùy chọn */
+    background-color: #fff;
+  }
+  .headerTour {
+    position: relative;
+    height: 60px;
+    margin-bottom: -40px;
+  }
+  
+  .tourUuDai {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .sapXepTheo {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .budget-filter {
+    margin-bottom: 20px;
+  }
+  
+  .filter-label {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .budget-options {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 cột */
+    gap: 10px;
+  }
+  
+  .budget-btn {
+    padding: 5px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+  }
+  
+  .budget-btn:hover {
+    background-color: #e2e6ea;
+  }
+  .budget-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+  .departure-filter{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .departure-filter .tour-departure-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000; /* Màu chữ đen */
+    margin-top: 10px;
+  }
+  
+  .departure-filter input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+  }
+  .apply-btn{
+    padding: 5px;
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  
+    &:hover {
+      background-color: #0056b3;
+    }
+  
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+  .filter-actions{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
   
