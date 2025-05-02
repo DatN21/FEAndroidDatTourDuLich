@@ -1,7 +1,18 @@
 <!-- Nút Thêm mới tour -->
 <h2>THÔNG TIN CÁC TOUR ĐÃ ĐẶT</h2>
-
-
+<div class="tourDaDat">
+<div class="headerTour position-relative">
+  <div class="sapXepTheo d-flex align-items-center">
+    <p class="me-2 mb-0">Trạng thái:</p>
+    <select class="form-select" style="width: 200px;" [(ngModel)]="selectedStatus" (change)="filterByStatus()">
+      <option value="all">Tất cả</option>
+      <option value="paid">Đã thanh toán</option>
+      <option value="confirmed">Đã xác nhận</option>
+      <option value="completed">Hoàn thành</option>
+      <option value="cancel">Đã huỷ</option>
+    </select>
+  </div>
+</div>
 <!-- Bảng dữ liệu tour  -->
 <table class="table table-bordered mt-3">
   <thead>
@@ -10,21 +21,28 @@
       <th>Ngày Ngày đặt </th>
       <th>Tổng tiền </th>
       <th>Trạng thái</th>
+      <th>Lựa chọn</th>
       <!-- <th>Nội dung</th> -->
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let booking of bookings">
+    <tr *ngFor="let booking of bookingsFiltered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)">
         <td>{{ booking.tour_name }}</td>
       <td>{{ booking.start_date  }}</td>
       <td>{{ booking.total_price  }} VNĐ</td>
       <td>{{ booking.status }}</td>
+      <td>
+        <button class="btn btn-primary btn-sm me-1" (click)="viewDetail(booking.id)">Xem chi tiết</button>
+        <button class="btn btn-warning btn-sm me-1" (click)="editBooking(booking.id)">Chỉnh sửa</button>
+        <!-- <button class="btn btn-danger btn-sm" (click)="cancelBooking(booking.id)">Huỷ tour</button> -->
+      </td>
+      
       <!-- <td [innerHTML]="tour.content"></td> -->
 
     </tr>
   </tbody>
 </table>
-
+</div>
 <!-- Pagination Section -->
 <div class="d-flex justify-content-center mt-4">
   <nav aria-label="Page navigation">

@@ -1,0 +1,76 @@
+<h1 class="text-center mb-4">Quản lý lịch trình tour</h1>
+
+<div class="d-flex justify-content-end mb-3">
+  <button class="btn btn-success" (click)="isAdding = !isAdding">
+    {{ isAdding ? 'Hủy thêm' : '+ Thêm lịch trình mới' }}
+  </button>
+</div>
+
+<!-- Form thêm mới -->
+<div *ngIf="isAdding" class="card p-3 mb-4 shadow-sm">
+  <h5 class="mb-3">Thêm lịch trình mới</h5>
+  <form (ngSubmit)="addItinerary()" #itineraryForm="ngForm">
+    <div class="mb-3">
+      <label for="departureDate" class="form-label">Ngày khởi hành</label>
+      <input type="date" id="departureDate" class="form-control" [(ngModel)]="newItinerary.departureDate" name="departureDate" required>
+    </div>
+    <div class="mb-3">
+      <label for="totalSeats" class="form-label">Tổng số ghế</label>
+      <input type="number" id="totalSeats" class="form-control" [(ngModel)]="newItinerary.totalSeats" name="totalSeats" min="1" required>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="!itineraryForm.form.valid">Lưu</button>
+  </form>
+</div>
+
+<div class="mb-3 d-flex align-items-center gap-2">
+  <label for="statusFilter" class="form-label mb-0">Lọc theo trạng thái:</label>
+  <select id="statusFilter" class="form-select w-auto" [(ngModel)]="selectedStatus" name="statusFilter">
+    <option value="">Tất cả</option>
+    <option value="ACTIVE">Đang hoạt động</option>
+    <option value="COMPLETED">Đã hoàn thành</option>
+    <option value="CANCELLED">Đã huỷ</option>
+  </select>
+</div>
+
+<!-- Bảng danh sách lịch trình -->
+<div class="card p-3 shadow-sm">
+  <table class="table table-bordered table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>#</th>
+        <th>Ngày khởi hành</th>
+        <th>Ngày kết thúc</th>
+        <th>Tổng số ghế</th>
+        <th>Số ghế còn lại</th>
+        <th>Trạng thái</th>
+        <th class="text-center">Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let itinerary of itineraries; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ itinerary.departureDate | date:'dd/MM/yyyy' }}</td>
+        <td>{{ itinerary.departureDate | date:'dd/MM/yyyy' }}</td>
+        <td>{{ itinerary.totalSeats }}</td>
+        <td>{{ itinerary.availableSeats }}</td>
+        <td>
+          <span class="badge" [ngClass]="{
+            'bg-success': itinerary.status === 'ACTIVE',
+            'bg-secondary': itinerary.status === 'PAUSED'
+          }">
+            {{ itinerary.status === 'ACTIVE' ? 'Đang hoạt động' : 'Tạm dừng' }}
+          </span>
+        </td>
+        <td class="text-center">
+          <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <button class="btn btn-sm btn-info">Xem chi tiết</button>
+            <button class="btn btn-sm btn-danger">Xóa</button>
+            <button class="btn btn-sm btn-warning">Cập nhật trạng thái</button>
+          </div>
+        </td>
+        
+      </tr>
+    </tbody>
+  </table>
+  
+</div>

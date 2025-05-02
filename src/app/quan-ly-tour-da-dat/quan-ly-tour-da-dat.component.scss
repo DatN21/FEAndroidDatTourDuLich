@@ -16,7 +16,7 @@ h2 {
     font-size: 24px;
     font-weight: bold;
     color: #333;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
     margin-top: 102px;
 }
 
@@ -139,3 +139,91 @@ ul li {
     margin-bottom: 5px;
     color: #555;
 }
+.tourDaDat{
+background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.tourDaDat h2 {
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  .headerTour {
+    margin-bottom: 15px;
+  }
+  
+  .sapXepTheo select {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+  }
+  
+  .sapXepTheo select:focus {
+    border-color: #0d6efd;
+    outline: none;
+  }
+  
+  /* Table styling */
+  .table {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .table th {
+    background-color: #0d6efd;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .table td {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 15px;
+  }
+  
+  /* Button group in table */
+  .table .btn {
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .table .btn-primary {
+    background-color: #0d6efd;
+    border: none;
+  }
+  
+  .table .btn-warning {
+    background-color: #ffc107;
+    border: none;
+    color: #000;
+  }
+  
+  .table .btn-danger {
+    background-color: #dc3545;
+    border: none;
+  }
+  
+  .table .btn:hover {
+    opacity: 0.85;
+    transform: scale(1.03);
+  }
+  
+  /* Pagination */
+  .pagination .page-link {
+    color: #0d6efd;
+    border: 1px solid #dee2e6;
+  }
+  
+  .pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+  }

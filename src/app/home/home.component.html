@@ -42,16 +42,52 @@
         <p class="pCon">Không còn lo lắng bởi Phú Yên Tour sẽ luôn bên bạn trong suốt hành trình, giúp chuyến đi của bạn được trọn vẹn, vui vẻ. Hotline: 0905 91 58 59</p>
     </div>
 </div>
+<div class="headerTour position-relative">
+  <p class="tourUuDai">TOUR ƯU ĐÃI</p>
+  <div class="sapXepTheo d-flex align-items-center">
+    <p class="me-2 mb-0">Sắp xếp theo:</p>
+    <select class="form-select" style="width: 200px;" [(ngModel)]="selectedSortOption" (change)="onSortChange()">
+      <option value="all">Tất cả</option>
+      <option value="nearest">Ngày khởi hành gần nhất</option>
+      <option value="priceLowToHigh">Giá từ thấp đến cao</option>
+      <option value="priceHighToLow">Giá từ cao đến thấp</option>
+    </select>
+  </div>
+</div>
 
+<p class="headerTourMotNgay">BỘ LỌC TÌM KIẾM</p>
 <div class="danhSachTour">
-<h2>TOUR NỔI BẬT</h2>
-<p class="tongHop">TỔNG HỢP DANH SÁCH CÁC TOUR</p>
-<p class="headerTourMotNgay">TOUR PHÚ YÊN 1 NGÀY</p>
-
 <!-- Tours 1 Day -->
-<div *ngIf="oneDayTours && oneDayTours.length">
+<div class="timKiem">
+  <div class="budget-filter">
+    <p class="filter-label">Ngân sách:</p>
+
+    <div class="budget-options">
+      <button class="budget-btn" [ngClass]="{ 'active': selectedBudget === 'under5' }" (click)="updateFilter('budget', 'under5')">Dưới 5 triệu</button>
+      <button class="budget-btn" [ngClass]="{ 'active': selectedBudget === '5to10' }" (click)="updateFilter('budget', '5to10')">5 - 10 triệu</button>
+      <button class="budget-btn" [ngClass]="{ 'active': selectedBudget === '10to20' }" (click)="updateFilter('budget', '10to20')">10 - 20 triệu</button>
+      <button class="budget-btn" [ngClass]="{ 'active': selectedBudget === 'above20' }" (click)="updateFilter('budget', 'above20')">Trên 20 triệu</button>
+    </div>
+  </div>  
+  
+  <div class="departure-filter">
+    <p class="filter-label">Ngày khởi hành:</p>
+    <div *ngIf="selectedDepartureDate" class="departure-date">
+      <p class="tour-departure-text">
+        {{ selectedDepartureDate | date:'dd/MM/yyyy' }} ({{ getDayOfWeek(selectedDepartureDate) }})
+      </p>
+    </div>
+    <input type="date" class="form-control" [(ngModel)]="selectedDepartureDate" />
+  </div> 
+
+  <div class="filter-actions mt-2">
+    <button class="apply-btn" (click)="applyFilters()">Áp dụng</button>
+  </div>
+  
+</div>
+<div class="tourList w-75">
   <div class="row">
-    <div class="col-lg-4 col-md-6" *ngFor="let tour of oneDayTours">
+    <div class="col-lg-4 col-md-6" *ngFor="let tour of filteredTours">
       <!-- Hiển thị thông tin tour 1 ngày -->
       <div class="tour-item" (click)="goToTourDetail(tour.id.toString())">
         <img *ngIf="tour.imageHeader" [src]="tour.imageHeader" alt="Tour Image" class="tour-image">
@@ -72,34 +108,6 @@
     </div>
   </div>
 </div>
-
-<p class="headerTourMotNgay">TOUR PHÚ YÊN NHIỀU NGÀY</p>
-
-<!-- Tours Multiple Days -->
-<div *ngIf="multiDayTours && multiDayTours.length">
-  <div class="row">
-    <div class="col-lg-4 col-md-6" *ngFor="let tour of multiDayTours">
-      <!-- Hiển thị thông tin tour nhiều ngày -->
-      <div class="tour-item" (click)="goToTourDetail(tour.id.toString())">
-        <img *ngIf="tour.imageHeader" [src]="tour.imageHeader" alt="Tour Image" class="tour-image">
-        <p class="tour-name">{{ tour.tour_name }}</p>
-        <div class="td_tour_type">
-          <i class="fa-regular fa-clock"></i>
-          <p class="bold-text">{{tour.days}}</p>
-        </div>
-        <div class="td_tour_type">
-          <i class="fa-regular fa-calendar-days"></i>
-          <p class="tour-depart">Khởi hành: {{ tour.start_date }}</p>
-        </div>
-        <div class="td_tour_type">
-          <p class="giaP">GIÁ:</p>
-          <p class="tour-price">{{ tour.price }}đ/Khách</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 
   </div>
   

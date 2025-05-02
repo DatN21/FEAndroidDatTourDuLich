@@ -17,6 +17,7 @@ import {QuanLyNguoiDungComponent} from './quan-ly-nguoi-dung/quan-ly-nguoi-dung.
 import { AuthGuard } from './guards/auth.guard';
 import {TourTimKiemComponent} from './tour-tim-kiem/tour-tim-kiem.component'
 import {LienHeComponent} from './lien-he/lien-he.component'
+import { QuanLyLichTrinhComponent } from './quan-ly-lich-trinh/quan-ly-lich-trinh.component';
 export const routes: Routes = [
     {
         path: 'gioi-thieu', // URL sẽ được sử dụng để điều hướng
@@ -58,6 +59,7 @@ export const routes: Routes = [
               component: QuanLyTourComponent,  // Trang quản lý tour
             },
             { path: 'them-anh/:id', component: ThemAnhComponent },
+            { path: 'lich-trinh/:id', component: QuanLyLichTrinhComponent },
         ]
         },
         // Các route khác nếu có

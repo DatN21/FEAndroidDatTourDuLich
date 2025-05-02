@@ -1,52 +1,50 @@
 import { Component, OnInit } from '@angular/core';
-import {BookingService} from '../service/booking.service'
-import {Booking} from '../model/booking'
+import { BookingService } from '../service/booking.service';
+import { Booking } from '../model/booking';
 import { Router } from '@angular/router';
-import { response } from 'express';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';  // Import FormsModule
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-quan-ly-bookings',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './quan-ly-booking.component.html',
   styleUrls: ['./quan-ly-booking.component.scss']
 })
 export class QuanLyBookingComponent implements OnInit {
   bookings: Booking[] = [];
+  pendingBookings: Booking[] = [];
   successMessage: string = '';
   errorMessage: string = '';
   currentPage: number = 0;
   itemsPerPage: number = 12;
   totalPages: number = 0;
   keyword: string = "";
-  visiblePages: number[] = []
+  visiblePages: number[] = [];
 
   isUpdateFormVisible: boolean = false;
   selectedBooking: Booking | null = null;
 
   constructor(private bookingService: BookingService, private router: Router) {}
+
   ngOnInit() {
-    this.getBookings( this.currentPage, this.itemsPerPage);
+    this.getBookings(this.currentPage, this.itemsPerPage);
   }
 
-  
   getBookings(page: number, limit: number) {
     this.bookingService.getAllBookings(page, limit).subscribe({
       next: (response: any) => {
         if (response && response.bookingResponses) {
-          // Sắp xếp danh sách bookings theo ngày đặt, booking mới nhất lên trước
           this.bookings = response.bookingResponses
-            .map((booking: Booking) => ({
-              ...booking,
-              // Xử lý bổ sung nếu cần, ví dụ: thêm URL hình ảnh
-            }))
+            .map((booking: Booking) => ({ ...booking }))
             .sort((a: Booking, b: Booking) => {
-              const dateA = new Date(a.booking_time);  // Thay 'bookingDate' bằng trường ngày đặt trong model
+              const dateA = new Date(a.booking_time);
               const dateB = new Date(b.booking_time);
-              return dateB.getTime() - dateA.getTime();  // Sắp xếp giảm dần (mới nhất lên trước)
+              return dateB.getTime() - dateA.getTime();
             });
-  
+
+          this.pendingBookings = this.bookings.filter(b => b.status === 'PENDING');
           this.totalPages = response.totalPages;
           this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
         } else {
@@ -58,7 +56,6 @@ export class QuanLyBookingComponent implements OnInit {
       }
     });
   }
-  
 
   generateVisiblePageArray(currentPage: number, totalPages: number): number[] {
     const maxVisiblePages = 5;
@@ -76,7 +73,7 @@ export class QuanLyBookingComponent implements OnInit {
 
   onPageChange(page: number) {
     this.currentPage = page;
-    this.getBookings( this.currentPage, this.itemsPerPage);
+    this.getBookings(this.currentPage, this.itemsPerPage);
   }
 
   onDelete(bookingId: number) {
@@ -85,42 +82,40 @@ export class QuanLyBookingComponent implements OnInit {
         next: () => {
           this.successMessage = 'Booking đã được xóa thành công!';
           this.errorMessage = '';
-          this.getBookings(this.currentPage, this.itemsPerPage); // Refresh lại danh sách sau khi xóa
+          this.getBookings(this.currentPage, this.itemsPerPage);
         },
         error: (error: any) => {
           this.errorMessage = 'Đã xảy ra lỗi khi xóa booking.';
-          console.error('Lỗi khi xóa booking:', error.message || error); // Hiển thị thông báo lỗi rõ ràng
+          console.error('Lỗi khi xóa booking:', error.message || error);
           alert('Xóa booking thất bại. Vui lòng thử lại.');
         }
       });
     }
   }
-  
 
   openUpdateForm(booking: Booking) {
     this.selectedBooking = { ...booking };
     this.isUpdateFormVisible = true;
   }
-  
+
   closeUpdateForm() {
     this.isUpdateFormVisible = false;
     this.selectedBooking = null;
   }
 
-updateBookingStatus() {
-  if (this.selectedBooking && this.selectedBooking.status) {
-    this.bookingService.updateBookingStatus(this.selectedBooking.id, this.selectedBooking.status).subscribe({
-      next: (response) => {
-        this.successMessage = 'Cập nhật trạng thái booking thành công!';
-        this.getBookings(this.currentPage, this.itemsPerPage); // Refresh danh sách booking
-        this.closeUpdateForm();
-      },
-      error: (error) => {
-        this.errorMessage = 'Cập nhật trạng thái booking thất bại.';
-        console.error(error);
-      }
-    });
+  updateBookingStatus() {
+    if (this.selectedBooking && this.selectedBooking.status) {
+      this.bookingService.updateBookingStatus(this.selectedBooking.id, this.selectedBooking.status).subscribe({
+        next: () => {
+          this.successMessage = 'Cập nhật trạng thái booking thành công!';
+          this.getBookings(this.currentPage, this.itemsPerPage);
+          this.closeUpdateForm();
+        },
+        error: (error) => {
+          this.errorMessage = 'Cập nhật trạng thái booking thất bại.';
+          console.error(error);
+        }
+      });
+    }
   }
-  
-}
 }
