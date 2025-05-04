@@ -33,7 +33,16 @@ export class TourDetailComponent implements OnInit, OnDestroy {
   user: any;
   selectedImage: string | null = null;
   currentIndex: number = 0;
-
+  selectedDate = '27/05';
+  ageGroups = [
+    { label: 'Người lớn\n> 10 tuổi', price: 32900000, count: 2 },
+    { label: 'Trẻ em\n6 - 10 tuổi', price: 0, count: 0 },
+    { label: 'Trẻ em\n2 - 5 tuổi', price: 0, count: 0 },
+    { label: 'Trẻ nhỏ\n< 2 tuổi', price: 0, count: 0 },
+  ];
+  selectDate(date: string) {
+    this.selectedDate = date;
+  }
   constructor(
     private fb: FormBuilder,
     private bookingService: BookingService,
@@ -188,4 +197,25 @@ export class TourDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.images.forEach((url) => URL.revokeObjectURL(url));
   }
+
+  increase(group: any) {
+    group.count++;
+    this.updateTotal();
+  }
+  
+  decrease(group: any) {
+    if (group.count > 0) {
+      group.count--;
+      this.updateTotal();
+    }
+  }
+  
+  updateTotal() {
+    this.totalPrice = this.ageGroups.reduce((sum, g) => sum + g.price * g.count, 0);
+  }
+
+  yeuCauDat(tourId: string): void {
+    this.router.navigate(['/yeu-cau-dat', tourId]);
+  }
+
 }

@@ -1,0 +1,160 @@
+.container1{
+  padding-top: 45px;
+ height: auto;
+display: flex;
+flex-direction: column;
+align-items: center;
+margin-top: 20px;
+min-height: 1000px;
+}
+
+:root {
+  --main-color: #0B5DA7;
+}
+
+
+textarea:focus {
+  outline: none;
+}
+
+/* ==== TẮT PHẦN TĂNG GIẢM SỐ CỦA THẺ INPUT TYPE NUMBER ==== */
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+-moz-appearance: textfield;
+}
+
+input {
+ border: none;
+ font-size: 14px;
+ font-weight: 500;
+ padding: 5px;
+}
+
+input:focus {
+  outline: 1px solid black;
+  border-radius: 5px;
+}
+
+/* ========== NHẬP THÔNG TIN ======== */
+.back {
+  text-decoration: none;
+  color: black;
+}
+
+.back:hover {
+  color: var(--main-color);
+}
+
+.cb:focus {
+  outline: none;
+  border: none;
+}
+
+.cb-hk,
+.sl-custom {
+  margin-top: 4px;
+  border: none;
+}
+
+.cb-hk:focus,
+.sl-custom:focus {
+  outline: none;
+  border: none;
+}
+
+.increase, .decrease {
+  width: 50px;
+  border: none;
+  background-color: white;
+}
+
+.increase:hover, .decrease:hover {
+  cursor: pointer;
+  background-color: #CDF2FA;
+  border-radius: 6px;
+}
+
+.scroll-box {
+  max-height: 300px;
+  overflow-y: auto;
+  line-height: 1.6;
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.scroll-box::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari */
+}
+
+/* ===== TÓM TẮT CHUYẾN ĐI ====== */
+.summary-box {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto; /* Căn giữa theo chiều ngang */
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.price {
+  color: red;
+  font-weight: bold;
+  font-size: 22px;
+}
+
+.line-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+
+.line-item span {
+  font-weight: bold;
+}
+
+.discount {
+  color: red;
+}
+
+.btn-dattour {
+  width: 100%;
+  border: 1px solid #E5E5E5;
+  background-color: white;
+  color: #B1B1B1;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#rightCol {
+  transition: transform 0.3s ease;
+}
+
+/* ========== THANH TOÁN ========== */
+.title {
+  font-size: 1.2rem;
+  color: #0B5DB9;
+}
+
+.custom-table th,
+.custom-table td {
+  border: none !important;
+}
+
+/* Căn giữa toàn bộ nội dung nếu cần */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column; /* Nếu cần căn giữa theo chiều dọc */
+}

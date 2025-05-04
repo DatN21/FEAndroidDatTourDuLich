@@ -21,56 +21,72 @@
     </div>
 
     <div class="datTour">
-      <h2>Đặt Tour</h2>
-      <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
-        
-        <!-- Số khách -->
-        <div class="form-group">
-          <label for="amount">Số khách:</label>
-          <input type="number" id="amount" formControlName="amount" class="form-control" />
-          <div *ngIf="bookingForm.get('amount')?.invalid && bookingForm.get('amount')?.touched" class="error-message">
-            Số lượng khách phải lớn hơn hoặc bằng 1.
-          </div>
+      <h2>Lịch Trình và Giá Tour</h2>
+    
+      <!-- Chọn ngày khởi hành -->
+      <div class="departure-dates">
+        <label>Chọn Lịch Trình và Xem Giá:</label>
+        <div class="date-options">
+          <button
+            type="button"
+            class="date-btn"
+            [class.active]="selectedDate === '27/05'"
+            (click)="selectDate('27/05')"
+          >
+            27/05
+          </button>
+          <button
+            type="button"
+            class="date-btn"
+            [class.active]="selectedDate === '03/06'"
+            (click)="selectDate('03/06')"
+          >
+            03/06
+          </button>
+          <button
+            type="button"
+            class="date-btn"
+            [class.active]="selectedDate === '10/06'"
+            (click)="selectDate('10/06')"
+          >
+            10/06
+          </button>
+          <button
+            type="button"
+            class="date-btn"
+            (click)="selectDate('all')"
+          >
+            Tất cả
+          </button>
         </div>
-
-        <!-- Ngày khởi hành -->
-        <div class="form-group">
-          <label for="start_date">Ngày khởi hành:</label>
-          <input type="date" id="start_date" formControlName="start_date" class="form-control" />
-          <div *ngIf="bookingForm.get('start_date')?.invalid && bookingForm.get('start_date')?.touched" class="error-message">
-            Ngày khởi hành không được để trống.
-          </div>
+      </div>
+    
+      <!-- Số lượng khách theo nhóm tuổi -->
+      <div class="guest-group" *ngFor="let group of ageGroups">
+        <div class="label">
+          {{ group.label }} <span class="price" *ngIf="group.price">x {{ group.price | number:'1.0-0' }} đ</span>
         </div>
-
-        <!-- Họ và tên -->
-        <div class="form-group">
-          <label for="fullName">Họ và tên:</label>
-          <input type="text" id="fullName" formControlName="fullName" class="form-control" />
-          <div *ngIf="bookingForm.get('fullName')?.invalid && bookingForm.get('fullName')?.touched" class="error-message">
-            <span *ngIf="bookingForm.get('fullName')?.errors?.['required']">Họ và tên không được để trống.</span>
-          </div>
+        <div class="quantity-control">
+          <button type="button" (click)="decrease(group)">-</button>
+          <span>{{ group.count }}</span>
+          <button type="button" (click)="increase(group)">+</button>
         </div>
-        
-        <!-- Số điện thoại -->
-        <div class="form-group">
-          <label for="phoneNumber">Số điện thoại:</label>
-          <input type="text" id="phoneNumber" formControlName="phoneNumber" class="form-control" />
-          <div *ngIf="bookingForm.get('phoneNumber')?.invalid && bookingForm.get('phoneNumber')?.touched" class="error-message">
-            <span *ngIf="bookingForm.get('phoneNumber')?.errors?.['required']">Số điện thoại không được để trống.</span>
-            <span *ngIf="bookingForm.get('phoneNumber')?.errors?.['pattern']">Số điện thoại không hợp lệ.</span>
-          </div>
-        </div>
-
-        <!-- Ghi chú -->
-        <div class="form-group">
-          <label for="notes">Ghi chú:</label>
-          <textarea id="notes" formControlName="notes" class="form-control"></textarea>
-        </div>
-
-        <!-- Nút gửi form -->
-        <button type="submit" [disabled]="bookingForm.invalid" class="submit-button">Đặt Tour</button>
-      </form>
+      </div>
+    
+      <!-- Thông báo xác nhận chỗ -->
+      <div class="note-contact">
+        <i class="icon-info"></i> Liên hệ để xác nhận chỗ
+      </div>
+    
+      <!-- Tổng giá tour -->
+      <div class="total-price">
+        Tổng Giá Tour <strong>{{ totalPrice | number:'1.0-0' }} đ</strong>
+      </div>
+    
+      <!-- Nút yêu cầu đặt -->
+      <button type="button" class="submit-button" (click)="yeuCauDat(tour.id.toString())">Yêu cầu đặt</button>
     </div>
+    
 
   </div>
       <div class="contentCon" [innerHTML]="tour.content"></div>

@@ -1,12 +1,12 @@
-.container{
-     padding-top: 10px;
-    height: auto;
+.container {
+  padding-top: 10px;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
+  min-height: 100vh; /* Đảm bảo chiếm ít nhất chiều cao của viewport */
 }
-
   
   .header-hinh img {
     width: 100%;
@@ -62,12 +62,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-right: -80px;
-  height: 680px;
-
-  /* Sticky position */
-  // position: sticky;
-  // top: 20px; /* Cách mép trên 20px */
-  // z-index: 1000; /* Đảm bảo luôn ở trên các phần tử khác */
+  height: auto; /* Thay vì chiều cao cố định */
 }
 
 h2 {
@@ -195,4 +190,134 @@ textarea {
   background-color: #333;
   width: 100%;
   margin-top: 77px;
+}
+
+h2 {
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #004aad;
+}
+
+/* Chọn ngày khởi hành */
+.departure-dates label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.date-options {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.date-btn {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.date-btn.active {
+  background: #e6f2ff;
+  border-color: #007bff;
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* Nhóm khách */
+.guest-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.label {
+  max-width: 60%;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.label .price {
+  color: #e85c00;
+  font-weight: bold;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quantity-control button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #f0f0f0;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.quantity-control span {
+  width: 24px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Thông báo xác nhận */
+.note-contact {
+  font-size: 13px;
+  color: #0aa1a1;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-info {
+  width: 14px;
+  height: 14px;
+  background-color: #0aa1a1;
+  border-radius: 50%;
+}
+
+/* Tổng giá */
+.total-price {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.total-price strong {
+  font-size: 20px;
+  color: #ff6d00;
+  margin-left: 6px;
+}
+
+/* Nút đặt tour */
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #ffa500;
+  border: none;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #e59400;
 }

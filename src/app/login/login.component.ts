@@ -78,9 +78,9 @@ login() {
           this.authService.saveLoggedInUser(this.userResponse);
 
           // Điều hướng dựa trên vai trò người dùng
-          if (this.userResponse?.roleId === 'admin') {
+          if (this.userResponse?.roleId === 'ADMIN') {
             this.router.navigate(['/admin']); // Trang quản trị
-          } else if (this.userResponse?.roleId === 'user') {
+          } else if (this.userResponse?.roleId === 'USER') {
             this.router.navigate(['/']); // Trang dành cho người dùng
           } else {
             console.warn('Vai trò người dùng không xác định.');

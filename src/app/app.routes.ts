@@ -18,6 +18,7 @@ import { AuthGuard } from './guards/auth.guard';
 import {TourTimKiemComponent} from './tour-tim-kiem/tour-tim-kiem.component'
 import {LienHeComponent} from './lien-he/lien-he.component'
 import { QuanLyLichTrinhComponent } from './quan-ly-lich-trinh/quan-ly-lich-trinh.component';
+import {YeuCauDatComponent} from './yeu-cau-dat/yeu-cau-dat.component';
 export const routes: Routes = [
     {
         path: 'gioi-thieu', // URL sẽ được sử dụng để điều hướng
@@ -60,6 +61,7 @@ export const routes: Routes = [
             },
             { path: 'them-anh/:id', component: ThemAnhComponent },
             { path: 'lich-trinh/:id', component: QuanLyLichTrinhComponent },
+        
         ]
         },
         // Các route khác nếu có
@@ -69,6 +71,7 @@ export const routes: Routes = [
     { path: '', component: HomeComponent },
 
     { path: 'tour-detail/:id', component: TourDetailComponent },
+    { path: 'yeu-cau-dat/:id', component: YeuCauDatComponent },
     {path: 'thong-tin-tai-khoan', component: ThongTinTaiKhoanComponent},
     {path: 'quan-ly-tour-da-dat', component: QuanLyTourDaDatComponent}
 ];

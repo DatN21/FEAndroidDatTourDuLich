@@ -1,0 +1,186 @@
+<div class="container1">
+    <div class="container mt-5">
+      <h2 style="color: #0b5da7" class="text-center fw-bold">ĐẶT TOUR</h2>
+      <img src="assets/image/nhapthongtin.jpg" class="img-fluid" alt="" />
+  
+      <!-- Thông tin liên lạc -->
+      <div class="row mt-4">
+        <div class="col-lg-7" id="leftCol">
+          <div class="fw-bold">THÔNG TIN LIÊN LẠC</div>
+          <form [formGroup]="contactForm" class="row mt-2">
+            <div class="col-lg-6 d-flex flex-column border-end">
+              <label class="fw-bold">Họ tên <span class="text-danger">*</span></label>
+              <input formControlName="name" type="text" class="w-100" placeholder="Liên hệ" />
+            </div>
+            <div class="col-lg-6 d-flex flex-column">
+              <label class="fw-bold">Điện thoại <span class="text-danger">*</span></label>
+              <input formControlName="phone" type="number" class="w-100" placeholder="Nhập số điện thoại" />
+            </div>
+            <div class="col-lg-6 d-flex flex-column border-end mt-3">
+              <label class="fw-bold">Email <span class="text-danger">*</span></label>
+              <input formControlName="email" type="email" class="w-100" placeholder="Nhập email" />
+            </div>
+            <div class="col-lg-6 d-flex flex-column mt-3">
+              <label class="fw-bold">Địa chỉ <span class="text-danger">*</span></label>
+              <input formControlName="address" type="text" class="w-100" placeholder="Nhập địa chỉ" />
+            </div>
+          </form>
+  
+          <!-- Hành khách -->
+          <div class="fw-bold mt-4">HÀNH KHÁCH</div>
+          <div class="row mt-1 g-3 gx-2">
+            <ng-container *ngFor="let group of passengerGroups">
+              <div class="col-lg-6">
+                <div class="h-100 d-flex border rounded p-3 w-100">
+                  <div class="d-flex flex-column gap-2 w-50">
+                    <div class="fw-medium">{{ group.label }}</div>
+                    <div style="font-size: 0.8rem">
+                      {{ group.description }} <i class="ri-information-2-fill"></i>
+                    </div>
+                  </div>
+                  <div class="quantity-wrapper d-flex justify-content-between align-items-center w-50 fw-semibold">
+                    <button class="fs-3 decrease px-3 pb-1 text-center" (click)="decrease(group.key)">-</button>
+                    <div class="quantity">{{ group.count }}</div>
+                    <button class="fs-3 increase px-3 pb-1 text-center" (click)="increase(group.key)">+</button>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+  
+          <!-- Thông tin hành khách -->
+          <div class="fw-bold mt-4">Thông tin hành khách</div>
+          <div class="row mt-3 g-4">
+            <ng-container *ngFor="let group of passengerGroups">
+              <ng-container *ngFor="let info of getPassengerList(group.key); let i = index">
+                <div class="col-lg-12">
+                  <div class="border-top border-secondary-subtle pt-2">
+                    <img src="assets/image/{{ group.img }}" class="img-fluid" style="height: 40px; width: 40px" />
+                    <strong>{{ group.label }}</strong> <i>({{ group.description }})</i>
+                  </div>
+                  <div class="d-flex w-100 mt-2">
+                    <div class="d-flex flex-column border-end p-2" style="width: 40%">
+                      <div><strong>Họ tên</strong> <span class="text-danger">*</span></div>
+                      <input [(ngModel)]="info.name" class="cb-hk" placeholder="Liên hệ" />
+                    </div>
+                    <div class="d-flex flex-column border-end p-2" style="width: 20%">
+                      <div><strong>Giới tính</strong> <span class="text-danger">*</span></div>
+                      <select [(ngModel)]="info.gender" class="sl-custom">
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                      </select>
+                    </div>
+                    <div class="d-flex flex-column border-end p-2" style="width: 20%">
+                      <div><strong>Ngày sinh</strong> <span class="text-danger">*</span></div>
+                      <input [(ngModel)]="info.dob" type="text" class="dob-input" placeholder="dd/mm/yyyy" />
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+  
+          <!-- Ghi chú -->
+          <textarea class="w-100 rounded bg-body-tertiary p-3 mt-3" style="height: 100px" placeholder="Nhập vào lời nhắn"></textarea>
+        </div>
+  
+        <!-- Tóm tắt chuyến đi -->
+        <div class="col-lg-5">
+          <div id="rightCol">
+            <h6 class="mb-3 fw-bold">TÓM TẮT CHUYẾN ĐI</h6>
+            <div class="summary-box bg-light">
+              <div class="d-flex" style="height: 150px">
+                <div style="width: 40%" class="pe-2">
+                  <img
+                    src="assets/image/langNghe - Copy.jpg"
+                    class="img-fluid rounded mb-3 h-100 w-100"
+                    alt="Tour"
+                  />
+                </div>
+                <div style="width: 60%" class="d-flex flex-column justify-content-between">
+                  <div class="fw-bold">
+                    Tour làng nghề Phú Yên 1 ngày: Văn hóa xứ Hoa Anh
+                  </div>
+                  <div class="d-flex">
+                    <img src="assets/image/ticket.jpg" alt="" style="width: 20px; height: 20px" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="scroll-box mt-2">
+                <div
+                  class="d-flex gap-3 border-top border-bottom border-start-0 border-end-0 mt-3"
+                >
+                  <p class="pt-3">
+                    <i class="bi bi-geo-alt"></i> <strong>Khởi hành:</strong>
+                    <span class="fw-bold" style="color: #0b5da7"> TP. Tuy Hoà</span>
+                  </p>
+                  
+                  <p class="pt-3">
+                    <img src="assets/image/ticket.jpg" alt="" style="width: 20px; height: 20px" />
+                    <strong>Thời gian:</strong>
+                    <span class="fw-bold" style="color: #0b5da7">1 Ngày</span>
+                  </p>
+                </div>
+                <div class="fw-bold d-flex align-items-center gap-2">
+                  <img src="assets/image/group.jpg" alt="" style="width: 30px; height: 30px" />
+                  <div class="fs-5">KHÁCH HÀNG + PHỤ THU</div>
+                </div>
+                <!-- <div class="mt-3" id="customerSummary">
+                  <div class="fw-bold d-flex align-items-center gap-2">
+                    <img src="images/group.jpg" alt="" style="width: 30px; height: 30px" />
+                    <div class="fs-5">KHÁCH HÀNG + PHỤ THU</div>
+                  </div>
+                  <div id="summaryLines"></div>
+                  <div class="line-item">
+                    <span>Người lớn</span>
+                    <span>1 x 11.990.000 ₫</span>
+                  </div>
+                  <div class="line-item">
+                    <span>Trẻ em</span>
+                    <span>1 x 11.990.000 ₫</span>
+                  </div>
+                  <div class="line-item">
+                    <span>Phụ thu phòng đơn</span>
+                    <span>2.200.000 ₫</span>
+                  </div>
+                  <div class="line-item">
+                    <strong>Tổng</strong>
+                    <strong class="text-danger" id="totalAmount">0 ₫</strong>
+                  </div>
+                </div> -->
+
+                <div class="mt-3" id="customerSummary">
+                  <div class="fw-bold d-flex align-items-center gap-2">
+                    <img src="assets/image/langNghe - Copy.jpg" alt="" style="width: 30px; height: 30px" />
+                  </div>
+                  <div id="summaryLines"></div>
+                  <div class="line-item">
+                    <strong>Tổng</strong>
+                    <strong class="text-danger" id="totalAmount">0 ₫</strong>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <div class="line-item">
+                    <span>Người lớn</span>
+                    <span class="discount">1 x 700.000 ₫</span>
+                  </div>
+                  <div class="line-item">
+                    <strong>Giảm</strong>
+                    <strong class="text-danger">700.000 ₫</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="line-item mt-4 border-top pt-3">
+                <strong class="fs-3">Tổng tiền</strong>
+                <strong class="price fs-3">13.490.000 ₫</strong>
+              </div>
+              <button class="btn-dattour">Đặt tour</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
