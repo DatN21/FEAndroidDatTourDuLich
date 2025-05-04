@@ -24,7 +24,7 @@ export class QuanLyLichTrinhComponent implements OnInit{
     this.itineraries = [
      { departureDate: new Date('2025-05-01'), totalSeats: 40, availableSeats: 10, status: 'ACTIVE' },
       { departureDate: new Date('2025-05-10'), totalSeats: 30, availableSeats: 5, status: 'ACTIVE' },
-      { departureDate: new Date('2025-04-25'), totalSeats: 20, availableSeats: 0, status: 'PAUSED' }
+      { departureDate: new Date('2025-04-25'), totalSeats: 20, availableSeats: 0, status: 'ACTIVE' }
     ];
   }
   addItinerary(): void {
