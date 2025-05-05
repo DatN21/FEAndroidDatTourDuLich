@@ -1,0 +1,223 @@
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* Tiêu đề */
+  h2 {
+    font-size: 2em;
+    color: #007bff;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+  
+  /* Tìm kiếm */
+  .search-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    padding: 10px;
+    width: 100%;
+    max-width: 400px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+  
+  .search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  }
+  
+  /* Bảng Tour và Lịch Trình */
+  .table-responsive {
+    margin-top: 30px;
+    overflow-x: auto;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table-bordered {
+    border: 1px solid #ddd;
+  }
+  
+  .table th, .table td {
+    padding: 12px 15px;
+    text-align: center;
+  }
+  
+  .table-light {
+    background-color: #f8f9fa;
+  }
+  
+  .schedule-day {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #e9ecef;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .schedule-day:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .schedule-day.bg-success-subtle {
+    background-color: #d4edda;
+  }
+  
+  .schedule-day .text-success {
+    font-size: 12px;
+    margin-left: 5px;
+  }
+  
+  /* Nút "Xem tất cả" */
+  .btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  /* Phân trang */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+  }
+  
+  .pagination .page-item {
+    cursor: pointer;
+  }
+  
+  .pagination .page-item.disabled {
+    pointer-events: none;
+  }
+  
+  .pagination .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+  }
+  
+  .page-link {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .page-link:hover {
+    background-color: #f8f9fa;
+  }
+  
+  /* Popup Lịch */
+  .calendar-popup, .promo-form-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popup-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .popup-content h5, .popup-content h6 {
+    color: #333;
+  }
+  
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+  }
+  
+  .calendar-cell {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .calendar-cell:hover {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .calendar-cell.has-promo {
+    background-color: #d4edda;
+  }
+  
+  .text-end {
+    text-align: right;
+  }
+  
+  /* Form Thêm Khuyến Mãi */
+  .promo-form-popup .form-control {
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .promo-form-popup .form-select {
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .promo-form-popup button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  
+  .promo-form-popup button.btn-success {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .promo-form-popup button.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .promo-form-popup button:hover {
+    opacity: 0.8;
+  }
+  

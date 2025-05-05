@@ -1,0 +1,108 @@
+<div class="container py-4">
+    <h2 class="text-center text-primary fw-bold mb-4">Quản Lý Chương Trình Khuyến Mãi</h2>
+    <div class="search-container">
+        <input
+          type="text"
+          (input)="searchTours()"
+          placeholder="Tìm kiếm tour theo tên..."
+          class="search-input"
+        />
+      </div>
+    <!-- Bảng tour và lịch trình -->
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Tên tour</th>
+            <th>Lịch trình</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tour of pagedTours">
+            <td>{{ tour.name }}</td>
+            <td>
+                <div class="d-flex flex-wrap gap-2">
+                    <ng-container *ngFor="let day of tour.scheduleDates | slice:0:5">
+                      <span class="schedule-day border rounded px-2 py-1"
+                            [class.bg-success-subtle]="hasPromotion(tour.id, day)"
+                            (click)="openPromotionPopup(tour, day)"
+                            style="cursor: pointer">
+                        {{ day | date:'dd/MM/yyyy' }}
+                        <span *ngIf="hasPromotion(tour.id, day)" class="text-success">(Đã có KM)</span>
+                      </span>
+                    </ng-container>
+                    <button *ngIf="tour.scheduleDates.length > 5"
+                            class="btn btn-sm btn-outline-primary"
+                            (click)="openCalendarPopup(tour)">Xem tất cả</button>
+                  </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Phân trang -->
+    <nav *ngIf="totalPages > 1" class="d-flex justify-content-center mt-4">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="changePage(currentPage - 1)">Trước</a>
+        </li>
+        <li *ngFor="let p of [].constructor(totalPages); let i = index"
+            class="page-item" [class.active]="currentPage === i + 1">
+          <a class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="changePage(currentPage + 1)">Sau</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Popup lịch -->
+    <div *ngIf="showCalendarPopup" class="calendar-popup">
+      <div class="popup-content">
+        <h5 class="mb-3">Lịch trình của tour: {{ selectedTour?.name }}</h5>
+        <div class="calendar-grid">
+          <div *ngFor="let day of selectedTour?.scheduleDates"
+               class="calendar-cell border p-2"
+               [class.has-promo]="hasPromotion(selectedTour.id, day)"
+               (click)="openPromotionPopup(selectedTour, day)">
+            {{ day | date:'dd/MM/yyyy' }}
+            <div *ngIf="hasPromotion(selectedTour.id, day)" class="text-success">Đã có KM</div>
+          </div>
+        </div>
+        <div class="text-end mt-3">
+          <button class="btn btn-secondary" (click)="closeCalendarPopup()">Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form thêm khuyến mãi -->
+    <div *ngIf="showPromoForm" class="promo-form-popup">
+      <div class="popup-content">
+        <h6>Thêm khuyến mãi cho {{ selectedDate | date:'dd/MM/yyyy' }}</h6>
+        <div class="mb-3">
+          <label>Tên khuyến mãi</label>
+          <input class="form-control" >
+        </div>
+        <div class="mb-3">
+          <label>Giảm giá (%)</label>
+          <input type="number" class="form-control" >
+        </div>
+        <div class="mb-3">
+          <label>Trạng thái</label>
+          <select class="form-select" >
+            <option value="active">Đang hoạt động</option>
+            <option value="expired">Hết hạn</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label>Ghi chú</label>
+          <textarea class="form-control" ></textarea>
+        </div>
+        <div class="text-end">
+          <button class="btn btn-success me-2" (click)="savePromotion()">Lưu</button>
+          <button class="btn btn-secondary" (click)="cancelPromotion()">Hủy</button>
+        </div>
+      </div>
+    </div>
+  </div>

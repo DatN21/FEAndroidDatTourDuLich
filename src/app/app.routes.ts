@@ -19,6 +19,7 @@ import {TourTimKiemComponent} from './tour-tim-kiem/tour-tim-kiem.component'
 import {LienHeComponent} from './lien-he/lien-he.component'
 import { QuanLyLichTrinhComponent } from './quan-ly-lich-trinh/quan-ly-lich-trinh.component';
 import {YeuCauDatComponent} from './yeu-cau-dat/yeu-cau-dat.component';
+import {QuanLyCtkmComponent} from './quan-ly-ctkm/quan-ly-ctkm.component'
 export const routes: Routes = [
     {
         path: 'gioi-thieu', // URL sẽ được sử dụng để điều hướng
@@ -46,6 +47,10 @@ export const routes: Routes = [
             {
               path: 'quan-ly-booking',
               component: QuanLyBookingComponent,  // Trang quản lý booking
+            },
+            {
+              path: 'quan-ly-ctkm',
+              component: QuanLyCtkmComponent,  // Trang quản lý chương trình khuyến mãi
             },
             {
               path: 'quan-ly-nguoi-dung',
