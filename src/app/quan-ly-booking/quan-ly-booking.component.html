@@ -1,4 +1,4 @@
-<h2 class="text-center my-4">Quản lý Booking</h2>
+<h2 class="text-center my-4">Danh sách các đơn đặt tour</h2>
 
 <!-- Thông báo thành công -->
 <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
@@ -7,7 +7,6 @@
 
 <!-- Bảng đơn booking chờ xác nhận -->
 <div *ngIf="(pendingBookings?.length ?? 0) > 0" class="mb-4">
-  <h4 class="mb-3">Các đơn booking <strong>chờ xác nhận</strong></h4>
   <table class="table table-bordered table-hover">
     <thead class="table-warning">
       <tr>
