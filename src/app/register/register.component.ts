@@ -25,7 +25,7 @@ export class RegisterComponent {
   name: string = '';
   isAccepted: boolean = false;
   successMessage: string = '';
-
+  submitted = false;
   constructor(private router: Router, private userService: UserService) {}
 
   // Ghi lại giá trị hiện tại của điện thoại mỗi khi nó thay đổi
@@ -34,15 +34,17 @@ export class RegisterComponent {
   }
 
   // Phương thức đăng ký
-  register() {
+  register(form: any) {
+    this.submitted = true;
     const registerDTO: RegisterDTO = {
       name: this.name,
       phone: this.phone,
       password: this.password,
-      retypePassword: this.retypePassword,
-      role_id: 1,
+      retypePassword: this.retypePassword
     };
-
+    if (form.invalid || this.password !== this.retypePassword) {
+      return; // Không submit nếu form không hợp lệ
+    }
     this.userService.register(registerDTO).subscribe({
       next: (response: any) => {
         // Hiển thị thông báo thành công từ backend

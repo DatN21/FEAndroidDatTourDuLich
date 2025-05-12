@@ -19,15 +19,11 @@ export class RegisterDTO{
   @IsString()
   name: string;
 
-
-  role_id: number;
-
   constructor(data : any){
     this.phone = data.phone ;
     this.password = data.password ;
     this.retypePassword = data.retypePassword ;
     this.name = data.name ;
-    this.role_id = data.role_id || 1 ;
   }
 
 }
