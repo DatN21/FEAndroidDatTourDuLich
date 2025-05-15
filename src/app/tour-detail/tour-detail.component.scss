@@ -47,6 +47,7 @@
   /* Sử dụng selector .ql-editor để chọn thẻ p bên trong Quill editor */
 .contentCha{
   display: flex;
+  gap: 100px;
 }
 .contentCon{
   text-align: justify;
@@ -55,14 +56,14 @@
  
 
 .datTour {
-  width: 30%;
+  width: 380px;
   margin: 0 auto;
   padding: 20px;
   background-color: #f9f9f9;  
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-right: -80px;
-  height: auto; /* Thay vì chiều cao cố định */
+    min-height: 550px;
 }
 
 h2 {
@@ -118,8 +119,8 @@ textarea {
 }
 
 .submit-button:disabled {
-  background-color: #4CAF50;
   cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .submit-button:hover {
@@ -320,4 +321,92 @@ h2 {
 
 .submit-button:hover {
   background-color: #e59400;
+}
+
+
+
+
+.schedule-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+}
+
+.schedule-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+}
+
+.schedule-modal {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 700px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #aaa;
+}
+
+.month-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.month-selector button {
+  padding: 6px 12px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+}
+
+.month-selector .active {
+  background: #004aad;
+  color: white;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.calendar-body .weekdays {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.calendar-body .days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.calendar-body .days div {
+  text-align: center;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+}
+
+.calendar-body .days .price {
+  color: red;
+  font-size: 0.8em;
+}
+
+.note {
+  font-size: 0.9em;
+  color: red;
+  margin-top: 10px;
 }

@@ -1,127 +1,86 @@
-.container1{
-  padding-top: 45px;
- height: auto;
-display: flex;
-flex-direction: column;
-align-items: center;
-margin-top: 20px;
-min-height: 1000px;
+/* Cải thiện bố cục của các input theo hàng */
+.container1 {
+  padding-top: 50px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  min-height: 100vh; /* Đảm bảo chiếm ít nhất chiều cao của viewport */
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
-:root {
-  --main-color: #0B5DA7;
+.col-lg-7 {
+  flex: 0 0 48%; /* Mỗi cột chiếm 50% chiều rộng */
+  margin-right: 4%;
+  margin-bottom: 20px;
+}
+.col-lg-12 {
+  flex: 0 0 100%; /* Cột chiếm 100% chiều rộng */
+  margin-bottom: 20px;
 }
 
-
-textarea:focus {
-  outline: none;
+/* Các phần tử hành khách */
+.d-flex {
+  display: flex;
 }
 
-/* ==== TẮT PHẦN TĂNG GIẢM SỐ CỦA THẺ INPUT TYPE NUMBER ==== */
-/* Chrome, Safari, Edge, Opera */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
--webkit-appearance: none;
-margin: 0;
+.d-flex.flex-column {
+  flex-direction: column;
 }
 
-/* Firefox */
-input[type=number] {
--moz-appearance: textfield;
+.d-flex.flex-column.p-2 {
+  padding: 12px;
 }
 
-input {
- border: none;
- font-size: 14px;
- font-weight: 500;
- padding: 5px;
-}
-
-input:focus {
-  outline: 1px solid black;
+/* Cải tiến giao diện các phần tử */
+input,
+select,
+textarea {
+  padding: 12px;
   border-radius: 5px;
-}
-
-/* ========== NHẬP THÔNG TIN ======== */
-.back {
-  text-decoration: none;
-  color: black;
-}
-
-.back:hover {
-  color: var(--main-color);
-}
-
-.cb:focus {
-  outline: none;
-  border: none;
-}
-
-.cb-hk,
-.sl-custom {
-  margin-top: 4px;
-  border: none;
-}
-
-.cb-hk:focus,
-.sl-custom:focus {
-  outline: none;
-  border: none;
-}
-
-.increase, .decrease {
-  width: 50px;
-  border: none;
-  background-color: white;
-}
-
-.increase:hover, .decrease:hover {
-  cursor: pointer;
-  background-color: #CDF2FA;
-  border-radius: 6px;
-}
-
-.scroll-box {
-  max-height: 300px;
-  overflow-y: auto;
-  line-height: 1.6;
-  scrollbar-width: none;        /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
-}
-
-.scroll-box::-webkit-scrollbar {
-  display: none;                /* Chrome, Safari */
-}
-
-/* ===== TÓM TẮT CHUYẾN ĐI ====== */
-.summary-box {
-  max-width: 600px;
-  width: 100%;
-  margin: 0 auto; /* Căn giữa theo chiều ngang */
-  border-radius: 10px;
   border: 1px solid #ddd;
-  padding: 20px;
-  background-color: #fff;
+  font-size: 14px;
+  width: 100%;
 }
 
-.price {
-  color: red;
-  font-weight: bold;
-  font-size: 22px;
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #0b5da7;
+  outline: none;
+}
+
+/* Tóm tắt chuyến đi */
+.summary-box {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: #f8f8f8;
 }
 
 .line-item {
   display: flex;
   justify-content: space-between;
-  padding: 5px 0;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
 }
 
 .line-item span {
   font-weight: bold;
 }
 
-.discount {
+.price {
   color: red;
+  font-weight: bold;
+  font-size: 22px;
 }
 
 .btn-dattour {
@@ -131,30 +90,210 @@ input:focus {
   color: #B1B1B1;
   font-size: 1.5rem;
   font-weight: bold;
-  padding: 10px;
+  padding: 15px;
   border-radius: 10px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-dattour:hover {
+  background-color: #0b5da7;
+  color: white;
+}
+
+/* Flight info and details */
+.flight-info {
+  background-color: #f8f8f8;
+  border-radius: 8px;
+}
+
+.flight-header h5 {
+  font-size: 1.3rem;
+  color: #0b5da7;
+  margin-bottom: 15px;
+  margin-top: 18px;
+}
+.kh {
+  margin-bottom: -22px;
+}
+
+.flight-schedule {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.flight-departure,
+.flight-return {
+  width: 48%;
+  display: flex;
+  flex-direction: column;
+}
+
+.time {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.time-value {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Thiết lập thanh trượt cho thời gian */
+.flight-departure .time-value,
+.flight-return .time-value {
+  display: block;
+  font-size: 16px;
+}
+
+.flight-departure .time-slider,
+.flight-return .time-slider {
+  flex-grow: 1;
+  height: 6px;
+  background-color: #ddd;
+  border-radius: 5px;
+  margin: 0 10px;
+  position: relative;
+}
+
+.flight-airline {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.airline-logo {
+  height: 20px;
+  margin-right: 5px;
 }
 
 #rightCol {
   transition: transform 0.3s ease;
 }
 
-/* ========== THANH TOÁN ========== */
-.title {
-  font-size: 1.2rem;
-  color: #0B5DB9;
+.scroll-box {
+  max-height: 300px;
+  overflow-y: auto;
+  line-height: 1.6;
+  margin-top: 20px;
+  padding-right: 10px;
 }
 
-.custom-table th,
-.custom-table td {
-  border: none !important;
+.scroll-box::-webkit-scrollbar {
+  display: none;
 }
 
-/* Căn giữa toàn bộ nội dung nếu cần */
-.container {
+.scroll-box::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.scroll-box::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+.fs-3 {
+  border: none;
+}
+.fs-3:hover {
+  background-color: #daefff;
+}
+/* CSS cho form thanh toán */
+.payment-form-container {
+  position: relative; 
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  flex-direction: column; /* Nếu cần căn giữa theo chiều dọc */
+  justify-content: center;   /* Căn giữa theo chiều ngang */
+  align-items: center;       /* Căn giữa theo chiều dọc */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Màu nền mờ */
+  z-index: 9999; /* Đảm bảo form thanh toán nằm trên các phần khác */
+  padding: 20px;
+}
+.close-btn:hover {
+  color: red; /* Màu khi hover vào dấu "X" */
+}
+.payment-form-container form {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 700px; /* Đảm bảo form có chiều rộng tối đa */
+}
+
+h2 {
+  color: #0b5da7;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.payment-methods {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;  /* Chắc chắn các payment options sẽ nằm theo chiều dọc */
+  align-items: center; /* Căn giữa tất cả các phần tử */
+  gap: 10px; /* Khoảng cách giữa các phần tử */
+}
+
+.payment-option {
+  text-align: center;
+  background-color: #f9f9f9; /* Màu nền mặc định */
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: background-color 0.3s;
+  width: 90%;  /* Đảm bảo mỗi payment option chiếm 90% chiều rộng của form */
+  box-sizing: border-box; /* Đảm bảo padding không làm phình rộng phần tử */
+}
+
+.payment-option:hover {
+  background-color: #e8e8e8;
+}
+
+.payment-option.selected {
+  background-color: #e0f7fa; /* Màu nền khi phương thức thanh toán được chọn */
+  border-color: #26c6da;
+}
+
+.payment-option .payment-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+}
+
+.payment-option span {
+  font-size: 1rem;
+  color: #333;
+}
+
+button[type="submit"] {
+  background-color: #0b5da7;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #045a8d;
+}
+
+button[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.fw-bold2{
+  text-align: center;
+  color: #0b5da7;
+  font-weight: bold;
 }

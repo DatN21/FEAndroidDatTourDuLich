@@ -5,93 +5,54 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { TourService } from '../service/tours.service';
-import { Tour } from '../model/tour';
+import { TourResponse } from '../response/TourResponse';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  imports: [HeaderComponent, FooterComponent, FormsModule, CommonModule, RouterModule],
+  imports: [FormsModule, CommonModule, RouterModule],
 })
 export class HomeComponent implements OnInit {
-  tours: Tour[] = [];
-  filteredTours: Tour[] = [];
-  currentPage: number = 0;
-  itemsPerPage: number = 12;
+  tours: TourResponse[] = [];
+  displayedTours: TourResponse[] = [];
+  selectedDepartureDate: Date | null = null;
+  currentPage: number = 1;
+  itemsPerPage: number = 6;
   totalPages: number = 0;
   visiblePages: number[] = [];
-  keyword: string = "";
+
+  keyword: string = '';
   selectedBudget: string = 'all';
   selectedSortOption: string = 'all';
-  selectedDepartureDate: string = '';
-  constructor(
-    private tourService: TourService,
-    private router: Router
-  ) {}
+  constructor(private tourService: TourService, private router: Router) {}
 
   ngOnInit() {
-    this.getTours(this.keyword, this.currentPage, this.itemsPerPage);
+    this.getTours(this.keyword);
   }
 
-  getTours(keyword: string, page: number, limit: number) {
-    this.tourService.getTours(keyword, page, limit).subscribe({
-      next: (response: any) => {
-        if (response && response.tourResponses) {
-          this.tours = response.tourResponses;
-          this.applyFilters(); // cập nhật filteredTours theo filters
-          this.totalPages = response.totalPages;
-          this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
+  getTours(keyword: string) {
+    this.tourService.getToursByActive(keyword, 0, 1000).subscribe({
+      next: (response) => {
+        if (response && response.data) {
+          this.tours = response.data.content;
+          this.applyFilters();
         } else {
-          console.error("Cấu trúc phản hồi không đúng:", response);
+          console.error('Lỗi khi tải tour:', response.message);
         }
       },
-      error: (error: any) => {
-        console.error('Lỗi khi lấy dữ liệu tour:', error);
+      error: (error) => {
+        console.error('Lỗi kết nối:', error);
       }
     });
   }
 
   searchTours(): void {
-    if (this.keyword.trim()) {
-      this.router.navigate(['/tour-tim-kiem'], { queryParams: { keyword: this.keyword } });
-    }
+    this.currentPage = 1;
+    this.getTours(this.keyword);
   }
 
-  onPageChange(page: number) {
-    this.currentPage = page;
-    this.getTours(this.keyword, this.currentPage, this.itemsPerPage);
-  }
-
-  generateVisiblePageArray(currentPage: number, totalPages: number): number[] {
-    const maxVisiblePages = 5;
-    const halfVisiblePages = Math.floor(maxVisiblePages / 2);
-
-    let startPage = Math.max(currentPage - halfVisiblePages, 1);
-    let endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
-
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(endPage - maxVisiblePages + 1, 1);
-    }
-
-    return new Array(endPage - startPage + 1).fill(0).map((_, index) => startPage + index);
-  }
-
-  goToTourDetail(tourId: string): void {
-    this.router.navigate(['/tour-detail', tourId]);
-  }
-
-  updateFilter(filterType: string, value: string) {
-    if (filterType === 'budget') {
-      this.selectedBudget = this.selectedBudget === value ? 'all' : value; // toggle on/off
-    }
-  }
-  getDayOfWeek(date: string): string {
-    const daysOfWeek = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
-    const dayIndex = new Date(date).getDay();
-    return daysOfWeek[dayIndex];
-  }
-  
   applyFilters() {
     let result = [...this.tours];
 
@@ -99,36 +60,126 @@ export class HomeComponent implements OnInit {
     result = result.filter(tour => {
       const price = Number(tour.price);
       switch (this.selectedBudget) {
-        case 'under5':
-          return price < 5000000;
-        case '5to10':
-          return price >= 5000000 && price <= 10000000;
-        case '10to20':
-          return price > 10000000 && price <= 20000000;
-        case 'above20':
-          return price > 20000000;
-        default:
-          return true;
+        case 'under5': return price < 5000000;
+        case '5to10': return price >= 5000000 && price <= 10000000;
+        case '10to20': return price > 10000000 && price <= 20000000;
+        case 'above20': return price > 20000000;
+        default: return true;
       }
     });
 
+   // Lọc theo ngày khởi hành
+  if (this.selectedDepartureDate) {
+    const selectedDateOnly = new Date(this.selectedDepartureDate);
+    selectedDateOnly.setHours(0, 0, 0, 0); // loại bỏ giờ để so sánh chính xác ngày
+
+    result = result.filter(tour => {
+      if (!tour.startDate) return false;
+      const tourStartDate = new Date(tour.startDate);
+      tourStartDate.setHours(0, 0, 0, 0);
+      return tourStartDate.getTime() === selectedDateOnly.getTime();
+    });
+  }
+
+
     // Sắp xếp
     switch (this.selectedSortOption) {
-      case 'nearest':
-        result.sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
-        break;
       case 'priceLowToHigh':
         result.sort((a, b) => Number(a.price) - Number(b.price));
         break;
       case 'priceHighToLow':
         result.sort((a, b) => Number(b.price) - Number(a.price));
         break;
+      case 'nearest':
+        result.sort((a, b) => {
+          const dateA = new Date(a.startDate || '').getTime();
+          const dateB = new Date(b.startDate || '').getTime();
+          return dateA - dateB;
+        });
+        break;
     }
 
-    this.filteredTours = result;
+    this.totalPages = Math.ceil(result.length / this.itemsPerPage);
+    this.updatePagination(result);
   }
 
-  onSortChange() {
+  updatePagination(filteredList: TourResponse[]) {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    this.displayedTours = filteredList.slice(start, end);
+    this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
     this.applyFilters();
   }
+
+  generateVisiblePageArray(currentPage: number, totalPages: number): number[] {
+    const maxPages = 5;
+    const half = Math.floor(maxPages / 2);
+    let start = Math.max(currentPage - half, 1);
+    let end = Math.min(start + maxPages - 1, totalPages);
+
+    if (end - start + 1 < maxPages) {
+      start = Math.max(end - maxPages + 1, 1);
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }
+
+  updateFilter(filterType: string, value: string) {
+    if (filterType === 'budget') {
+      this.selectedBudget = this.selectedBudget === value ? 'all' : value;
+    }
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  goToTourDetail(tourId: string): void {
+    this.router.navigate(['/tour-detail', tourId]);
+  }
+
+  
+// Ví dụ: Hàm được gọi sau khi load data từ API
+loadTourDetails(tour: TourResponse): void {
+  this.selectedDepartureDate = tour.startDate ? new Date(tour.startDate) : null;
+}
+
+// Đổi ngày khởi hành
+onDepartureDateChange(event: string): void {
+  this.selectedDepartureDate = new Date(event);
+}
+
+// Lấy thứ trong tuần
+getDayOfWeek(date: Date): string {
+  const days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+  return days[date.getDay()];
+}
+
+getTourDurationText(duration: number): string {
+  if (duration === 1) {
+    return '1 ngày';
+  } 
+   else {
+    return `${duration} ngày ${duration - 1} đêm`;
+  }
+}
+// sortTours() {
+//     switch (this.selectedSortOption) {
+//       case 'nearest':
+//         this.tours.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+//         break;
+//       case 'priceLowToHigh':
+//         this.tours.sort((a, b) => a.price - b.price);
+//         break;
+//       case 'priceHighToLow':
+//         this.tours.sort((a, b) => b.price - a.price);
+//         break;
+//       case 'all':
+//       default:
+//         this.getTours(this.keyword); // Gọi lại API hoặc khôi phục thứ tự gốc
+//         break;
+//     }
+//   }
 }

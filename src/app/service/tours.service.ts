@@ -7,6 +7,10 @@ import { TourCreateDTO } from '../dtos/user/tourDTO/tour-create.dto';
 import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs'; 
 import {AuthService} from '../service/auth.service'
+import { ApiResponse } from '../response/APIResponse';
+import { TourPageData, TourResponse } from '../response/TourResponse';
+import { TourByAgeResponse } from '../response/TourByAgeResponse';
+import { TourScheduleResponse } from '../response/TourScheduleResponse';
 @Injectable({
   providedIn: 'root'
 })
@@ -24,8 +28,8 @@ export class TourService {
       .set('limit', limit.toString());            
     return this.http.get<Tour[]>(this.apiUrl, { params });
   }
-  getDetailTour(TourId: number) {
-    return this.http.get(`${enviroment.apiBaseUrl}/tours/${TourId}`);
+  getDetailTour(TourId: number): Observable<ApiResponse<TourResponse>> { 
+    return this.http.get<ApiResponse<TourResponse>>(`${this.apiUrl}/${TourId}`);
   }
   getToursByIds(toursIds: number[]): Observable<Tour[]> {
     // Chuyển danh sách ID thành một chuỗi và truyền vào params
@@ -84,15 +88,23 @@ uploadImages(tourId: number, files: File[]): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${tourId}?page=${page}&size=${size}`);
   }
 
-      getToursFull(keyword:string, 
-        page: number, limit: number
-    ): Observable<Tour[]> {
-    const params = new HttpParams()
+getToursFull(keyword: string, page: number, limit: number): Observable<ApiResponse<TourPageData>> {
+  const params = new HttpParams()
     .set('keyword', keyword)
     .set('page', page.toString())
-    .set('limit', limit.toString());            
-    return this.authService.getWithAuthHeaderFull(`${this.apiUrl}/full`,{ params });
-    }
+    .set('limit', limit.toString());
+
+  return this.authService.getWithAuthHeaderFull<ApiResponse<TourPageData>>(`${this.apiUrl}/full`, { params });
+}
+
+getToursByActive(keyword: string, page: number, limit: number): Observable<ApiResponse<TourPageData>> {
+  const params = new HttpParams()
+    .set('keyword', keyword)
+    .set('page', page.toString())
+    .set('limit', limit.toString());
+
+  return this.authService.getWithAuthHeaderFull<ApiResponse<TourPageData>>(`${this.apiUrl}`, { params });
+}
 
     searchTours(keyword: string, page: number, limit: number): Observable<Tour[]> {
       const params = new HttpParams()
@@ -104,8 +116,21 @@ uploadImages(tourId: number, files: File[]): Observable<any> {
     }
 
     updateTourStatus(id: number, status: string): Observable<any> {
-      const url = `${this.apiUrl}/status/${id}` ;
-      return this.authService.putWithAuthHeader(url, {status});
+  const url = `${this.apiUrl}/status/${id}?status=${status}`;  // Chú ý sửa "staus" thành "status"
+  return this.authService.putWithAuthHeader(url, {});
+}
+
+
+    getAllTourByAge(): Observable<TourByAgeResponse[]> { 
+    return this.http.get<ApiResponse<TourByAgeResponse[]>>(`${this.apiUrl}/allTourAge`).pipe(
+      map(response => response.data) // Extract the list of TourByAgeResponse from the API response
+    );
+    }
+    
+    getAllTourSchedule(id: number): Observable<TourScheduleResponse[]> { 
+    return this.http.get<ApiResponse<TourScheduleResponse[]>>(`${this.apiUrl}/allTourSchedule/${id}`).pipe(
+      map(response => response.data) // Extract the list of TourByAgeResponse from the API response
+    );
     }
 }
 

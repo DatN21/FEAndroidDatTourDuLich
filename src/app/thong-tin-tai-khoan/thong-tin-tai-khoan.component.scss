@@ -41,7 +41,15 @@
     color: #333;
     background-color: #fff;
   }
-  
+  .account-item select{
+    width: 60%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+    background-color: #fff;
+  }
   .account-actions {
     display: flex;
     justify-content: space-between;

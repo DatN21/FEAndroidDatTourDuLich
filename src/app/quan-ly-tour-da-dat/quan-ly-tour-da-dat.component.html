@@ -6,10 +6,10 @@
     <p class="me-2 mb-0">Trạng thái:</p>
     <select class="form-select" style="width: 200px;" [(ngModel)]="selectedStatus" (change)="filterByStatus()">
       <option value="all">Tất cả</option>
-      <option value="paid">Đã thanh toán</option>
-      <option value="confirmed">Đã xác nhận</option>
-      <option value="completed">Hoàn thành</option>
-      <option value="cancel">Đã huỷ</option>
+      <option value="PAID">Đã thanh toán</option>
+      <option value="CONFIRMED">Đã xác nhận</option>
+      <option value="COMPLETED">Hoàn thành</option>
+      <option value="CANCEL">Đã huỷ</option>
     </select>
   </div>
 </div>
@@ -18,7 +18,8 @@
   <thead>
     <tr>
       <th>Tên tour</th>
-      <th>Ngày Ngày đặt </th>
+      <th>Mã tour</th>
+      <th>Ngày đặt </th>
       <th>Tổng tiền </th>
       <th>Trạng thái</th>
       <th>Lựa chọn</th>
@@ -28,9 +29,10 @@
   <tbody>
     <tr *ngFor="let booking of bookingsFiltered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)">
         <td>{{ booking.tour_name }}</td>
+        <td>{{ booking.code }}</td>
       <td>{{ booking.start_date  }}</td>
-      <td>{{ booking.total_price  }} VNĐ</td>
-      <td>{{ booking.status }}</td>
+      <td>{{ booking.total_price  | number:'1.0-0' }} VNĐ</td>
+      <td>{{ mapTextToEnum(booking.status) }}</td>
       <td>
         <button class="btn btn-primary btn-sm me-1" (click)="viewDetail(booking.id)">Xem chi tiết</button>
         <button class="btn btn-warning btn-sm me-1" (click)="editBooking(booking.id)">Chỉnh sửa</button>
@@ -66,4 +68,45 @@
       </li>
     </ul>
   </nav>
+  <!-- Modal/Form chi tiết booking -->
+<div class="modal fade show d-block" tabindex="-1" role="dialog" *ngIf="showDetailModal && bookingDetail">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content p-3">
+      <div class="modal-header">
+        <h5 class="modal-title">CHI TIẾT ĐƠN ĐẶT TOUR</h5>
+        <button type="button" class="btn-close" (click)="showDetailModal = false"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Họ tên khách hàng:</strong> {{ bookingDetail.customerName }}</p>
+        <p><strong>Số điện thoại:</strong> {{ bookingDetail.phone }}</p>
+        <p><strong>Ngày bắt đầu:</strong> {{ bookingDetail.startDate | date: 'dd/MM/yyyy' }}</p>
+        <p><strong>Ngày kết thúc:</strong> {{ bookingDetail.endDate | date: 'dd/MM/yyyy' }}</p>
+        <p><strong>Ghi chú:</strong> {{ bookingDetail.note || 'Không có' }}</p>
+        <p><strong>Phương thức thanh toán:</strong> {{ bookingDetail.method }}</p>
+        <p><strong>Tổng tiền:</strong> {{ bookingDetail.price | number:'1.0-0'  }} VNĐ</p>
+
+        <h6 class="mt-3">Danh sách người tham gia tour:</h6>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Họ tên</th>
+              <th>Giới tính</th>
+              <th>Ngày sinh</th>
+              <th>Giá</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let detail of bookingDetail.bookingDetails">
+              <td>{{ detail.fullName }}</td>
+              <td>{{ detail.gender }}</td>
+              <td>{{ detail.birthDate | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ detail.pricePerPerson | number:'1.0-0' }} VNĐ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>

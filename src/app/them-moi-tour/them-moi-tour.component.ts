@@ -20,15 +20,11 @@ export class ThemMoiTourComponent implements OnInit {
   @ViewChild('quillEditor') quillEditor: QuillEditorComponent | undefined;
   newTour: TourCreateDTO = {
     tourName: '',
-    days: '',
-    startDate: '',
-    destination: '',
-    tourType: '',
+    duration: 1,
+    description: '',
     departureLocation: '',
     status: '',
     price: 0,
-    description: '',
-    content: '',
     imageHeader: '',
   };
 
@@ -60,15 +56,11 @@ export class ThemMoiTourComponent implements OnInit {
   
       const newTour: TourCreateDTO = {
         tourName: this.newTour.tourName,
-        days: this.newTour.days,
-        startDate: this.newTour.startDate,
-        destination: this.newTour.destination,
-        tourType: this.newTour.tourType,
-        departureLocation: this.newTour.departureLocation,
+        duration: this.newTour.duration,
         status: this.newTour.status,
         price: this.newTour.price,
         description: this.newTour.description,
-        content: content, // Gán nội dung HTML từ Quill Editor
+        departureLocation: this.newTour.departureLocation,
         imageHeader: this.newTour.imageHeader, // Gán ảnh đại diện
       };
   

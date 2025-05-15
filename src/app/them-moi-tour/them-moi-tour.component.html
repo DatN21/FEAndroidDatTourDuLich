@@ -7,35 +7,19 @@
 
   <!-- Số ngày -->
   <label for="days">Số ngày:</label>
-  <input id="days" type="text" [(ngModel)]="newTour.days" name="days" required />
+  <input id="days" type="text" [(ngModel)]="newTour.duration" name="days" required />
 
   <!-- Khởi hành -->
   <label for="start_date">Khởi hành:</label>
-  <input id="start_date" type="text" [(ngModel)]="newTour.startDate" name="start_date" required />
-
-  <!-- Điểm đến -->
-  <label for="destination">Điểm đến:</label>
-  <input id="destination" type="text" [(ngModel)]="newTour.destination" name="destination" required />
-
+  <input id="start_date" type="text" [(ngModel)]="newTour.departureLocation" name="start_date" required />
   <!-- Loại Tour -->
-  <div class="option">
-    <label for="tourType">Loại tour:</label>
-    <select id="tourType" [(ngModel)]="newTour.tourType" name="tourType" required>
-      <option value="1 ngày">1 ngày</option>
-      <option value="Nhiều ngày">Nhiều ngày</option>
-    </select>
-  </div>
-
-  <!-- Điểm xuất phát -->
-  <label for="departure_location">Điểm xuất phát:</label>
-  <input id="departure_location" type="text" [(ngModel)]="newTour.departureLocation" name="departure_location" required />
 
   <!-- Trạng thái -->
   <div class="option">
     <label for="status">Trạng thái:</label>
     <select id="status" [(ngModel)]="newTour.status" name="status" required>
-      <option value="Tạm dừng">Tạm dừng</option>
-      <option value="Đang hoạt động">Đang hoạt động</option>
+      <option value="ACTIVE">Tạm dừng</option>
+      <option value="INACTIVE">Đang hoạt động</option>
     </select>
   </div>
 
@@ -43,13 +27,10 @@
   <label for="price">Giá tour:</label>
   <input id="price" type="number" [(ngModel)]="newTour.price" name="price" required />
 
-  <!-- Tiêu đề Tour -->
-  <label for="description">Tiêu đề Tour:</label>
-  <input id="description" type="text" [(ngModel)]="newTour.description" name="description" />
 
   <!-- Nội dung tour (Quill Editor) -->
   <label for="content">Nội dung tour:</label>
-  <quill-editor #quillEditor [(ngModel)]="newTour.content"
+  <quill-editor #quillEditor [(ngModel)]="newTour.description"
     name="content"
     [style]="{ height: '300px' }"
     [modules]="{

@@ -6,7 +6,7 @@
 
   <div class="body">
     <!-- Tên tour -->
-    <h1>{{ tour.tourName }}</h1>
+    <h1>{{ tour.name }}</h1>
 
     <div class="contentCha">
     <div class="slideshow-container">
@@ -22,49 +22,47 @@
 
     <div class="datTour">
       <h2>Lịch Trình và Giá Tour</h2>
-    
+      <div class="date-options">
+  <button
+    *ngFor="let schedule of tourSchedule.slice(0, 3)"
+    type="button"
+    class="date-btn"
+    [class.active]="selectedDate === schedule.startDate"
+    (click)="selectDate(schedule.startDate)"
+  >
+    {{ schedule.startDate | date: 'dd/MM' }}
+  </button>
+
+  <button
+    type="button"
+    class="date-btn"
+    [class.active]="selectedDate === 'all'"
+    (click)="selectDate('all')"
+  >
+    Tất cả
+  </button>
+</div>
+
+
       <!-- Chọn ngày khởi hành -->
       <div class="departure-dates">
         <label>Chọn Lịch Trình và Xem Giá:</label>
-        <div class="date-options">
-          <button
-            type="button"
-            class="date-btn"
-            [class.active]="selectedDate === '27/05'"
-            (click)="selectDate('27/05')"
-          >
-            27/05
-          </button>
-          <button
-            type="button"
-            class="date-btn"
-            [class.active]="selectedDate === '03/06'"
-            (click)="selectDate('03/06')"
-          >
-            03/06
-          </button>
-          <button
-            type="button"
-            class="date-btn"
-            [class.active]="selectedDate === '10/06'"
-            (click)="selectDate('10/06')"
-          >
-            10/06
-          </button>
-          <button
-            type="button"
-            class="date-btn"
-            (click)="selectDate('all')"
-          >
-            Tất cả
-          </button>
-        </div>
+        <!-- Hiển thị giá theo nhóm tuổi -->
+      <div class="age-price-section">
+        <p><strong>Giá theo nhóm tuổi:</strong></p>
+        <ul class="list-group">
+          <li *ngFor="let group of tourAgeGroups" class="list-group-item d-flex justify-content-between">
+            <span>{{ group.describe }}</span>
+            <span class="fw-bold text-success">{{ getPriceForAgeGroup(group.priceRate) | number:'1.0-0' }}đ</span>
+          </li>
+        </ul>
+      </div>
       </div>
     
       <!-- Số lượng khách theo nhóm tuổi -->
       <div class="guest-group" *ngFor="let group of ageGroups">
         <div class="label">
-          {{ group.label }} <span class="price" *ngIf="group.price">x {{ group.price | number:'1.0-0' }} đ</span>
+          {{ group.describe }} <span class="price" *ngIf="group.price"></span>
         </div>
         <div class="quantity-control">
           <button type="button" (click)="decrease(group)">-</button>
@@ -84,15 +82,64 @@
       </div>
     
       <!-- Nút yêu cầu đặt -->
-      <button type="button" class="submit-button" (click)="yeuCauDat(tour.id.toString())">Yêu cầu đặt</button>
+    <button
+      type="button"
+      class="submit-button"
+      [disabled]="!selectedScheduleId"
+      (click)="yeuCauDat()"
+    >
+      Yêu cầu đặt
+    </button>
+
+
+
+
     </div>
     
 
   </div>
-      <div class="contentCon" [innerHTML]="tour.content"></div>
+      <div class="contentCon" [innerHTML]="tour.description"></div>
 
       <!-- Form đặt tour -->
 
     </div>
+    <!-- Popup lịch khởi hành -->
+<div class="schedule-popup" *ngIf="showFullSchedule">
+  <div class="schedule-overlay" (click)="closeSchedulePopup()"></div>
+  <div class="schedule-modal">
+    <h3>LỊCH KHỞI HÀNH</h3>
+    <div class="month-selector">
+      <button *ngFor="let month of availableMonths"
+              (click)="selectMonth(month)"
+              [class.active]="selectedMonth === month">
+        {{ month }}
+      </button>
+    </div>
+
+    <div class="calendar">
+      <div class="calendar-header">
+        <button (click)="prevMonth()">←</button>
+        <strong>THÁNG {{ selectedMonth }}</strong>
+        <button (click)="nextMonth()">→</button>
+      </div>
+
+      <div class="calendar-body">
+        <div class="weekdays">
+          <span *ngFor="let day of ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']">{{ day }}</span>
+        </div>
+        <div class="days">
+          <div *ngFor="let date of calendarDays"
+               [class.today]="isToday(date)"
+               (click)="selectScheduleDate(date)">
+            <span>{{ date.day }}</span>
+            <div *ngIf="date.price" class="price">{{ date.price | number:'1.0-0' }}K</div>
+          </div>
+        </div>
+      </div>
+      <p class="note">Quý khách vui lòng chọn ngày phù hợp</p>
+    </div>
+  </div>
+</div>
+
   </div>
 

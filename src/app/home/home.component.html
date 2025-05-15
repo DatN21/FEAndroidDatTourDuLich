@@ -46,7 +46,7 @@
   <p class="tourUuDai">TOUR ƯU ĐÃI</p>
   <div class="sapXepTheo d-flex align-items-center">
     <p class="me-2 mb-0">Sắp xếp theo:</p>
-    <select class="form-select" style="width: 200px;" [(ngModel)]="selectedSortOption" (change)="onSortChange()">
+    <select class="form-select" style="width: 200px;" [(ngModel)]="selectedSortOption" (change)="applyFilters()">
       <option value="all">Tất cả</option>
       <option value="nearest">Ngày khởi hành gần nhất</option>
       <option value="priceLowToHigh">Giá từ thấp đến cao</option>
@@ -54,6 +54,7 @@
     </select>
   </div>
 </div>
+
 
 <p class="headerTourMotNgay">BỘ LỌC TÌM KIẾM</p>
 <div class="danhSachTour">
@@ -70,15 +71,21 @@
     </div>
   </div>  
   
-  <div class="departure-filter">
-    <p class="filter-label">Ngày khởi hành:</p>
-    <div *ngIf="selectedDepartureDate" class="departure-date">
-      <p class="tour-departure-text">
-        {{ selectedDepartureDate | date:'dd/MM/yyyy' }} ({{ getDayOfWeek(selectedDepartureDate) }})
-      </p>
-    </div>
-    <input type="date" class="form-control" [(ngModel)]="selectedDepartureDate" />
-  </div> 
+<div class="departure-filter">
+  <p class="filter-label">Ngày khởi hành:</p>
+
+  <div *ngIf="selectedDepartureDate" class="departure-date">
+    <p class="tour-departure-text">
+      {{ selectedDepartureDate | date:'dd/MM/yyyy' }} ({{ getDayOfWeek(selectedDepartureDate) }})
+    </p>
+  </div>
+
+  <input type="date"
+         class="form-control"
+         [ngModel]="selectedDepartureDate | date:'yyyy-MM-dd'"
+         (ngModelChange)="onDepartureDateChange($event)" />
+</div>
+
 
   <div class="filter-actions mt-2">
     <button class="apply-btn" (click)="applyFilters()">Áp dụng</button>
@@ -87,22 +94,24 @@
 </div>
 <div class="tourList w-75">
   <div class="row">
-    <div class="col-lg-4 col-md-6" *ngFor="let tour of filteredTours">
+    <div class="col-lg-4 col-md-6" *ngFor="let tour of displayedTours">
       <!-- Hiển thị thông tin tour 1 ngày -->
       <div class="tour-item" (click)="goToTourDetail(tour.id.toString())">
         <img *ngIf="tour.imageHeader" [src]="tour.imageHeader" alt="Tour Image" class="tour-image">
-        <p class="tour-name">{{ tour.tour_name }}</p>
+        <p class="tour-name">{{ tour.name }}</p>
         <div class="td_tour_type">
           <i class="fa-regular fa-clock"></i>
-          <p class="bold-text">{{tour.days}}</p>
+          <p class="bold-text">{{ getTourDurationText(tour.duration) }}</p>
         </div>
-        <div class="td_tour_type">
-          <i class="fa-regular fa-calendar-days"></i>
-          <p class="tour-depart">Khởi hành: {{ tour.start_date }}</p>
-        </div>
+
+      <div class="td_tour_type">
+        <i class="fa-regular fa-calendar-days"></i>
+        <p class="tour-depart">Khởi hành: {{ tour.startDate | date: 'dd/MM/yyyy' }}</p>
+      </div>
+
         <div class="td_tour_type">
           <p class="giaP">GIÁ:</p>
-          <p class="tour-price">{{ tour.price }}đ/Khách</p>
+          <p class="tour-price">{{ tour.price | number:'1.0-0'  }}đ</p>
         </div>
       </div>
     </div>

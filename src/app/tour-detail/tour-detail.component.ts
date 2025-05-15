@@ -11,6 +11,9 @@ import { TourService } from '../service/tours.service';
 import { BookingDTO } from '../dtos/user/booking/booking.dto';
 import { AuthService } from '../service/auth.service';
 import { ImageService } from '../service/image.service';
+import { TourResponse } from '../response/TourResponse';
+import { TourByAgeResponse } from '../response/TourByAgeResponse';
+import { TourScheduleResponse } from '../response/TourScheduleResponse';
 
 @Component({
   selector: 'app-tour-detail',
@@ -20,8 +23,9 @@ import { ImageService } from '../service/image.service';
   styleUrls: ['./tour-detail.component.scss'],
 })
 export class TourDetailComponent implements OnInit, OnDestroy {
+  selectedTour: TourResponse | null = null;
   bookingForm!: FormGroup;
-  tour: any = {}; 
+  tour!: TourResponse; 
   tourId!: number; 
   tourName: string = ''; 
   loading: boolean = false;
@@ -33,16 +37,14 @@ export class TourDetailComponent implements OnInit, OnDestroy {
   user: any;
   selectedImage: string | null = null;
   currentIndex: number = 0;
-  selectedDate = '27/05';
-  ageGroups = [
-    { label: 'Người lớn\n> 10 tuổi', price: 32900000, count: 2 },
-    { label: 'Trẻ em\n6 - 10 tuổi', price: 0, count: 0 },
-    { label: 'Trẻ em\n2 - 5 tuổi', price: 0, count: 0 },
-    { label: 'Trẻ nhỏ\n< 2 tuổi', price: 0, count: 0 },
-  ];
-  selectDate(date: string) {
-    this.selectedDate = date;
-  }
+  selectedDate = 'all';
+  selectedScheduleId: number | null = null;
+tourAgeGroups: TourByAgeResponse[] = [];
+tourSchedule: TourScheduleResponse[] = [];
+tourDuration!: number;
+tourDepatureLocation!: string;
+  selectedBasePrice: number = 0;
+  ageGroups: { describe: string; priceRate: number; price: number; count: number }[] = [];
   constructor(
     private fb: FormBuilder,
     private bookingService: BookingService,
@@ -53,77 +55,143 @@ export class TourDetailComponent implements OnInit, OnDestroy {
     private imageService: ImageService
   ) {}
 
-  ngOnInit(): void {
-    this.user = this.authService.getLoggedInUser();
-    this.initializeForm();
-    this.loadTourData();
+ ngOnInit(): void {
+
+  this.user = this.authService.getLoggedInUser();
+  this.bookingForm = this.fb.group({
+  fullName: ['', Validators.required],
+  phoneNumber: ['', Validators.required],
+  amount: [1, [Validators.required, Validators.min(1)]],
+  start_date: ['', Validators.required],
+  notes: ['']
+});
+
+  this.loadTourData(); // Gọi tất cả từ đây
+}
+
+getPriceForAgeGroup(rate: number): number {
+  if (rate === 0) {
+    return this.selectedBasePrice;
   }
+  return this.selectedBasePrice - (this.selectedBasePrice * rate);
+}
 
-  private initializeForm(): void {
-    this.bookingForm = this.fb.group({
-      amount: [1, [Validators.required, Validators.min(1)]],
-      start_date: ['', Validators.required],
-      phoneNumber: [
-        '',
-        [Validators.required, Validators.pattern(/^(0[3|5|7|8|9])+([0-9]{8})$/)],
-      ],
-      notes: [''],
-      fullName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-
-    this.bookingForm.get('amount')?.valueChanges.subscribe((amount) => {
-      this.totalPrice = this.calculateTotalPrice(amount);
-    });
-  }
-
-  private loadTourData(): void {
+private loadTourData(): void {
     const tourId = Number(this.route.snapshot.params['id']);
-    if (tourId) {
-      this.tourId = tourId;
-      this.fetchTourDetails(tourId);
-      this.loadImages();
-    } else {
-      this.errorMessage = 'Không tìm thấy thông tin tour.';
-    }
+  if (tourId) {
+    this.tourId = tourId;
+
+    this.fetchTourDetails(tourId);
+    this.loadImages(tourId);
+    this.getTourAgeGroup(); // 👈 Gọi ở đây là hợp lý
+    this.getTourSchedule(tourId);
+
+  } else {
+    this.errorMessage = 'Không tìm thấy thông tin tour.';
   }
+}
+
 
   private fetchTourDetails(tourId: number): void {
     this.tourService.getDetailTour(tourId).subscribe({
-      next: (data) => {
-        this.tour = data;
-        this.pricePerPerson = (data as any).price;
-        this.totalPrice = this.calculateTotalPrice(this.bookingForm.value.amount);
+      next: (response) => {
+        if(response && response.data) {
+          this.tour = response.data;
+          this.selectedTour = response.data; // 👈 thêm dòng này
+          this.pricePerPerson = this.tour.price;
+           this.selectedBasePrice = this.tour.price;
+          this.totalPrice = this.calculateTotalPrice(this.bookingForm.value.amount);
+        }
       },
       error: () => {
         this.errorMessage = 'Không thể tải thông tin tour.';
-      },
+      }
     });
   }
 
-  private loadImages(): void {
-    this.loading = true;
-    this.imageService.getImagesByTourIdArray(this.tourId).subscribe({
-      next: (data) => {
-        const imageRequests = data.map((img) =>
-          this.imageService.getImageWithToken(img.imgUrl).toPromise()
-        );
+private getTourAgeGroup(): void {
+  this.tourService.getAllTourByAge().subscribe({
+    next: (ageGroups: TourByAgeResponse[]) => {
+      this.tourAgeGroups = ageGroups;
+      this.ageGroups = ageGroups.map(group => ({
+        describe: group.describe,
+        priceRate: group.priceRate,
+        price: this.getPriceForAgeGroup(group.priceRate),
+        count: 0
+      }));
+    },
+    error: (error) => {
+      console.error('Lỗi khi tải nhóm tuổi:', error);
+      this.errorMessage = 'Không thể tải thông tin nhóm tuổi.';
+      this.tourAgeGroups = [];
+      this.ageGroups = [];
+    }
+  });
+}
 
-        Promise.all(imageRequests)
-        .then((imageBlobs) => {
-          this.images = imageBlobs
-            .filter((blob): blob is Blob => !!blob && blob.size > 0) // Sử dụng '!!blob' để loại bỏ 'undefined'
-            .map((blob) => URL.createObjectURL(blob));
+private getTourSchedule(id:number): void {
+  this.tourService.getAllTourSchedule(id).subscribe({
+    next: (tourSchedule: TourScheduleResponse[]) => {
+      if (tourSchedule && tourSchedule.length > 0) {
+        this.tourSchedule = tourSchedule;
+      }
+    },
+    error: (error) => {
+      console.error('Lỗi khi lịch trình tour:', error);
+      this.errorMessage = 'Không thể tải lịch trình tour.';
+      this.tourSchedule = [];
+    }
+  });
+}
+
+private loadImages(id: number): void {
+  this.loading = true;
+
+  this.imageService.getImagesByTourIdArray(id).subscribe({
+    next: (data) => {
+      const imageRequests = data.map((img) =>
+        this.imageService.getImageWithToken(img.imgUrl).toPromise()
+      );
+
+      Promise.allSettled(imageRequests)
+        .then((results) => {
+          const fulfilledBlobs = results
+            .filter(
+              (result): result is PromiseFulfilledResult<Blob> =>
+                result.status === 'fulfilled' && !!result.value && result.value.size > 0
+            )
+            .map((result) => result.value);
+
+          return Promise.all(fulfilledBlobs.map(this.blobToBase64));
+        })
+        .then((base64Images) => {
+          this.images = base64Images;
         })
         .catch((err) => {
-          console.error('Lỗi khi tải ảnh:', err);
+          console.error('Lỗi khi xử lý ảnh:', err);
         })
         .finally(() => {
           this.loading = false;
         });
-      },
-      error: () => (this.loading = false),
-    });  
-  }
+    },
+    error: (err) => {
+      console.error('Lỗi khi lấy danh sách ảnh:', err);
+      this.loading = false;
+    }
+  });
+}
+
+private blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+
+
 
   onSubmit(): void {
     if (this.bookingForm.invalid) {
@@ -157,7 +225,7 @@ export class TourDetailComponent implements OnInit, OnDestroy {
       full_name: this.bookingForm.value.fullName,
       phone_number: this.bookingForm.value.phoneNumber,
       tour_id: this.tourId,
-      tour_name: this.tour.tourName,
+      tour_name: this.tour.name,
       amount: this.bookingForm.value.amount,
       start_date: this.bookingForm.value.start_date,
       total_price: this.calculateTotalPrice(this.bookingForm.value.amount),
@@ -210,12 +278,95 @@ export class TourDetailComponent implements OnInit, OnDestroy {
     }
   }
   
-  updateTotal() {
-    this.totalPrice = this.ageGroups.reduce((sum, g) => sum + g.price * g.count, 0);
+ updateTotal() {
+  this.ageGroups.forEach(group => {
+    group.price = this.getPriceForAgeGroup(group.priceRate); // cập nhật lại giá nếu base price thay đổi
+  });
+  this.totalPrice = this.ageGroups.reduce((sum, g) => sum + g.price * g.count, 0);
+}
+
+
+yeuCauDat(): void {
+  if (!this.selectedScheduleId || !this.tour) {
+    alert('Vui lòng chọn lịch trình trước khi đặt tour.');
+    return;
   }
 
-  yeuCauDat(tourId: string): void {
-    this.router.navigate(['/yeu-cau-dat', tourId]);
+  const selectedSchedule = this.tourSchedule.find(s => s.id === this.selectedScheduleId);
+  
+  const dataToSend = {
+    tourDuration: this.tour.duration,
+    tourDepatureLocation: this.tour.departureLocation,
+    tourId: this.tour.id,
+    tourName: this.tour.name,
+    tourCode: this.tour.code,
+    ageGroups: this.ageGroups,
+    scheduleId: this.selectedScheduleId,
+    scheduleStartDate: selectedSchedule?.startDate,
+    scheduleEndDate: selectedSchedule?.endDate,
+    totalPrice: this.totalPrice,
+    price: this.tour.price,
+    amount: this.bookingForm.value.amount,
+  };
+
+  this.router.navigate(['/yeu-cau-dat', this.tour.id], { state: dataToSend });
+}
+
+
+showFullSchedule = false;
+selectedMonth = '6/2025';
+availableMonths = ['6/2025', '7/2025']; // Tuỳ vào dữ liệu backend
+calendarDays: { day: number, price?: number }[] = [];
+
+selectDate(date: string) {
+  this.selectedDate = date;
+  const selectedSchedule = this.tourSchedule.find(s => s.startDate === date);
+  this.selectedScheduleId = selectedSchedule ? selectedSchedule.id : null;
+  if (date === 'all') {
+    this.showFullSchedule = true;
+    this.loadCalendarForMonth(this.selectedMonth);
   }
+}
+
+closeSchedulePopup() {
+  this.showFullSchedule = false;
+}
+
+selectMonth(month: string) {
+  this.selectedMonth = month;
+  this.loadCalendarForMonth(month);
+}
+
+prevMonth() {
+  // Xử lý chuyển về tháng trước
+}
+
+nextMonth() {
+  // Xử lý chuyển sang tháng sau
+}
+
+loadCalendarForMonth(month: string) {
+  // Demo cứng: tháng 6 có giá vào ngày 7
+  if (month === '6/2025') {
+    this.calendarDays = Array.from({ length: 30 }, (_, i) => ({
+      day: i + 1,
+      price: i + 1 === 7 ? 96990 : undefined,
+    }));
+  } else {
+    this.calendarDays = Array.from({ length: 30 }, (_, i) => ({
+      day: i + 1,
+    }));
+  }
+}
+
+isToday(date: { day: number }) {
+  const today = new Date();
+  return today.getDate() === date.day && today.getMonth() + 1 === parseInt(this.selectedMonth.split('/')[0]);
+}
+
+selectScheduleDate(date: { day: number, price?: number }) {
+  this.selectedDate = `${date.day}/${this.selectedMonth.split('/')[0]}`;
+  this.showFullSchedule = false;
+}
 
 }

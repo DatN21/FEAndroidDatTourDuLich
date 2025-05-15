@@ -2,30 +2,32 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgClass, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // ✅ Import đúng module
-
+import { TourScheduleResponse } from '../response/TourScheduleResponse';
+import { TourService } from '../service/tours.service';
+import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-quan-ly-lich-trinh',
   standalone: true,
-  imports: [CommonModule,FormsModule ], // ✅ import NgClass thay vì CommonModule
+  imports: [CommonModule, FormsModule], // ✅ import NgClass thay vì CommonModule
+  providers: [TourService], // Add TourService to the providers array
   templateUrl: './quan-ly-lich-trinh.component.html',
   styleUrls: ['./quan-ly-lich-trinh.component.scss'] // sửa lại từ `styleUrl` -> `styleUrls`
 })
 export class QuanLyLichTrinhComponent implements OnInit{
+  tourSchedule: TourScheduleResponse[] = [];
   isAdding: boolean = false;
   itineraries: any[] = [];
-  selectedStatus: string = '';
-  constructor() { } // Khởi tạo constructor nếu cần thiết
+  errorMessage: string = ''; // Declare the errorMessage property
+  selectedStatus: string = ''; // Declare the selectedStatus property
+  constructor(private tourService: TourService, private router: Router,private route: ActivatedRoute,) { } // Khởi tạo constructor nếu cần thiết
   newItinerary = {
     departureDate: '',
     totalSeats: null
   };
   ngOnInit(): void {
-    // Gọi hàm khởi tạo dữ liệu ở đây nếu cần
-    this.itineraries = [
-     { departureDate: new Date('2025-05-01'), totalSeats: 40, availableSeats: 10, status: 'ACTIVE' },
-      { departureDate: new Date('2025-05-10'), totalSeats: 30, availableSeats: 5, status: 'ACTIVE' },
-      { departureDate: new Date('2025-04-25'), totalSeats: 20, availableSeats: 0, status: 'ACTIVE' }
-    ];
+    const tourId = Number(this.route.snapshot.params['id']);
+    this.getTourSchedule(tourId); // Gọi hàm này với id tour cụ thể
   }
   addItinerary(): void {
     const { departureDate, totalSeats } = this.newItinerary;
@@ -48,4 +50,19 @@ export class QuanLyLichTrinhComponent implements OnInit{
     }
     return this.itineraries.filter(i => i.status === this.selectedStatus);
   }
+
+  private getTourSchedule(id:number): void {
+  this.tourService.getAllTourSchedule(id).subscribe({
+    next: (tourSchedule: TourScheduleResponse[]) => {
+      if (tourSchedule && tourSchedule.length > 0) {
+        this.tourSchedule = tourSchedule;
+      }
+    },
+    error: (error) => {
+      console.error('Lỗi khi lịch trình tour:', error);
+      this.errorMessage = 'Không thể tải lịch trình tour.';
+      this.tourSchedule = [];
+    }
+  });
+}
 }

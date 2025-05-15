@@ -1,92 +1,135 @@
 <div class="container my-4">
-  <!-- Thanh tìm kiếm & bộ lọc -->
-  <!-- Nút Thêm mới tour và tiêu đề -->
+  <!-- Tiêu đề -->
   <h1 class="text-center mb-4">Danh sách tour</h1>
+  <!-- Thông báo lỗi -->
+<div *ngIf="errorMessage" class="alert alert-danger" [ngClass]="{ 'fade-out': fadeOut }">
+  {{ errorMessage }}
+</div>
 
-<!-- Bộ lọc tour -->
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" id="hasBooking">
+  <!-- Bộ lọc tour và các nút hành động -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Bộ lọc Tour -->
+<div class="d-flex">
+  <div class="form-check me-3">
+    <input class="form-check-input" type="checkbox" id="hasBooking" [(ngModel)]="hasBooking" (change)="filterTours()">
     <label class="form-check-label" for="hasBooking">
       Tour đang có khách đặt
     </label>
   </div>
   <div class="form-check">
-    <input class="form-check-input" type="checkbox" id="noBooking">
+    <input class="form-check-input" type="checkbox" id="noBooking" [(ngModel)]="noBooking" (change)="filterTours()">
     <label class="form-check-label" for="noBooking">
       Tour chưa có khách đặt
     </label>
   </div>
 </div>
 
-<!-- Form tìm kiếm và lọc -->
-<div class="row mb-3">
-  <div class="col-md-3"> <!-- Giảm width xuống còn 3 -->
-    <input type="text" class="form-control" [(ngModel)]="keyword" placeholder="Tìm theo tên tour, điểm đến...">
-  </div>
-  <div class="col-md-2"> <!-- Giảm width xuống còn 2 -->
-    <select class="form-select">
-      <option value="">Trạng thái</option>
-      <option value="ACTIVE">Đang hoạt động</option>
-      <option value="PAUSED">Tạm dừng</option>
-    </select>
-  </div>
-  <div class="col-md-2"> <!-- Giảm width xuống còn 2 -->
-    <button class="btn btn-primary w-100">Lọc</button>
-  </div>
+<div class="d-flex gap-2">
+  <!-- Tìm kiếm theo ngày khởi hành -->
+  <input type="date" class="form-control" [(ngModel)]="selectedStartDate" (change)="filterTours()">
 
-  <!-- Thêm tour mới -->
-  <div class="col-md-2"> <!-- Giảm width xuống còn 2 -->
-    <a routerLink="/admin/them-moi-tour" class="btn btn-success w-100">Thêm mới tour</a>
-  </div>
-  
-  <!-- Xem báo cáo thống kê -->
-  <div class="col-md-2"> <!-- Giảm width xuống còn 2 -->
-    <a routerLink="/admin/bao-cao-thong-ke" class="btn btn-info w-100">Xem thống kê</a>
-  </div>
 </div>
 
+    <!-- Tìm kiếm và Lọc -->
+<div class="d-flex gap-2">
+  <!-- Tìm kiếm -->
+  <input type="text" class="form-control" [(ngModel)]="keyword" placeholder="Tìm theo tên tour, điểm đến..." (input)="filterTours()">
   
+  <!-- Trạng thái lọc -->
+  <select class="form-select" [(ngModel)]="selectedStatus" (change)="filterTours()">
+    <option value="">Trạng thái</option>
+    <option value="ACTIVE">Đang hoạt động</option>
+    <option value="INACTIVE">Tạm dừng</option>
+  </select>
   
+  <!-- Nút lọc -->
+</div>
+
+
+    <!-- Thêm tour và Thống kê -->
+    <div class="d-flex gap-2">
+      <a routerLink="/admin/them-moi-tour" class="btn btn-success">Thêm mới tour</a>
+      <a routerLink="/admin/bao-cao-thong-ke" class="btn btn-info">Xem thống kê</a>
+    </div>
+  </div>
+
   <!-- Bảng dữ liệu tour -->
   <div class="table-responsive">
     <table class="table table-hover table-striped align-middle">
       <thead class="table-dark">
         <tr>
-          <th>ID</th>
+          <th>Mã tour</th>
           <th>Tên tour</th>
+        <th>Lịch trình và số ghế đặt</th>
           <th>Số ngày</th>
-          <th>Ngày khởi hành</th>
-          <th>Điểm đến</th>
-          <th>Loại tour</th>
           <th>Điểm khởi hành</th>
           <th>Trạng thái</th>
           <th>Giá tour</th>
-          <th>Tiêu đề</th>
+          <th>Ảnh đại diện</th>
           <th>Hành động</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let tour of tours">
-          <td>{{ tour.id }}</td>
-          <td>{{ tour.tour_name }}</td>
-          <td>{{ tour.days }}</td>
-          <td>{{ tour.start_date }}</td>
-          <td>{{ tour.destination }}</td>
-          <td>{{ tour.tour_type }}</td>
-          <td>{{ tour.departure_location }}</td>
-          <td>{{ tour.status }}</td>
-          <td>{{ tour.price }}</td>
-          <td>{{ tour.description }}</td>
+        <tr *ngFor="let tour of filteredTours">
+          <td>{{ tour.code }}</td>
+          <td>{{ tour.name }}</td>
           <td>
-            <!-- Hành động -->
-            <a class="btn btn-info btn-sm" [routerLink]="['/admin/them-anh', tour.id]" title="Thêm ảnh">Thêm ảnh</a>
-            <a class="btn btn-primary btn-sm" [routerLink]="['/admin/edit-tour', tour.id]" title="Sửa thông tin">Sửa</a>
-            <a class="btn btn-warning btn-sm"  title="Tạm dừng/Kích hoạt tour">
-              {{ tour.status === 'ACTIVE' ? 'Tạm dừng' : 'Kích hoạt' }}
-            </a>
-            <a class="btn btn-secondary btn-sm" [routerLink]="['/admin/lich-trinh', tour.id]" title="Quản lý lịch trình tour">Lịch trình</a>
+                  <div *ngFor="let schedule of tour.schedules" class="schedule-container">
+          <!-- Kiểm tra tourId để chỉ hiển thị lịch trình cho tour hiện tại -->
+          <div *ngIf="+schedule.tourId === tour.id" >
+            <!-- Hiển thị ngày bắt đầu và số ghế đã đặt -->
+            <div *ngIf="+schedule.bookedSlots > 0" class="schedule-item">
+    <!-- Hiển thị ngày bắt đầu và số ghế đã đặt -->
+          <div class="schedule-text">
+            {{ schedule.startDate | date: 'dd/MM' }}: {{ schedule.bookedSlots }} / {{ schedule.totalSlots }} ghế
+          </div>
+        </div>
+
+          </div>
+        </div>
+         <a class="btn btn-secondary btn-sm" [routerLink]="['/admin/lich-trinh', tour.id]" title="Quản lý lịch trình tour">Xem tất cả</a>
+        </td>
+          <td>{{ tour.duration }}</td>
+          <td>{{ tour.departureLocation }}</td> 
+           <td>
+            <!-- Hiển thị trạng thái hoạt động hoặc tạm ngừng -->
+            <span *ngIf="tour.status === 'ACTIVE'">Hoạt động</span>
+            <span *ngIf="tour.status === 'INACTIVE'">Tạm ngừng</span>
           </td>
+          <td>{{ tour.price | number:'1.0-0' }} đ</td>
+          <td><img [src]="tour.imageHeader" alt="Tour Image" class="tour-image" style="max-height: 50px; max-width: 100px; object-fit: cover;"></td>
+       <td>
+  <div class="d-flex flex-column gap-2">
+    <div class="d-flex gap-2">
+      <a class="btn btn-info btn-sm" [routerLink]="['/admin/them-anh', tour.id]" title="Quản lý ảnh">Quản lý ảnh</a>
+      <a class="btn btn-primary btn-sm" [routerLink]="['/admin/edit-tour', tour.id]" title="Sửa">Sửa thông tin</a>
+    </div>
+    <button class="btn btn-warning btn-sm" (click)="openStatusModal(tour)">
+      Thay đổi trạng thái
+    </button>
+  </div>
+</td>
+
+
+<!-- Popup/Modal -->
+<div id="statusModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="close-btn" (click)="closeModal()">×</span>
+    <h2>Thay đổi trạng thái tour</h2>
+    <form (ngSubmit)="changeStatus()">
+      <div class="form-group">
+        <label for="status">Chọn trạng thái:</label>
+        <select id="status" [(ngModel)]="newStatus" name="status" class="form-control">
+          <option value="ACTIVE">Hoạt động</option>
+          <option value="INACTIVE">Tạm ngưng</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-success">Lưu thay đổi</button>
+      <button type="button" class="btn btn-danger" (click)="closeModal()">Hủy bỏ</button>
+    </form>
+  </div>
+</div>
+
         </tr>
       </tbody>
     </table>

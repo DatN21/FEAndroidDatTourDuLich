@@ -20,6 +20,7 @@ export class ThongTinTaiKhoanComponent implements OnInit {
   editableRowId: number | null = null;
   successMessage: string = '';
   errorMessage: string = '';
+  displayGender: string = '';
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -28,7 +29,10 @@ export class ThongTinTaiKhoanComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
-    this.isAdmin = this.user.roleId === 'ADMIN'; // Kiểm tra quyền của người dùng
+    this.isAdmin = this.user.roleId === '2'; // Kiểm tra quyền của người dùng
+    if(this.user){
+       this.displayGender = this.mapEnumToText(this.user.gender) ;
+    }
   }
 
   viewBookedTours(): void {
@@ -36,22 +40,32 @@ export class ThongTinTaiKhoanComponent implements OnInit {
     this.router.navigate(['/quan-ly-tour-da-dat']);
   }
 
-  updateAccount(): void {
-    // Cập nhật thông tin tài khoản nếu không phải admin
-    if (!this.isAdmin) {
-      this.userService.updateUser(this.user.id, this.user).subscribe({
-        next: (response) => {
-          this.successMessage = `Thông tin đã được cập nhật!`;
-          this.editableRowId = null;
-          this.authService.saveLoggedInUser(response);  // Cập nhật thông tin người dùng mới
-        },
-        error: (error) => {
-          console.error('Lỗi khi cập nhật :', error);
-          this.errorMessage = 'Cập nhật không thành công, vui lòng thử lại!';
-        }
-      });
-    }
+updateAccount(): void {
+  if (!this.isAdmin) {
+    this.userService.updateUser(this.user.id, this.user).subscribe({
+      next: (response) => {
+        this.successMessage = 'Thông tin đã được cập nhật!';
+        this.editableRowId = null;
+        this.authService.saveLoggedInUser(response);  // Cập nhật thông tin người dùng mới
+
+        // Ẩn thông báo sau 3 giây
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 1500);
+      },
+      error: (error) => {
+        console.error('Lỗi khi cập nhật :', error);
+        this.errorMessage = 'Cập nhật không thành công, vui lòng thử lại!';
+
+        // Ẩn thông báo lỗi sau 5 giây
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 2000);
+      }
+    });
   }
+}
+
 
   logout(): void {
     this.authService.logout();
@@ -62,4 +76,19 @@ export class ThongTinTaiKhoanComponent implements OnInit {
     // Chuyển đến trang quản trị nếu người dùng là admin
     this.router.navigate(['/admin']);
   }
+
+
+mapEnumToText(gender: string): string {
+  return gender === 'NAM' ? 'Nam' : gender === 'NU' ? 'Nữ' : '';
+}
+
+mapTextToEnum(text: string): string {
+  const t = text.trim().toLowerCase();
+  return t === 'nam' ? 'NAM' : t === 'nữ' || t === 'nu' ? 'NU' : 'OTHER';
+}
+
+onGenderChange() {
+  this.user.gender = this.mapTextToEnum(this.displayGender);
+}
+
 }

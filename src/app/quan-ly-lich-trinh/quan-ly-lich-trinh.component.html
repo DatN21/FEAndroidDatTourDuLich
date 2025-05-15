@@ -41,18 +41,18 @@
         <th>Ngày khởi hành</th>
         <th>Ngày kết thúc</th>
         <th>Tổng số ghế</th>
-        <th>Số ghế còn lại</th>
+        <th>Số ghế đã đặt</th>
         <th>Trạng thái</th>
         <th class="text-center">Hành động</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let itinerary of itineraries; let i = index">
+      <tr *ngFor="let itinerary of tourSchedule; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ itinerary.departureDate | date:'dd/MM/yyyy' }}</td>
-        <td>{{ itinerary.departureDate | date:'dd/MM/yyyy' }}</td>
-        <td>{{ itinerary.totalSeats }}</td>
-        <td>{{ itinerary.availableSeats }}</td>
+        <td>{{ itinerary.startDate| date:'dd/MM/yyyy' }}</td>
+        <td>{{ itinerary.endDate| date:'dd/MM/yyyy' }}</td>
+        <td>{{ itinerary.totalSlots }}</td>
+        <td>{{ itinerary.bookedSlots }}</td>
         <td>
           <span class="badge" [ngClass]="{
             'bg-success': itinerary.status === 'ACTIVE',

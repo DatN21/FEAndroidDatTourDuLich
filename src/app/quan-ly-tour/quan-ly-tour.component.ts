@@ -8,6 +8,9 @@ import { enviroment } from '../enviroments/enviroments';
 import { RouterModule } from '@angular/router';
 import { TourCreateDTO } from '../dtos/user/tourDTO/tour-create.dto';  // Import DTO nếu chưa làm
 import { QuillModule } from 'ngx-quill';
+import { TourResponse } from '../response/TourResponse';
+import { TourScheduleResponse } from '../response/TourScheduleResponse';
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-quan-ly-tour',
   standalone: true,
@@ -16,7 +19,17 @@ import { QuillModule } from 'ngx-quill';
   styleUrls: ['./quan-ly-tour.component.scss']
 })
 export class QuanLyTourComponent implements OnInit {
-  tours: Tour[] = [];
+  selectedStartDate: string | null = null;  
+  hasBooking: boolean = false; // Biến để lưu trạng thái checkbox "Tour có khách đặt"
+  noBooking: boolean = false; // Biến để lưu trạng thái checkbox "Tour chưa có khách đặt"
+  
+  selectedStatus: string = ''; 
+  fadeOut = false;
+  errorMessage: string | null = null;
+  newStatus: string = '';
+  currentTour: any = null;
+  filteredTours: TourResponse[] = [];
+  tours: TourResponse[] = [];
   currentPage: number = 0;
   itemsPerPage: number = 12;
   totalPages: number = 0;
@@ -24,11 +37,12 @@ export class QuanLyTourComponent implements OnInit {
   keyword: string = "";
   showForm = false;
   successMessage: string = '';
-  errorMessage: string = '';
   showAddImageForm: boolean = false; // Điều khiển hiển thị form thêm ảnh
   selectedFiles: File[] = [];        // Mảng lưu ảnh đã chọn
   selectedTourId: number | null = null;
   uploadedImageUrls: string[] = [];
+  tourSchedule: TourScheduleResponse[] = [];
+    tourSchedule2: TourScheduleResponse[] = [];
   // @ViewChild('themTour') registerForm!: NgForm;
 
   // newTour: TourCreateDTO = {
@@ -52,25 +66,73 @@ export class QuanLyTourComponent implements OnInit {
     this.getTours(this.keyword, this.currentPage, this.itemsPerPage);
   }
 
-  getTours(keyword: string, page: number, limit: number) {
+// Mảng lưu lịch trình cho các tour
+tourSchedules: TourScheduleResponse[] = [];
+
+getTours(keyword: string, page: number, limit: number) {
     this.tourService.getToursFull(keyword, page, limit).subscribe({
-      next: (response: any) => {
-        if (response && response.tourResponses) {
-          this.tours = response.tourResponses.map((tour: Tour) => ({
-            ...tour,
-            // thumbnailUrl: `${enviroment.apiBaseUrl}/images/${tour.thumbnail}`
-          }));
-          this.totalPages = response.totalPages;
-          this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
+      next: (response) => {
+        if (response && response.data) {
+          // Lấy danh sách các tour
+          this.tours = response.data.content;
+          this.totalPages = response.data.totalPages;
+          this.filterTours(); // Sau khi lấy danh sách tour, gọi hàm lọc
+          
+          // Sau khi lấy danh sách tour, gọi hàm lấy lịch trình cho mỗi tour
+          this.tours.forEach(tour => {
+            this.getTourSchedule(tour.id);  // Gọi getTourSchedule để lấy lịch trình cho từng tour
+          });
         } else {
-          console.error("Cấu trúc phản hồi từ backend không đúng:", response);
+          console.error('Lỗi khi tải tour:', response.message);
         }
       },
-      error: (error: any) => {
-        console.error('Lỗi khi lấy dữ liệu tour:', error);
+      error: (error) => {
+        console.error('Lỗi kết nối:', error);
       }
     });
   }
+
+private getTourSchedule(id: number): void {
+  this.tourService.getAllTourSchedule(id).subscribe({
+    next: (tourSchedule: TourScheduleResponse[]) => {
+      if (tourSchedule && tourSchedule.length > 0) {
+        // Tìm tour tương ứng trong danh sách tour
+        const tour = this.tours.find(t => t.id === id);
+        if (tour) {
+          // Gán lịch trình vào tour
+          tour.schedules = tourSchedule;
+        }
+      }
+    },
+    error: (error) => {
+      console.error('Lỗi khi lấy lịch trình tour:', error);
+      this.errorMessage = 'Không thể tải lịch trình tour.';
+    }
+  });
+}
+
+private getTourSchedule2(id: number): void {
+  this.tourService.getAllTourSchedule(id).subscribe({
+    next: (tourSchedule: TourScheduleResponse[]) => {
+      if (tourSchedule && tourSchedule.length > 0) {
+        // Tìm tour tương ứng và gán lịch trình vào tour
+        const tour = this.tours.find(t => t.id === id);
+        if (tour) {
+          tour.schedules = tourSchedule;  // Gán lịch trình vào tour
+        }
+      }
+    },
+    error: (error) => {
+      console.error('Lỗi khi lịch trình tour:', error);
+      this.errorMessage = 'Không thể tải lịch trình tour.';
+    }
+  });
+}
+
+// Hàm để lấy lịch trình cho tour dựa vào tourId
+private getTourScheduleByTourId(tourId: number): TourScheduleResponse[] {
+  return this.tourSchedules.filter(schedule => +schedule.tourId === tourId);
+}
 
   generateVisiblePageArray(currentPage: number, totalPages: number): number[] {
     const maxVisiblePages = 5;
@@ -182,5 +244,116 @@ searchTours(keyword: string, page: number, limit: number) {
 
   
 
+openStatusModal(tour: any): void {
+    this.currentTour = tour;
+    this.newStatus = tour.status; // Giữ trạng thái hiện tại để dễ dàng thay đổi
+    const modalElement = document.getElementById('statusModal');
+    if (modalElement) {
+      modalElement.style.display = 'flex'; // Hiển thị modal
+    }
+  }
+
+  // Đóng modal
+  closeModal(): void {
+    const modalElement = document.getElementById('statusModal');
+    if (modalElement) {
+      modalElement.style.display = 'none'; // Ẩn modal
+    }
+  }
+
+  // Thay đổi trạng thái tour
+showError(message: string) {
+    this.errorMessage = message;  // Hiển thị thông báo lỗi
+    this.fadeOut = false;  // Đảm bảo rằng class fade-out chưa được thêm vào
+
+    // Sau 1.5 giây, thêm class fade-out và ẩn thông báo lỗi
+    setTimeout(() => {
+      this.fadeOut = true;
+
+      // Sau 2 giây (đủ thời gian cho animation), ẩn thông báo lỗi
+      setTimeout(() => {
+        this.errorMessage = null;  // Ẩn thông báo
+      }, 1000);  // Thời gian này tương ứng với hiệu ứng CSS
+    }, 1000);  // Thời gian hiển thị là 1.5 giây
+  }
+
+  // Hàm xử lý khi thay đổi trạng thái tour
+  changeStatus(): void {
+    if (this.currentTour && this.newStatus) {
+      // Giữ trạng thái cũ trong giao diện trước khi thay đổi
+      const previousStatus = this.currentTour.status;
+
+      // Cập nhật trạng thái trong giao diện ngay lập tức
+      this.currentTour.status = this.newStatus;
+
+      // Gọi API cập nhật trạng thái tour
+      this.tourService.updateTourStatus(this.currentTour.id, this.newStatus).subscribe({
+        next: (response) => {
+          console.log('Cập nhật trạng thái tour thành công');
+          this.closeModal(); // Đóng modal sau khi thay đổi
+        },
+        error: (error: HttpErrorResponse) => {
+          // Nếu có lỗi, khôi phục lại trạng thái cũ và hiển thị thông báo lỗi từ backend
+          console.error('Lỗi khi cập nhật trạng thái tour:', error);
+
+          // Kiểm tra xem backend có gửi thông báo lỗi trong trường 'error' không
+          if (error) {
+            this.showError(error.error.error);  // Lấy thông báo lỗi từ backend
+          } else {
+            this.showError('Đã xảy ra lỗi khi cập nhật trạng thái tour.');
+          }
+
+          // Khôi phục lại trạng thái cũ
+          this.currentTour.status = previousStatus; 
+        }
+      });
+    }}
+filterTours() {
+  let filteredTours = this.tours;
+
+  // Lọc theo trạng thái tour
+  if (this.selectedStatus) {
+    filteredTours = filteredTours.filter(tour => tour.status === this.selectedStatus);
+  }
+
+  // Lọc theo từ khóa tìm kiếm
+  if (this.keyword) {
+    filteredTours = filteredTours.filter(tour => {
+      return (
+        tour.name.toLowerCase().includes(this.keyword.toLowerCase()) || 
+        tour.departureLocation.toLowerCase().includes(this.keyword.toLowerCase())
+      );
+    });
+  }
+
+  // Lọc theo ngày khởi hành
+  if (this.selectedStartDate) {
+    const selectedDate = new Date(this.selectedStartDate);
+    filteredTours = filteredTours.filter(tour => {
+      // Kiểm tra ngày khởi hành của lịch trình tour
+      return tour.schedules?.some(schedule => {
+        const startDate = new Date(schedule.startDate);
+        return startDate.toDateString() === selectedDate.toDateString();
+      });
+    });
+  }
+
+  // Lọc theo trạng thái khách đặt (có khách đặt)
+  if (this.hasBooking) {
+    filteredTours = filteredTours.filter(tour => {
+      return tour.schedules?.some(schedule => +schedule.bookedSlots > 0);  // Kiểm tra nếu có lịch trình nào có khách đặt
+    });
+  }
+
+  // Lọc theo trạng thái khách đặt (chưa có khách đặt)
+  if (this.noBooking) {
+    filteredTours = filteredTours.filter(tour => {
+      return tour.schedules?.every(schedule => +schedule.bookedSlots === 0);  // Kiểm tra nếu tất cả lịch trình đều chưa có khách đặt
+    });
+  }
+
+  // Cập nhật danh sách tour đã lọc
+  this.filteredTours = filteredTours;
+}
 
 }

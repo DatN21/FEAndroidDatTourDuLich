@@ -30,18 +30,18 @@ export class UserService {
     return this.http.post(this.apiRegister,registerDTO, this.apiConfig) ;
   }
 
-  login(loginDTO: LoginDTO): Observable<any> {
-    return this.http.post(this.apiLogin, loginDTO, this.apiConfig).pipe(
-        map((response: any) => {
-            // Xác minh rằng phản hồi chứa token
-            if (response && response.token) {
-                return response.token; // Hoặc trả về một đối tượng có token
-            } else {
-                throw new Error('Invalid response format'); // Ném lỗi nếu không có token
-            }
-        })
-    );
+  login(loginDTO: LoginDTO): Observable<string> {
+  return this.http.post(this.apiLogin, loginDTO, this.apiConfig).pipe(
+    map((response: any) => {
+      if (response && response.data && response.data.token) {
+        return response.data.token;
+      } else {
+        throw new Error('Invalid response format');
+      }
+    })
+  );
 }
+
 getUserDetail(token: string) {
   return this.http.post(this.apiUserDetail, {}, {
     headers: new HttpHeaders({

@@ -30,7 +30,5 @@ export class ImageService {
         const url = `${this.apiUrl}/user/${tourId}`;
         return this.http.get<any[]>(url); // Gọi API trực tiếp qua HttpClient
       }
-      
-
         
 }

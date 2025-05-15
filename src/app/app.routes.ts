@@ -30,10 +30,11 @@ export const routes: Routes = [
     { path: 'dang-ky', component: RegisterComponent },
     { path: 'tour-tim-kiem', component: TourTimKiemComponent },
     { path: 'lien-he', component: LienHeComponent },
+    { path: 'admin', component: AdminComponent },
         {
           path: 'admin',
           component: AdminComponent, 
-          canActivate: [AuthGuard], // Admin layout
+          // canActivate: [AuthGuard], // Admin layout
           children: [
             {
               path: '',  // Trang dashboard của Admin

@@ -1,11 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, importProvidersFrom, OnInit } from '@angular/core';
 import {BookingService} from '../service/booking.service'
 import {Booking} from '../model/booking'
+import { BookingResponseByUser } from '../response/BookingResponseByUser';
 import { Router } from '@angular/router';
 import { response } from 'express';
 import { CommonModule } from '@angular/common';
 import {AuthService} from '../service/auth.service'
 import { FormsModule } from '@angular/forms';
+import { throwIfEmpty } from 'rxjs';
+import {ApiResponse} from '../response/APIResponse'
+import {BookingDetailResponseByBookingId} from '../response/BookingDetailResponseByBookingId'
 @Component({
   selector: 'app-quan-ly-tour-da-dat',
   standalone: true,
@@ -14,15 +18,18 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './quan-ly-tour-da-dat.component.scss'
 })
 export class QuanLyTourDaDatComponent implements OnInit{
-bookings: Booking[] = []; //danh sách gốc (từ API)
-bookingsFiltered: Booking[] = []; //danh sách đã lọc (theo từ khoá)
+bookingByUserId: BookingResponseByUser[] = []; //danh sách gốc (từ API)
+bookingsFiltered: BookingResponseByUser[] = []; //danh sách đã lọc (theo từ khoá)
 selectedStatus: string = 'all'; // Trạng thái đã chọn
+bookingDetail!: BookingDetailResponseByBookingId;
+showDetailModal: boolean = false;
 user: any;
   currentPage: number = 1;
   itemsPerPage: number = 12;
   totalPages: number = 0;
   keyword: string = "";
   visiblePages: number[] = [];
+  displayGender: string = '';
   constructor(private bookingService: BookingService, private router: Router, private authService: AuthService) {}
   ngOnInit() {
     this.user = this.authService.getLoggedInUser();
@@ -41,8 +48,8 @@ user: any;
   getBookings(): void {
     this.bookingService.getBookingsByUser(this.user.id).subscribe({
       next: (data) => {
-        this.bookings = data;
-        this.bookingsFiltered = [...this.bookings]; // Khởi tạo danh sách hiển thị
+        this.bookingByUserId = data;
+        this.bookingsFiltered = [...this.bookingByUserId]; // Khởi tạo danh sách hiển thị
         this.totalPages = Math.ceil(this.bookingsFiltered.length / this.itemsPerPage);
         this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
       },
@@ -55,9 +62,9 @@ user: any;
   
   filterByStatus() {
     if (this.selectedStatus === 'all') {
-      this.bookingsFiltered = [...this.bookings];
+      this.bookingsFiltered = [...this.bookingByUserId];
     } else {
-      this.bookingsFiltered = this.bookings.filter(b => b.status === this.selectedStatus);
+      this.bookingsFiltered = this.bookingByUserId.filter(b => b.status === this.selectedStatus);
     }
     this.totalPages = Math.ceil(this.bookingsFiltered.length / this.itemsPerPage);
     this.currentPage = 1;
@@ -82,10 +89,7 @@ user: any;
     this.currentPage = page;
     this.getBookings();
   }
-  viewDetail(bookingId: number) {
-    this.router.navigate(['/booking-detail', bookingId]);
-  }
-  
+
   editBooking(bookingId: number) {
     this.router.navigate(['/booking-edit', bookingId]);
   }
@@ -98,5 +102,36 @@ user: any;
   //     });
   //   }
   // }
-  
+ mapTextToEnum(text: string): string {
+  const t = text.trim().toUpperCase();
+
+  switch (t) {
+    case 'PAID':
+      return 'ĐÃ THANH TOÁN';
+    case 'CONFIRMED':
+      return 'ĐÃ XÁC NHẬN'
+    case 'CANCELLED':
+      return 'ĐÃ HUỶ';
+    default:
+      return 'HOÀN TIỀN';
+  }
+}
+
+onStatusChange(status:string) {
+  this.user.gender = this.mapTextToEnum(status);
+}
+
+viewDetail(bookingId: number) {
+  this.bookingService.getBookingDetailByBookingId(bookingId).subscribe({
+    next: (response: ApiResponse<BookingDetailResponseByBookingId>) => {
+      this.bookingDetail = response.data;
+      this.showDetailModal = true;
+      console.log('Booking detail received:', this.bookingDetail);
+    },
+    error: (err: any) => {
+      console.error('Failed to fetch booking detail', err);
+    }
+  });
+}
+
 }

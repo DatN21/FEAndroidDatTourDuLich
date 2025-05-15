@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserKey = 'currentUser';
+  private currentUserKey = 'user';
   private tokenKey = 'access_token';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
@@ -47,18 +47,18 @@ export class AuthService {
   }
 
 
-  getWithAuthHeaderFull(url: string, options?: { params?: HttpParams }): Observable<any> {
-    const token = localStorage.getItem('access_token'); // Lấy token từ localStorage
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+getWithAuthHeaderFull<T>(url: string, options?: { params?: HttpParams }): Observable<T> {
+  const token = localStorage.getItem('access_token'); // Lấy token từ localStorage
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    // Nếu có options (params), thêm vào request
-    const httpOptions = {
-      headers,
-      ...options, // Kết hợp headers với options khác (như params)
-    };
+  const httpOptions = {
+    headers,
+    ...options, // Bao gồm params nếu có
+  };
 
-    return this.http.get(url, httpOptions);
-  }
+  return this.http.get<T>(url, httpOptions); // Sử dụng generic T ở đây
+}
+
 
   postWithAuthHeader(url: string, body: any): Observable<any> {
     const token = localStorage.getItem('access_token');
@@ -89,13 +89,20 @@ export class AuthService {
   }
 
   getLoggedInUser(): any {
-    if (isPlatformBrowser(this.platformId)) {
-      const user = localStorage.getItem(this.currentUserKey);
-      console.log('User in localStorage:', user); 
-      return user ? JSON.parse(user) : null;
+  if (isPlatformBrowser(this.platformId)) {
+    const user = localStorage.getItem(this.currentUserKey);
+    console.log('User in localStorage:', user);
+    try {
+      const parsed = user ? JSON.parse(user) : null;
+      return parsed?.data || null;
+    } catch (error) {
+      console.error('Error parsing user from localStorage', error);
+      return null;
     }
-    return null;
   }
+  return null;
+}
+
 
   saveLoggedInUser(user: any): void {
     if (isPlatformBrowser(this.platformId)) {
