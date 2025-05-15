@@ -9,23 +9,39 @@
 <div *ngIf="(pendingBookings?.length ?? 0) > 0" class="mb-4">
   <table class="table table-bordered table-hover">
     <thead class="table-warning">
-      <tr>
-        <th>Họ và tên</th>
-        <th>Số điện thoại</th>
+    <tr>
+      <th>User đặt tour</th>
+        <th>Tên người đặt tour</th>
+        <th>Số điện thoại </th>
         <th>Tên tour</th>
-        <th>Số lượng khách</th>
-        <th>Tổng tiền</th>
+        <th>Số ghế đặt</th>
         <th>Trạng thái</th>
+        <th>Tổng tiền</th>
+        <th>Ghi chú</th>
         <th>Hành động</th>
-      </tr>
+    </tr>
     </thead>
     <tbody>
       <tr *ngFor="let booking of pendingBookings">
-        <td>{{ booking.full_name }}</td>
-        <td>{{ booking.phone_number }}</td>
-        <td>{{ booking.tour_name }}</td>
-        <td>{{ booking.amount }}</td>
-        <td>{{ booking.total_price }}</td>
+        <td>{{ booking.phoneUser }}</td>
+        <td>{{ booking.customerName }}</td>
+        <td>{{ booking.phoneTour }}</td>
+        <td>{{ booking.tourName }}</td>
+        <td>{{ booking.bookedSlots }}</td>
+       <td>
+        <span class="badge" [ngClass]="{
+          'bg-info': booking.status === 'PAID',
+          'bg-success': booking.status === 'CONFIRMED',
+          'bg-danger': booking.status === 'CANCELLED',
+          'bg-warning': booking.status === 'COMPLETED',
+          'bg-secondary': booking.status === 'REFUNDED'
+        }">
+          {{ getStatusLabel(booking.status) }}
+        </span>
+      </td>
+
+        <td>{{ booking.price }}</td>
+         <td>{{ booking.note }}</td>
         <td><span class="badge bg-warning text-dark">{{ booking.status }}</span></td>
         <td>
           <button class="btn btn-sm btn-primary" (click)="openUpdateForm(booking)">Xác nhận / Cập nhật</button>
@@ -40,36 +56,44 @@
 <table class="table table-bordered table-hover">
   <thead class="table-dark">
     <tr>
-      <th>ID</th>
-      <th>Họ và tên</th>
-      <th>Số điện thoại</th>
-      <th>Tên tour</th>
-      <th>Số lượng</th>
-      <th>Tổng tiền</th>
-      <th>Trạng thái</th>
-      <th>Ghi chú</th>
-      <th>Hành động</th>
+      <th>User đặt tour</th>
+        <th>Tên người đặt tour</th>
+        <th>Số điện thoại </th>
+        <th>Tên tour</th>
+        <th>Số ghế đặt</th>
+        <th>Trạng thái</th>
+        <th>Tổng tiền</th>
+        <th>Ghi chú</th>
+        <th>Hành động</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let booking of bookings">
-      <td>{{ booking.id }}</td>
-      <td>{{ booking.full_name }}</td>
-      <td>{{ booking.phone_number }}</td>
-      <td>{{ booking.tour_name }}</td>
-      <td>{{ booking.amount }}</td>
-      <td>{{ booking.total_price }}</td>
+      <td>{{ booking.phoneUser }}</td>
+        <td>{{ booking.customerName }}</td>
+        <td>{{ booking.phoneTour }}</td>
+        <td>{{ booking.tourName }}</td>
+        <td>{{ booking.bookedSlots }}</td>
+        <td>
+        <span class="badge" [ngClass]="{
+          'bg-info': booking.status === 'PAID',
+          'bg-success': booking.status === 'CONFIRMED',
+          'bg-danger': booking.status === 'CANCELLED',
+          'bg-warning': booking.status === 'COMPLETED',
+          'bg-secondary': booking.status === 'REFUNDED'
+        }">
+          {{ getStatusLabel(booking.status) }}
+        </span>
+      </td>
+        <td>{{ booking.price }}</td>
+         <td>{{ booking.note }}</td>
       <td>
         <span [ngClass]="{
           'badge bg-warning text-dark': booking.status === 'PENDING',
           'badge bg-success': booking.status === 'CONFIRMED',
           'badge bg-danger': booking.status === 'CANCELLED'
         }">
-          {{ booking.status }}
         </span>
-      </td>
-      <td>{{ booking.notes }}</td>
-      <td>
          <!-- Nút Cập nhật trạng thái -->
     <button class="btn btn-primary btn-sm" title="Cập nhật trạng thái Booking" (click)="openUpdateForm(booking)">
       <i class="fa fa-edit"></i> Cập nhật trạng thái

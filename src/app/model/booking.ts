@@ -1,15 +1,15 @@
 import {Tour} from './tour'
 export interface Booking {
-    id: number ;
-    full_name: string ;
-    phone_number: string ;
-    userId: number ;
-    tour_name: string ;
-    amount : number ;
-    start_date: Date ;
-    total_price: number; 
+    bookingId: number ;
+    phoneUser: string ;
+    phoneTour: string ;
+    address: string ;
+    customerName: string ;
+    customerEmail : string ;
+    tourName: string ;
+    createdAt: number ;
+    bookedSlots: number ;
     status: string ;
-    paymentMehod: string ;
-    notes: string ;
-    booking_time: Date;
+    price: number ;
+    note: string ;
 }

@@ -35,12 +35,12 @@ export class QuanLyBookingComponent implements OnInit {
   getBookings(page: number, limit: number) {
     this.bookingService.getAllBookings(page, limit).subscribe({
       next: (response: any) => {
-        if (response && response.bookingResponses) {
-          this.bookings = response.bookingResponses
+        if (response && response.data.content) {
+          this.bookings = response.data.content
             .map((booking: Booking) => ({ ...booking }))
             .sort((a: Booking, b: Booking) => {
-              const dateA = new Date(a.booking_time);
-              const dateB = new Date(b.booking_time);
+              const dateA = new Date(a.createdAt);
+              const dateB = new Date(b.createdAt);
               return dateB.getTime() - dateA.getTime();
             });
 
@@ -105,7 +105,7 @@ export class QuanLyBookingComponent implements OnInit {
 
   updateBookingStatus() {
     if (this.selectedBooking && this.selectedBooking.status) {
-      this.bookingService.updateBookingStatus(this.selectedBooking.id, this.selectedBooking.status).subscribe({
+      this.bookingService.updateBookingStatus(this.selectedBooking.bookingId, this.selectedBooking.status).subscribe({
         next: () => {
           this.successMessage = 'Cập nhật trạng thái booking thành công!';
           this.getBookings(this.currentPage, this.itemsPerPage);
@@ -118,4 +118,22 @@ export class QuanLyBookingComponent implements OnInit {
       });
     }
   }
+
+  getStatusLabel(status: string): string {
+  switch(status) {
+    case 'PAID':
+      return 'Đã thanh toán';
+    case 'CONFIRMED':
+      return 'Đã xác nhận';
+    case 'CANCELLED':
+      return 'Đã huỷ';
+    case 'COMPLETED':
+      return 'Hoàn thành';
+    case 'REFUNDED':
+      return 'Đã hoàn tiền';
+    default:
+      return 'Chưa xác định';
+  }
+}
+
 }
